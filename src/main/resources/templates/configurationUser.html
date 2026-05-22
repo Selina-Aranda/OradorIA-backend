@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>OradorIA | Configuración</title>
+
+  <!-- Tailwind CSS v3 + Font Awesome 6 + Google Fonts Inter -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    * {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    body {
+      background: #f4f7fc;
+    }
+    .settings-card {
+      transition: all 0.2s ease;
+    }
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 52px;
+      height: 28px;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #cbd5e1;
+      transition: 0.3s;
+      border-radius: 34px;
+    }
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+    }
+    input:checked + .toggle-slider {
+      background-color: #4f46e5;
+    }
+    input:checked + .toggle-slider:before {
+      transform: translateX(24px);
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #e2e8f0;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #94a3b8;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <div class="min-h-screen flex bg-slate-50">
+    <!-- Sidebar -->
+    <aside class="w-[280px] bg-white border-r border-slate-200/70 hidden md:flex flex-col">
+      <div class="px-6 py-6">
+        <div class="flex items-center gap-3">
+          <span class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-600">
+            <i class="fas fa-microphone-lines text-white"></i>
+          </span>
+          <span class="text-xl font-extrabold tracking-tight text-blue-600">OradorIA</span>
+        </div>
+      </div>
+
+      <nav class="px-4 space-y-2">
+        <a href="mainUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+          <i class="fas fa-house w-5"></i>
+          <span>Inicio</span>
+        </a>
+        <a href="analysisUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+          <i class="fas fa-magnifying-glass w-5"></i>
+          <span>Nuevo Análisis</span>
+        </a>
+        <a href="recordUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+          <i class="fas fa-clock-rotate-left w-5"></i>
+          <span>Historial</span>
+        </a>
+        <a href="reportsUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+          <i class="fas fa-chart-column w-5"></i>
+          <span>Reportes</span>
+        </a>
+        <a href="profileUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+          <i class="fas fa-user w-5"></i>
+          <span>Perfil</span>
+        </a>
+        <a href="configurationUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 bg-blue-50 text-blue-700 font-semibold" aria-current="page">
+          <i class="fas fa-gear w-5 text-blue-600"></i>
+          <span>Configuración</span>
+        </a>
+      </nav>
+
+      <div class="mt-auto">
+        <div class="mx-6 my-6 border-t border-slate-200/70"></div>
+
+        <div class="px-6 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="h-11 w-11 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">JP</div>
+            <div class="min-w-0">
+              <div class="font-semibold text-slate-900 truncate">Juan Pérez</div>
+              <div class="text-sm text-slate-500">Plan Profesional</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="px-6 pb-6">
+          <a href="login.html" class="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 transition">
+            <i class="fas fa-right-from-bracket"></i>
+            <span>Cerrar sesión</span>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <div class="flex-1 min-w-0">
+      <!-- Header -->
+      <header class="bg-white border-b border-slate-200/70">
+        <div class="px-6 py-4 flex items-center gap-4">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="h-10 w-10 rounded-2xl bg-blue-600 flex items-center justify-center text-white md:hidden" aria-hidden="true">
+              <i class="fas fa-microphone-lines"></i>
+            </div>
+            <div class="min-w-0">
+              <div class="text-lg font-extrabold text-slate-900 truncate">Configuración</div>
+              <div class="text-xs text-slate-500 truncate">Preferencias</div>
+            </div>
+          </div>
+
+          <div class="flex-1 hidden lg:block">
+            <label class="relative block">
+              <span class="absolute inset-y-0 left-3 flex items-center text-slate-400">
+                <i class="fas fa-search"></i>
+              </span>
+              <input class="w-full max-w-3xl rounded-xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-200" placeholder="Buscar..." type="search" />
+            </label>
+          </div>
+
+          <button class="relative h-10 w-10 rounded-full hover:bg-slate-50 transition flex items-center justify-center text-slate-600" aria-label="Notificaciones">
+            <i class="fas fa-bell"></i>
+            <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500"></span>
+          </button>
+
+          <div class="h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" aria-label="Usuario">JP</div>
+        </div>
+      </header>
+
+      <!-- CONTENIDO PRINCIPAL: CONFIGURACIÓN -->
+      <main class="px-5 py-6 md:px-8 md:py-8">
+      <div class="max-w-4xl mx-auto">
+        
+        <!-- Encabezado -->
+        <div class="mb-8">
+          <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-800">Configuración</h1>
+          <p class="text-slate-500 mt-1 flex items-center gap-2"><i class="fas fa-sliders-h text-indigo-400"></i> Personaliza tu experiencia en OradorIA</p>
+        </div>
+
+        <div class="space-y-6">
+          
+          <!-- SECCIÓN: CUENTA -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden settings-card">
+            <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center gap-2">
+              <i class="fas fa-user-circle text-indigo-500 text-xl"></i>
+              <h2 class="font-bold text-slate-800 text-lg">Cuenta</h2>
+            </div>
+            <div class="p-6 space-y-5">
+              <!-- Correo electrónico -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                <div>
+                  <label class="font-medium text-slate-700 block">Correo electrónico</label>
+                  <p class="text-sm text-slate-500 mt-0.5" id="userEmailDisplay">juan.perez@email.com</p>
+                </div>
+                <button id="changeEmailBtn" class="text-indigo-600 hover:text-indigo-800 text-sm font-semibold flex items-center gap-1 transition">
+                  <i class="fas fa-pen-alt"></i> Cambiar
+                </button>
+              </div>
+              <!-- Contraseña -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                <div>
+                  <label class="font-medium text-slate-700 block">Contraseña</label>
+                  <p class="text-sm text-slate-500 mt-0.5">••••••••</p>
+                </div>
+                <button id="changePasswordBtn" class="text-indigo-600 hover:text-indigo-800 text-sm font-semibold flex items-center gap-1 transition">
+                  <i class="fas fa-key"></i> Cambiar
+                </button>
+              </div>
+              <!-- Plan actual -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <label class="font-medium text-slate-700 block">Plan actual</label>
+                  <p class="text-sm text-slate-500 mt-0.5 flex items-center gap-2"><span class="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full text-xs font-semibold">Profesional</span> Acceso a análisis ilimitados y métricas avanzadas</p>
+                </div>
+                <button id="upgradePlanBtn" class="bg-gradient-to-r from-indigo-600 to-indigo-500 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:shadow-md transition">
+                  <i class="fas fa-crown mr-1"></i> Gestionar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECCIÓN: NOTIFICACIONES -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden settings-card">
+            <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center gap-2">
+              <i class="fas fa-bell text-indigo-500 text-xl"></i>
+              <h2 class="font-bold text-slate-800 text-lg">Notificaciones</h2>
+            </div>
+            <div class="p-6 space-y-5">
+              <!-- Notificaciones por correo -->
+              <div class="flex items-center justify-between flex-wrap gap-3">
+                <div>
+                  <label class="font-medium text-slate-700 block">Notificaciones por correo</label>
+                  <p class="text-sm text-slate-500">Recibe actualizaciones, resúmenes semanales y consejos de oratoria por email</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="emailNotificationsToggle" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <!-- Recordatorios de práctica -->
+              <div class="flex items-center justify-between flex-wrap gap-3 pt-2 border-t border-slate-100">
+                <div>
+                  <label class="font-medium text-slate-700 block">Recordatorios de práctica</label>
+                  <p class="text-sm text-slate-500">Recibe notificaciones para mantener tu racha de entrenamiento</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="reminderToggle" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <!-- Alertas de logros -->
+              <div class="flex items-center justify-between flex-wrap gap-3 pt-2 border-t border-slate-100">
+                <div>
+                  <label class="font-medium text-slate-700 block">Alertas de logros</label>
+                  <p class="text-sm text-slate-500">Recibe felicitaciones cuando superes tus marcas personales</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="achievementsToggle" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECCIÓN: PREFERENCIAS DE ANÁLISIS -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden settings-card">
+            <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center gap-2">
+              <i class="fas fa-microphone-alt text-indigo-500 text-xl"></i>
+              <h2 class="font-bold text-slate-800 text-lg">Preferencias de análisis</h2>
+            </div>
+            <div class="p-6 space-y-5">
+              <!-- Detección automática de muletillas -->
+              <div class="flex items-center justify-between flex-wrap gap-3">
+                <div>
+                  <label class="font-medium text-slate-700 block">Detección automática de muletillas</label>
+                  <p class="text-sm text-slate-500">Identifica palabras como "eh", "este", "mmmm" en tiempo real</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="fillerDetectionToggle" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <!-- Análisis de postura (cámara) -->
+              <div class="flex items-center justify-between flex-wrap gap-3 pt-2 border-t border-slate-100">
+                <div>
+                  <label class="font-medium text-slate-700 block">Análisis de postura</label>
+                  <p class="text-sm text-slate-500">Recomendaciones sobre lenguaje corporal mediante IA</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="postureAnalysisToggle" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <!-- Guardado automático de transcripciones -->
+              <div class="flex items-center justify-between flex-wrap gap-3 pt-2 border-t border-slate-100">
+                <div>
+                  <label class="font-medium text-slate-700 block">Guardado automático</label>
+                  <p class="text-sm text-slate-500">Almacena automáticamente todas las transcripciones de análisis</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="autoSaveToggle" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECCIÓN: PRIVACIDAD Y SEGURIDAD -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden settings-card">
+            <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center gap-2">
+              <i class="fas fa-shield-alt text-indigo-500 text-xl"></i>
+              <h2 class="font-bold text-slate-800 text-lg">Privacidad y Seguridad</h2>
+            </div>
+            <div class="p-6 space-y-5">
+              <!-- Datos anónimos para mejorar IA -->
+              <div class="flex items-center justify-between flex-wrap gap-3">
+                <div>
+                  <label class="font-medium text-slate-700 block">Compartir datos anónimos</label>
+                  <p class="text-sm text-slate-500">Ayuda a mejorar OradorIA compartiendo métricas anónimas de rendimiento</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="shareDataToggle" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <!-- Exportar mis datos -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-slate-100">
+                <div>
+                  <label class="font-medium text-slate-700 block">Exportar mis datos</label>
+                  <p class="text-sm text-slate-500">Descarga un archivo con toda tu actividad e históricos</p>
+                </div>
+                <button id="exportDataBtn" class="border border-slate-300 text-slate-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-50 transition">
+                  <i class="fas fa-download mr-1"></i> Exportar
+                </button>
+              </div>
+              <!-- Eliminar cuenta (peligroso) -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-red-100 bg-red-50/30 p-3 rounded-xl">
+                <div>
+                  <label class="font-medium text-red-700 block">Eliminar cuenta</label>
+                  <p class="text-sm text-red-600/80">Esta acción es irreversible. Todos tus datos serán eliminados.</p>
+                </div>
+                <button id="deleteAccountBtn" class="bg-red-50 border border-red-300 text-red-700 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-red-100 transition">
+                  <i class="fas fa-trash-alt mr-1"></i> Eliminar cuenta
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botón de guardar cambios general -->
+          <div class="flex justify-end pt-4">
+            <button id="saveAllSettingsBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl font-semibold shadow-md transition flex items-center gap-2">
+              <i class="fas fa-save"></i> Guardar cambios
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+    </div>
+  </div>
+
+  <script>
+    // Simulación de persistencia de preferencias usando localStorage
+    // Inicializar estados guardados o por defecto
+    function loadSettings() {
+      const emailNotify = localStorage.getItem('emailNotifications') !== 'false';
+      const reminderNotify = localStorage.getItem('reminderNotifications') !== 'false';
+      const achievementsNotify = localStorage.getItem('achievementsNotifications') !== 'false';
+      const fillerDetect = localStorage.getItem('fillerDetection') !== 'false';
+      const postureAnalysis = localStorage.getItem('postureAnalysis') !== 'false';
+      const autoSave = localStorage.getItem('autoSave') !== 'false';
+      const shareData = localStorage.getItem('shareAnonymousData') !== 'false';
+      
+      document.getElementById('emailNotificationsToggle').checked = emailNotify;
+      document.getElementById('reminderToggle').checked = reminderNotify;
+      document.getElementById('achievementsToggle').checked = achievementsNotify;
+      document.getElementById('fillerDetectionToggle').checked = fillerDetect;
+      document.getElementById('postureAnalysisToggle').checked = postureAnalysis;
+      document.getElementById('autoSaveToggle').checked = autoSave;
+      document.getElementById('shareDataToggle').checked = shareData;
+    }
+    
+    function saveAllSettings() {
+      localStorage.setItem('emailNotifications', document.getElementById('emailNotificationsToggle').checked);
+      localStorage.setItem('reminderNotifications', document.getElementById('reminderToggle').checked);
+      localStorage.setItem('achievementsNotifications', document.getElementById('achievementsToggle').checked);
+      localStorage.setItem('fillerDetection', document.getElementById('fillerDetectionToggle').checked);
+      localStorage.setItem('postureAnalysis', document.getElementById('postureAnalysisToggle').checked);
+      localStorage.setItem('autoSave', document.getElementById('autoSaveToggle').checked);
+      localStorage.setItem('shareAnonymousData', document.getElementById('shareDataToggle').checked);
+      
+      // Mostrar mensaje de éxito
+      const btn = document.getElementById('saveAllSettingsBtn');
+      const originalHtml = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-check-circle"></i> Guardado!';
+      setTimeout(() => {
+        btn.innerHTML = originalHtml;
+      }, 2000);
+      alert("✅ Configuración guardada correctamente.");
+    }
+    
+    // Acciones de los botones interactivos
+    function initActions() {
+      document.getElementById('changeEmailBtn').addEventListener('click', () => {
+        const newEmail = prompt("Ingresa tu nuevo correo electrónico:", "juan.perez@email.com");
+        if (newEmail && newEmail.includes('@')) {
+          document.getElementById('userEmailDisplay').innerText = newEmail;
+          alert(`Correo actualizado a: ${newEmail}`);
+          localStorage.setItem('userEmail', newEmail);
+        } else if (newEmail) alert("Correo inválido");
+      });
+      
+      document.getElementById('changePasswordBtn').addEventListener('click', () => {
+        const newPass = prompt("Cambiar contraseña (simulación):", "********");
+        if (newPass && newPass.length >= 4) {
+          alert("Contraseña actualizada correctamente (simulación protección).");
+        } else if (newPass) alert("La contraseña debe tener al menos 4 caracteres.");
+      });
+      
+      document.getElementById('upgradePlanBtn').addEventListener('click', () => {
+        alert("🧠 Próximamente: gestión de planes premium. Actualmente disfrutas del plan Profesional.");
+      });
+      
+      document.getElementById('exportDataBtn').addEventListener('click', () => {
+        const data = {
+          usuario: "Juan Pérez",
+          email: document.getElementById('userEmailDisplay').innerText,
+          estadisticas: { totalAnalisis: 24, mejorPuntaje: 92, racha: 5 },
+          configuraciones: {
+            emailNotifications: document.getElementById('emailNotificationsToggle').checked,
+            recordatorios: document.getElementById('reminderToggle').checked,
+            deteccionMuletillas: document.getElementById('fillerDetectionToggle').checked,
+            analisisPostura: document.getElementById('postureAnalysisToggle').checked
+          }
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "oratoria_mis_datos.json";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        alert("Exportación completada. Se ha descargado tu archivo json.");
+      });
+      
+      document.getElementById('deleteAccountBtn').addEventListener('click', () => {
+        const confirmDelete = confirm("⚠️ ADVERTENCIA: Esta acción eliminará permanentemente tu cuenta y todos tus análisis. ¿Estás completamente seguro?");
+        if (confirmDelete) {
+          const secondConfirm = prompt("Escribe 'ELIMINAR' para confirmar la eliminación de tu cuenta");
+          if (secondConfirm === "ELIMINAR") {
+            alert("Tu cuenta ha sido eliminada. Serás redirigido al inicio.");
+            localStorage.clear();
+            window.location.href = "#"; // simulación
+          } else {
+            alert("Eliminación cancelada.");
+          }
+        }
+      });
+      
+      document.getElementById('saveAllSettingsBtn').addEventListener('click', saveAllSettings);
+      
+      // Restaurar email si estaba guardado previamente
+      const savedEmail = localStorage.getItem('userEmail');
+      if (savedEmail) document.getElementById('userEmailDisplay').innerText = savedEmail;
+    }
+    
+    // Cargar email inicial desde almacenamiento simulado
+    document.addEventListener('DOMContentLoaded', () => {
+      loadSettings();
+      initActions();
+    });
+  </script>
+</body>
+</html>

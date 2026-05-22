@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>OradorIA | Reportes y Estadísticas</title>
+
+  <!-- Tailwind CSS v3 + Font Awesome 6 + Google Fonts Inter -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Chart.js CDN para gráficos profesionales -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <style>
+    * {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    body {
+      background: #f4f7fc;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid #eef2f6;
+    }
+    .period-btn.active {
+      background: #4f46e5;
+      color: white;
+      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.2);
+    }
+    .period-btn:not(.active) {
+      background: #f1f5f9;
+      color: #334155;
+    }
+    .period-btn:not(.active):hover {
+      background: #e2e8f0;
+      transform: translateY(-1px);
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #e2e8f0;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #94a3b8;
+      border-radius: 10px;
+    }
+    .stat-card {
+      transition: all 0.2s ease;
+    }
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 20px -12px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <div class="min-h-screen flex bg-slate-50">
+    <!-- Sidebar -->
+    <aside class="w-[280px] bg-white border-r border-slate-200/70 hidden md:flex flex-col">
+      <div class="px-6 py-6">
+        <div class="flex items-center gap-3">
+          <span class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-600">
+            <i class="fas fa-microphone-lines text-white"></i>
+          </span>
+          <span class="text-xl font-extrabold tracking-tight text-blue-600">OradorIA</span>
+        </div>
+      </div>
+
+      <nav class="px-4 space-y-2">
+        <a href="mainUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+          <i class="fas fa-house w-5"></i>
+          <span>Inicio</span>
+        </a>
+        <a href="analysisUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+          <i class="fas fa-magnifying-glass w-5"></i>
+          <span>Nuevo Análisis</span>
+        </a>
+        <a href="recordUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+          <i class="fas fa-clock-rotate-left w-5"></i>
+          <span>Historial</span>
+        </a>
+        <a href="reportsUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 bg-blue-50 text-blue-700 font-semibold" aria-current="page">
+          <i class="fas fa-chart-column w-5 text-blue-600"></i>
+          <span>Reportes</span>
+        </a>
+        <a href="profileUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+          <i class="fas fa-user w-5"></i>
+          <span>Perfil</span>
+        </a>
+        <a href="configurationUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+          <i class="fas fa-gear w-5"></i>
+          <span>Configuración</span>
+        </a>
+      </nav>
+
+      <div class="mt-auto">
+        <div class="mx-6 my-6 border-t border-slate-200/70"></div>
+
+        <div class="px-6 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="h-11 w-11 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">JP</div>
+            <div class="min-w-0">
+              <div class="font-semibold text-slate-900 truncate">Juan Pérez</div>
+              <div class="text-sm text-slate-500">Plan Profesional</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="px-6 pb-6">
+          <a href="login.html" class="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 transition">
+            <i class="fas fa-right-from-bracket"></i>
+            <span>Cerrar sesión</span>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <div class="flex-1 min-w-0">
+      <!-- Header -->
+      <header class="bg-white border-b border-slate-200/70">
+        <div class="px-6 py-4 flex items-center gap-4">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="h-10 w-10 rounded-2xl bg-blue-600 flex items-center justify-center text-white md:hidden" aria-hidden="true">
+              <i class="fas fa-microphone-lines"></i>
+            </div>
+            <div class="min-w-0">
+              <div class="text-lg font-extrabold text-slate-900 truncate">Reportes</div>
+              <div class="text-xs text-slate-500 truncate">Reportes y estadísticas</div>
+            </div>
+          </div>
+
+          <div class="flex-1 hidden lg:block">
+            <label class="relative block">
+              <span class="absolute inset-y-0 left-3 flex items-center text-slate-400">
+                <i class="fas fa-search"></i>
+              </span>
+              <input class="w-full max-w-3xl rounded-xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-200" placeholder="Buscar..." type="search" />
+            </label>
+          </div>
+
+          <button class="relative h-10 w-10 rounded-full hover:bg-slate-50 transition flex items-center justify-center text-slate-600" aria-label="Notificaciones">
+            <i class="fas fa-bell"></i>
+            <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500"></span>
+          </button>
+
+          <div class="h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" aria-label="Usuario">JP</div>
+        </div>
+      </header>
+
+      <!-- CONTENIDO PRINCIPAL: REPORTES Y ESTADÍSTICAS -->
+      <main class="px-5 py-6 md:px-8 md:py-8">
+      <div class="max-w-7xl mx-auto">
+        
+        <!-- Encabezado -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+          <div>
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-800">Reportes y Estadísticas</h1>
+            <p class="text-slate-500 mt-1 flex items-center gap-2"><i class="fas fa-chart-line text-indigo-400"></i> Visualiza tu progreso y evolución a lo largo del tiempo</p>
+          </div>
+          <button id="exportBtn" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-indigo-200 text-indigo-700 rounded-xl font-semibold hover:bg-indigo-50 transition shadow-sm">
+            <i class="fas fa-download"></i> Exportar Reporte
+          </button>
+        </div>
+
+        <!-- Tarjetas de métricas clave adicionales (kilométricas) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+          <div class="stat-card bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+            <div class="flex items-center gap-3">
+              <div class="h-11 w-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center"><i class="fas fa-chart-column text-xl"></i></div>
+              <div><p class="text-slate-500 text-sm">Promedio general</p><p class="text-2xl font-extrabold text-slate-800" id="avgScoreMetric">83.5</p></div>
+            </div>
+          </div>
+          <div class="stat-card bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+            <div class="flex items-center gap-3">
+              <div class="h-11 w-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center"><i class="fas fa-arrow-trend-up"></i></div>
+              <div><p class="text-slate-500 text-sm">Mejora total</p><p class="text-2xl font-extrabold text-slate-800" id="totalImprovement">+22%</p></div>
+            </div>
+          </div>
+          <div class="stat-card bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+            <div class="flex items-center gap-3">
+              <div class="h-11 w-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center"><i class="fas fa-microphone"></i></div>
+              <div><p class="text-slate-500 text-sm">Muletillas (prom)</p><p class="text-2xl font-extrabold text-slate-800" id="avgFillersMetric">11.2</p></div>
+            </div>
+          </div>
+          <div class="stat-card bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+            <div class="flex items-center gap-3">
+              <div class="h-11 w-11 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center"><i class="fas fa-hourglass-half"></i></div>
+              <div><p class="text-slate-500 text-sm">Total sesiones</p><p class="text-2xl font-extrabold text-slate-800" id="totalSessions">24</p></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filtro de períodos -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm mb-8">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-2 text-slate-700 font-medium"><i class="fas fa-calendar-alt text-indigo-500"></i> <span>Período:</span></div>
+            <div class="flex flex-wrap gap-2">
+              <button data-period="lastMonth" class="period-btn px-5 py-2 rounded-xl text-sm font-semibold transition-all">Último mes</button>
+              <button data-period="last3Months" class="period-btn px-5 py-2 rounded-xl text-sm font-semibold transition-all">Últimos 3 meses</button>
+              <button data-period="lastYear" class="period-btn px-5 py-2 rounded-xl text-sm font-semibold transition-all">Último año</button>
+              <button data-period="all" class="period-btn active px-5 py-2 rounded-xl text-sm font-semibold transition-all">Todo</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gráfico principal: Evolución de Puntaje -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-8">
+          <div class="flex justify-between items-center flex-wrap mb-4">
+            <h2 class="text-xl font-extrabold text-slate-800 flex items-center gap-2"><i class="fas fa-chart-line text-indigo-500"></i> Evolución de Puntaje</h2>
+            <div class="text-xs text-slate-400 bg-slate-50 px-3 py-1.5 rounded-full">Puntuación promedio por mes</div>
+          </div>
+          <div class="relative h-80">
+            <canvas id="scoreChart" width="400" height="300" style="max-height: 320px;"></canvas>
+          </div>
+        </div>
+
+        <!-- Sección (debajo de Evolución): Reducción de Muletillas + Resumen de Mejoras -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <!-- Reducción de Muletillas -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <div class="flex items-center justify-between gap-3 flex-wrap">
+              <h3 class="text-xl font-extrabold text-slate-800">Reducción de Muletillas</h3>
+              <div class="text-xs text-slate-400 bg-slate-50 px-3 py-1.5 rounded-full">Muletillas por mes</div>
+            </div>
+
+            <div id="fillersReductionBars" class="mt-8 h-72 flex items-end justify-between gap-4">
+              <!-- JS dinámico -->
+            </div>
+          </div>
+
+          <!-- Resumen de Mejoras -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <div class="flex items-center justify-between gap-3 flex-wrap">
+              <h3 class="text-xl font-extrabold text-slate-800">Resumen de Mejoras</h3>
+              <div class="text-xs text-slate-400 bg-slate-50 px-3 py-1.5 rounded-full">Último período</div>
+            </div>
+
+            <div class="mt-8 space-y-5">
+              <div class="rounded-2xl bg-emerald-50/60 p-5 border border-emerald-100">
+                <div class="flex items-center justify-between">
+                  <div class="font-bold text-slate-700">Mejora en Fluidez</div>
+                  <div class="font-extrabold text-emerald-600 flex items-center gap-2"><i class="fas fa-arrow-trend-up"></i><span id="improveFluency">+34%</span></div>
+                </div>
+                <div class="mt-3 h-3 rounded-full bg-emerald-100 overflow-hidden">
+                  <div id="barFluency" class="h-full rounded-full bg-emerald-500" style="width: 78%"></div>
+                </div>
+              </div>
+
+              <div class="rounded-2xl bg-blue-50/60 p-5 border border-blue-100">
+                <div class="flex items-center justify-between">
+                  <div class="font-bold text-slate-700">Mejora en Claridad</div>
+                  <div class="font-extrabold text-blue-600 flex items-center gap-2"><i class="fas fa-arrow-trend-up"></i><span id="improveClarity">+28%</span></div>
+                </div>
+                <div class="mt-3 h-3 rounded-full bg-blue-100 overflow-hidden">
+                  <div id="barClarity" class="h-full rounded-full bg-blue-500" style="width: 64%"></div>
+                </div>
+              </div>
+
+              <div class="rounded-2xl bg-violet-50/60 p-5 border border-violet-100">
+                <div class="flex items-center justify-between">
+                  <div class="font-bold text-slate-700">Mejora en Confianza</div>
+                  <div class="font-extrabold text-violet-600 flex items-center gap-2"><i class="fas fa-arrow-trend-up"></i><span id="improveConfidence">+26%</span></div>
+                </div>
+                <div class="mt-3 h-3 rounded-full bg-violet-100 overflow-hidden">
+                  <div id="barConfidence" class="h-full rounded-full bg-violet-500" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <div class="rounded-2xl bg-rose-50/60 p-5 border border-rose-100">
+                <div class="flex items-center justify-between">
+                  <div class="font-bold text-slate-700">Reducción Muletillas</div>
+                  <div class="font-extrabold text-rose-600 flex items-center gap-2"><i class="fas fa-arrow-trend-down"></i><span id="improveFillers">-66%</span></div>
+                </div>
+                <div class="mt-3 h-3 rounded-full bg-rose-100 overflow-hidden">
+                  <div id="barFillers" class="h-full rounded-full bg-rose-500" style="width: 88%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comparativa Mensual -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="px-6 py-4 bg-slate-50 border-b border-slate-200">
+            <h3 class="text-xl font-extrabold text-slate-800">Comparativa Mensual</h3>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-slate-50 text-slate-600 font-semibold">
+                <tr>
+                  <th class="px-5 py-3 text-left">Mes</th>
+                  <th class="px-5 py-3 text-left">Análisis</th>
+                  <th class="px-5 py-3 text-left">Puntaje Promedio</th>
+                  <th class="px-5 py-3 text-left">Muletillas</th>
+                  <th class="px-5 py-3 text-left">Tiempo Total</th>
+                  <th class="px-5 py-3 text-left">Cambio</th>
+                </tr>
+              </thead>
+              <tbody id="comparisonTableBody">
+                <!-- JS dinámico -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+    </div>
+  </div>
+
+  <script>
+    // ======================== DATOS SIMULADOS PERO REALISTAS (evolución real) ========================
+    // Datos mensuales: desde Enero 2026 hasta Mayo 2026 (además algunos meses anteriores para demostrar todo el período)
+    const monthlyData = [
+      { month: "Ene", year: 2026, score: 65, fluency: 58, fillers: 35, durationMinutes: 28 },
+      { month: "Feb", year: 2026, score: 72, fluency: 64, fillers: 28, durationMinutes: 42 },
+      { month: "Mar", year: 2026, score: 78, fluency: 71, fillers: 22, durationMinutes: 58 },
+      { month: "Abr", year: 2026, score: 82, fluency: 77, fillers: 18, durationMinutes: 67 },
+      { month: "May", year: 2026, score: 87, fluency: 83, fillers: 12, durationMinutes: 71 }
+    ];
+    
+    // Agregar datos históricos adicionales para el "último año" y "todo"
+    const extendedHistory = [
+      { month: "Dic", year: 2025, score: 59, fluency: 52, fillers: 41, durationMinutes: 22 },
+      { month: "Nov", year: 2025, score: 56, fluency: 49, fillers: 44, durationMinutes: 19 },
+      { month: "Oct", year: 2025, score: 52, fluency: 45, fillers: 46, durationMinutes: 18 },
+      { month: "Sep", year: 2025, score: 48, fluency: 41, fillers: 49, durationMinutes: 15 },
+      { month: "Ago", year: 2025, score: 45, fluency: 39, fillers: 52, durationMinutes: 14 },
+      { month: "Jul", year: 2025, score: 44, fluency: 38, fillers: 54, durationMinutes: 12 }
+    ];
+    
+    const fullDataset = [...extendedHistory.reverse(), ...monthlyData]; // orden cronológico ascendente (jul 2025 - may 2026)
+    
+    // IDs de gráficos
+    let scoreChart;
+    let currentPeriod = "all"; // 'lastMonth', 'last3Months', 'lastYear', 'all'
+    
+    // Función para filtrar datos según período
+    function filterDataByPeriod(period) {
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const currentMonth = now.getMonth() + 1; // 1-12
+      // Para determinar filtro basado en meses hacia atrás
+      if (period === "lastMonth") {
+        // mostrar solo el último mes disponible: Mayo 2026 (asumiendo que es el más reciente)
+        const lastMonthData = monthlyData.slice(-1); // [Mayo]
+        return lastMonthData;
+      } else if (period === "last3Months") {
+        return monthlyData.slice(-3); // Mar, Abr, May
+      } else if (period === "lastYear") {
+        // últimos 12 meses (desde junio 2025 hasta mayo 2026 aprox)
+        const oneYearAgo = fullDataset.filter(item => {
+          const itemDate = new Date(item.year, getMonthNumber(item.month), 1);
+          const limitDate = new Date(currentYear, currentMonth - 12, 1);
+          return itemDate >= limitDate;
+        });
+        return oneYearAgo;
+      }
+      return fullDataset; // "all"
+    }
+    
+    function getMonthNumber(monthName) {
+      const months = { "Ene":0, "Feb":1, "Mar":2, "Abr":3, "May":4, "Jun":5, "Jul":6, "Ago":7, "Sep":8, "Oct":9, "Nov":10, "Dic":11 };
+      return months[monthName];
+    }
+    
+    // Actualizar gráficos y tabla según período
+    function updateReports() {
+      const filtered = filterDataByPeriod(currentPeriod);
+      if (filtered.length === 0) return;
+      
+      // Preparar labels y valores
+      const labels = filtered.map(d => `${d.month} ${d.year}`);
+      const scores = filtered.map(d => d.score);
+      const fluencyValues = filtered.map(d => d.fluency);
+      const fillerValues = filtered.map(d => d.fillers);
+      
+      // Actualizar métricas generales (con datos totales del período)
+      const avgScore = (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1);
+      const avgFillers = (fillerValues.reduce((a,b)=>a+b,0)/fillerValues.length).toFixed(1);
+      const totalSessionsCount = filtered.reduce((acc, d) => acc + Math.max(1, Math.floor(d.durationMinutes / 5)), 0); // estimación conv
+      const firstScore = filtered[0]?.score || 0;
+      const lastScore = filtered[filtered.length-1]?.score || 0;
+      let improvement = ((lastScore - firstScore) / (firstScore || 1)) * 100;
+      improvement = improvement > 0 ? `+${improvement.toFixed(0)}%` : `${improvement.toFixed(0)}%`;
+      
+      document.getElementById('avgScoreMetric').innerText = avgScore;
+      document.getElementById('avgFillersMetric').innerText = avgFillers;
+      document.getElementById('totalSessions').innerText = filtered.length * 2 + 8; // solo visual
+      document.getElementById('totalImprovement').innerHTML = improvement;
+      
+      // Update Score Chart
+      if (scoreChart) scoreChart.destroy();
+      const ctxScore = document.getElementById('scoreChart').getContext('2d');
+      scoreChart = new Chart(ctxScore, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Puntaje general',
+            data: scores,
+            borderColor: '#4f46e5',
+            backgroundColor: 'rgba(79, 70, 229, 0.05)',
+            borderWidth: 3,
+            pointRadius: 5,
+            pointBackgroundColor: '#6366f1',
+            pointBorderColor: '#ffffff',
+            tension: 0.2,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: (ctx) => `${ctx.raw} pts` } } }
+        }
+      });
+
+      // Reducción de muletillas (barras) — mostrar hasta los últimos 5 meses del período
+      const barsHost = document.getElementById('fillersReductionBars');
+      if (barsHost) {
+        const slice = filtered.slice(-5);
+        const maxFillers = Math.max(...slice.map(d => d.fillers), 1);
+        barsHost.innerHTML = slice.map(d => {
+          const heightPct = Math.max(18, Math.round((d.fillers / maxFillers) * 100));
+          return `
+            <div class="flex-1 h-full flex flex-col items-center justify-end">
+              <div class="mb-3 px-3 py-1 rounded-full text-white text-xs font-extrabold bg-red-600 shadow-sm">${d.fillers}</div>
+              <div class="w-full max-w-[92px] rounded-t-[28px] bg-gradient-to-b from-rose-400 to-red-600" style="height: ${heightPct}%;"></div>
+              <div class="mt-4 text-sm font-semibold text-slate-700">${d.month}</div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Comparativa mensual
+      const comparisonTbody = document.getElementById('comparisonTableBody');
+      if (comparisonTbody) {
+        comparisonTbody.innerHTML = filtered.map((d, idx) => {
+          const prev = filtered[idx - 1];
+          const analyses = Math.max(1, Math.floor(d.durationMinutes / 5));
+
+          let deltaText = "—";
+          let deltaClass = "text-slate-400";
+          let deltaIcon = "fa-minus";
+          if (prev) {
+            const delta = d.score - prev.score;
+            if (delta > 0) {
+              deltaText = `+${delta}`;
+              deltaClass = "text-emerald-600";
+              deltaIcon = "fa-arrow-trend-up";
+            } else if (delta < 0) {
+              deltaText = `${delta}`;
+              deltaClass = "text-rose-600";
+              deltaIcon = "fa-arrow-trend-down";
+            } else {
+              deltaText = "0";
+              deltaClass = "text-slate-500";
+              deltaIcon = "fa-minus";
+            }
+          }
+
+          return `
+            <tr class="border-b border-slate-100 hover:bg-slate-50">
+              <td class="px-5 py-3 font-semibold text-slate-700">${d.month} ${d.year}</td>
+              <td class="px-5 py-3">${analyses}</td>
+              <td class="px-5 py-3 font-extrabold text-slate-900">${d.score}</td>
+              <td class="px-5 py-3">${d.fillers}</td>
+              <td class="px-5 py-3">${d.durationMinutes} min</td>
+              <td class="px-5 py-3 font-extrabold ${deltaClass}">
+                <span class="inline-flex items-center gap-2">
+                  <i class="fas ${deltaIcon}"></i>
+                  <span>${deltaText}</span>
+                </span>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+    }
+    
+    // Configurar botones de período
+    function initPeriodButtons() {
+      const btns = document.querySelectorAll('.period-btn');
+      btns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          btns.forEach(b => b.classList.remove('active', 'bg-indigo-600', 'text-white'));
+          btns.forEach(b => b.classList.add('bg-slate-100', 'text-slate-700'));
+          btn.classList.remove('bg-slate-100', 'text-slate-700');
+          btn.classList.add('active', 'bg-indigo-600', 'text-white');
+          const period = btn.getAttribute('data-period');
+          currentPeriod = period;
+          updateReports();
+        });
+      });
+    }
+    
+    // Exportar reporte como TXT / CSV
+    function exportReport() {
+      const filtered = filterDataByPeriod(currentPeriod);
+      let content = "ORADORIA - REPORTE DE ESTADÍSTICAS\n";
+      content += `Período: ${currentPeriod}\nFecha: ${new Date().toLocaleDateString()}\n\n`;
+      content += "Mes, Puntaje, Fluidez(%), Muletillas, Duración(min)\n";
+      filtered.forEach(d => {
+        content += `${d.month} ${d.year}, ${d.score}, ${d.fluency}, ${d.fillers}, ${d.durationMinutes}\n`;
+      });
+      const blob = new Blob([content], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.href = url;
+      link.setAttribute("download", `oratoria_report_${currentPeriod}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+    
+    // Inicializar todo
+    document.addEventListener('DOMContentLoaded', () => {
+      initPeriodButtons();
+      updateReports();
+      const exportBtn = document.getElementById('exportBtn');
+      if (exportBtn) exportBtn.addEventListener('click', exportReport);
+    });
+    
+  </script>
+</body>
+</html>

@@ -8,6 +8,8 @@ public class DemoOratorIaApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoOratorIaApplication.class, args);
+
+		System.out.print("El proyecto corre en el http://localhost:8001");
 	}
 
 }

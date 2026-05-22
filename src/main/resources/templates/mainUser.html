@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OradorIA | Dashboard</title>
+
+  <!-- Tailwind CSS v3 + Font Awesome Icons + Google Fonts (Inter) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+
+  <style>
+    * { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    body { background: #f6f8fb; }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.5); border-radius: 999px; }
+  </style>
+</head>
+
+<body class="antialiased text-slate-900">
+  <div class="min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-[280px] bg-white border-r border-slate-200/70 hidden md:flex flex-col">
+      <div class="px-6 py-6">
+        <div class="flex items-center gap-3">
+          <span class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-600">
+            <i class="fas fa-microphone-lines text-white"></i>
+          </span>
+          <span class="text-xl font-extrabold tracking-tight text-blue-600">OradorIA</span>
+        </div>
+      </div>
+
+      <nav class="px-4 space-y-2">
+        <a href="mainUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 bg-blue-50 text-blue-700 font-semibold">
+          <i class="fas fa-house w-5 text-blue-600"></i>
+          <span>Inicio</span>
+        </a>
+        <a href="analysisUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+          <i class="fas fa-magnifying-glass w-5"></i>
+          <span>Nuevo Análisis</span>
+        </a>
+        <a href="recordUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+          <i class="fas fa-clock-rotate-left w-5"></i>
+          <span>Historial</span>
+        </a>
+        <a href="reportsUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+          <i class="fas fa-chart-column w-5"></i>
+          <span>Reportes</span>
+        </a>
+        <a href="profileUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+          <i class="fas fa-user w-5"></i>
+          <span>Perfil</span>
+        </a>
+        <a href="configurationUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+          <i class="fas fa-gear w-5"></i>
+          <span>Configuración</span>
+        </a>
+      </nav>
+
+      <div class="mt-auto">
+        <div class="mx-6 my-6 border-t border-slate-200/70"></div>
+
+        <div class="px-6 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="h-11 w-11 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
+              JP
+            </div>
+            <div class="min-w-0">
+              <div class="font-semibold text-slate-900 truncate">Juan Pérez</div>
+              <div class="text-sm text-slate-500">Plan Profesional</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="px-6 pb-6">
+          <a href="login.html" class="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 transition">
+            <i class="fas fa-right-from-bracket"></i>
+            <span>Cerrar sesión</span>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="flex-1 min-w-0">
+      <!-- Topbar -->
+      <header class="bg-white border-b border-slate-200/70">
+        <div class="px-6 py-4 flex items-center gap-4">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="h-10 w-10 rounded-2xl bg-blue-600 flex items-center justify-center text-white md:hidden" aria-hidden="true">
+              <i class="fas fa-microphone-lines"></i>
+            </div>
+            <div class="min-w-0">
+              <div class="text-lg font-extrabold text-slate-900 truncate">Inicio</div>
+              <div class="text-xs text-slate-500 truncate">Dashboard</div>
+            </div>
+          </div>
+
+          <div class="flex-1 hidden lg:block">
+            <label class="relative block">
+              <span class="absolute inset-y-0 left-3 flex items-center text-slate-400">
+                <i class="fas fa-search"></i>
+              </span>
+              <input
+                class="w-full max-w-3xl rounded-xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-200"
+                placeholder="Buscar análisis..."
+                type="search"
+              />
+            </label>
+          </div>
+
+          <button class="relative h-10 w-10 rounded-full hover:bg-slate-50 transition flex items-center justify-center text-slate-600" aria-label="Notificaciones">
+            <i class="fas fa-bell"></i>
+            <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500"></span>
+          </button>
+
+          <div class="h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" aria-label="Usuario">
+            JP
+          </div>
+        </div>
+      </header>
+
+      <!-- Content -->
+      <main class="px-6 py-8">
+        <div class="max-w-6xl">
+          <h1 class="text-4xl font-extrabold tracking-tight">Dashboard</h1>
+          <p class="mt-2 text-slate-600">Bienvenido de nuevo, Juan. Aquí está tu progreso.</p>
+
+          <!-- Stats cards -->
+          <section class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Total de análisis -->
+            <article class="bg-white rounded-2xl border border-slate-200/70 p-6">
+              <div class="flex items-start justify-between">
+                <div class="h-12 w-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                  <i class="fas fa-chart-column"></i>
+                </div>
+                <div class="text-sm font-semibold text-emerald-600 flex items-center gap-1">
+                  <i class="fas fa-arrow-up"></i>
+                  <span>+12%</span>
+                </div>
+              </div>
+              <div class="mt-5 text-4xl font-extrabold">24</div>
+              <div class="mt-1 text-sm text-slate-500">Total de análisis</div>
+            </article>
+
+            <!-- Promedio de fluidez -->
+            <article class="bg-white rounded-2xl border border-slate-200/70 p-6">
+              <div class="flex items-start justify-between">
+                <div class="h-12 w-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                  <i class="fas fa-bullseye"></i>
+                </div>
+                <div class="text-sm font-semibold text-emerald-600 flex items-center gap-1">
+                  <i class="fas fa-arrow-up"></i>
+                  <span>+5%</span>
+                </div>
+              </div>
+              <div class="mt-5 text-4xl font-extrabold">87%</div>
+              <div class="mt-1 text-sm text-slate-500">Promedio de fluidez</div>
+            </article>
+
+            <!-- Muletillas promedio -->
+            <article class="bg-white rounded-2xl border border-slate-200/70 p-6">
+              <div class="flex items-start justify-between">
+                <div class="h-12 w-12 rounded-2xl bg-slate-50 text-slate-700 flex items-center justify-center">
+                  <i class="fas fa-comment"></i>
+                </div>
+                <div class="text-sm font-semibold text-red-600 flex items-center gap-1">
+                  <i class="fas fa-arrow-down"></i>
+                  <span>-23%</span>
+                </div>
+              </div>
+              <div class="mt-5 text-4xl font-extrabold">8</div>
+              <div class="mt-1 text-sm text-slate-500">Muletillas promedio</div>
+            </article>
+
+            <!-- Nivel de confianza -->
+            <article class="bg-white rounded-2xl border border-slate-200/70 p-6">
+              <div class="flex items-start justify-between">
+                <div class="h-12 w-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center">
+                  <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="text-sm font-semibold text-emerald-600 flex items-center gap-1">
+                  <i class="fas fa-arrow-up"></i>
+                  <span>+8%</span>
+                </div>
+              </div>
+              <div class="mt-5 text-4xl font-extrabold">82%</div>
+              <div class="mt-1 text-sm text-slate-500">Nivel de confianza</div>
+            </article>
+          </section>
+
+          <!-- Progreso mensual -->
+          <section class="mt-8 bg-white rounded-2xl border border-slate-200/70">
+            <div class="px-6 py-5">
+              <h2 class="text-xl font-bold">Progreso mensual</h2>
+            </div>
+            <div class="px-6 pb-6">
+              <div class="h-64 rounded-2xl bg-slate-50 border border-dashed border-slate-200"></div>
+            </div>
+          </section>
+
+          <!-- Análisis recientes + CTA -->
+          <section class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Left: Análisis recientes -->
+            <div class="lg:col-span-8 bg-white rounded-3xl border border-slate-200/70 p-6">
+              <div class="flex items-center justify-between">
+                <h2 class="text-2xl font-extrabold tracking-tight">Análisis recientes</h2>
+                <a href="#" class="text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition">Ver todos</a>
+              </div>
+
+              <div class="mt-6 space-y-5">
+                <!-- Item 1 -->
+                <div class="rounded-2xl border border-slate-200/70 p-5">
+                  <div class="flex items-center gap-4">
+                    <div class="h-14 w-14 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600">
+                      <i class="fas fa-pen"></i>
+                    </div>
+
+                    <div class="flex-1 min-w-0">
+                      <div class="font-bold text-lg truncate">Presentación de ventas Q1</div>
+                      <div class="mt-1 text-sm text-slate-500 flex items-center gap-2">
+                        <i class="far fa-clock"></i>
+                        <span>Hace 2 horas</span>
+                      </div>
+                    </div>
+
+                    <div class="hidden sm:flex items-center gap-10">
+                      <div class="text-right">
+                        <div class="text-sm text-slate-500">Duración</div>
+                        <div class="font-extrabold text-slate-900">5:23</div>
+                      </div>
+                      <div class="text-right">
+                        <div class="text-sm text-slate-500">Puntaje</div>
+                        <div class="text-3xl font-extrabold text-indigo-600">92</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Mobile right metrics -->
+                  <div class="sm:hidden mt-4 grid grid-cols-2 gap-3">
+                    <div class="rounded-xl bg-slate-50 border border-slate-200/60 p-3">
+                      <div class="text-xs text-slate-500">Duración</div>
+                      <div class="font-extrabold">5:23</div>
+                    </div>
+                    <div class="rounded-xl bg-slate-50 border border-slate-200/60 p-3">
+                      <div class="text-xs text-slate-500">Puntaje</div>
+                      <div class="font-extrabold text-indigo-600">92</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="rounded-2xl border border-slate-200/70 p-5">
+                  <div class="flex items-center gap-4">
+                    <div class="h-14 w-14 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600">
+                      <i class="fas fa-pen"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <div class="font-bold text-lg truncate">Pitch para inversores</div>
+                      <div class="mt-1 text-sm text-slate-500 flex items-center gap-2">
+                        <i class="far fa-clock"></i>
+                        <span>Hace 1 día</span>
+                      </div>
+                    </div>
+                    <div class="hidden sm:flex items-center gap-10">
+                      <div class="text-right">
+                        <div class="text-sm text-slate-500">Duración</div>
+                        <div class="font-extrabold text-slate-900">8:45</div>
+                      </div>
+                      <div class="text-right">
+                        <div class="text-sm text-slate-500">Puntaje</div>
+                        <div class="text-3xl font-extrabold text-indigo-600">88</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="sm:hidden mt-4 grid grid-cols-2 gap-3">
+                    <div class="rounded-xl bg-slate-50 border border-slate-200/60 p-3">
+                      <div class="text-xs text-slate-500">Duración</div>
+                      <div class="font-extrabold">8:45</div>
+                    </div>
+                    <div class="rounded-xl bg-slate-50 border border-slate-200/60 p-3">
+                      <div class="text-xs text-slate-500">Puntaje</div>
+                      <div class="font-extrabold text-indigo-600">88</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="rounded-2xl border border-slate-200/70 p-5">
+                  <div class="flex items-center gap-4">
+                    <div class="h-14 w-14 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600">
+                      <i class="fas fa-pen"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <div class="font-bold text-lg truncate">Discurso motivacional</div>
+                      <div class="mt-1 text-sm text-slate-500 flex items-center gap-2">
+                        <i class="far fa-clock"></i>
+                        <span>Hace 2 días</span>
+                      </div>
+                    </div>
+                    <div class="hidden sm:flex items-center gap-10">
+                      <div class="text-right">
+                        <div class="text-sm text-slate-500">Duración</div>
+                        <div class="font-extrabold text-slate-900">3:12</div>
+                      </div>
+                      <div class="text-right">
+                        <div class="text-sm text-slate-500">Puntaje</div>
+                        <div class="text-3xl font-extrabold text-indigo-600">85</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="sm:hidden mt-4 grid grid-cols-2 gap-3">
+                    <div class="rounded-xl bg-slate-50 border border-slate-200/60 p-3">
+                      <div class="text-xs text-slate-500">Duración</div>
+                      <div class="font-extrabold">3:12</div>
+                    </div>
+                    <div class="rounded-xl bg-slate-50 border border-slate-200/60 p-3">
+                      <div class="text-xs text-slate-500">Puntaje</div>
+                      <div class="font-extrabold text-indigo-600">85</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="rounded-2xl border border-slate-200/70 p-5">
+                  <div class="flex items-center gap-4">
+                    <div class="h-14 w-14 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600">
+                      <i class="fas fa-pen"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <div class="font-bold text-lg truncate">Reunión de equipo</div>
+                      <div class="mt-1 text-sm text-slate-500 flex items-center gap-2">
+                        <i class="far fa-clock"></i>
+                        <span>Hace 3 días</span>
+                      </div>
+                    </div>
+                    <div class="hidden sm:flex items-center gap-10">
+                      <div class="text-right">
+                        <div class="text-sm text-slate-500">Duración</div>
+                        <div class="font-extrabold text-slate-900">6:30</div>
+                      </div>
+                      <div class="text-right">
+                        <div class="text-sm text-slate-500">Puntaje</div>
+                        <div class="text-3xl font-extrabold text-indigo-600">79</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="sm:hidden mt-4 grid grid-cols-2 gap-3">
+                    <div class="rounded-xl bg-slate-50 border border-slate-200/60 p-3">
+                      <div class="text-xs text-slate-500">Duración</div>
+                      <div class="font-extrabold">6:30</div>
+                    </div>
+                    <div class="rounded-xl bg-slate-50 border border-slate-200/60 p-3">
+                      <div class="text-xs text-slate-500">Puntaje</div>
+                      <div class="font-extrabold text-indigo-600">79</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: CTA -->
+            <div class="lg:col-span-4 bg-gradient-to-b from-blue-600 to-indigo-700 rounded-3xl p-8 text-white">
+              <h2 class="text-2xl font-extrabold">Comienza ahora</h2>
+              <p class="mt-3 text-white/90">Realiza un nuevo análisis de oratoria</p>
+
+              <button class="mt-10 w-full bg-white text-indigo-700 font-bold py-4 rounded-2xl hover:bg-white/95 transition">
+                Nuevo Análisis
+              </button>
+
+              <div class="mt-8 space-y-4">
+                <div class="bg-white/10 rounded-2xl px-5 py-4 flex items-center justify-between">
+                  <span class="text-white/90">Análisis este mes</span>
+                  <span class="text-xl font-extrabold">24</span>
+                </div>
+                <div class="bg-white/10 rounded-2xl px-5 py-4 flex items-center justify-between">
+                  <span class="text-white/90">Tiempo total</span>
+                  <span class="text-xl font-extrabold">2h 34m</span>
+                </div>
+                <div class="bg-white/10 rounded-2xl px-5 py-4 flex items-center justify-between">
+                  <span class="text-white/90">Mejora promedio</span>
+                  <span class="text-xl font-extrabold">+15%</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>OradorIA | Análisis Avanzado en Tiempo Real</title>
+
+  <!-- Tailwind CSS v3 + Font Awesome 6 + Google Fonts Inter -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+
+  <style>
+    * {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    }
+    .card-glass {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(0px);
+      border: 1px solid rgba(203, 213, 225, 0.6);
+    }
+    .video-preview {
+      transition: all 0.2s ease;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      transform: scale(1);
+    }
+    .pulse-ring {
+      animation: pulse-ring 1.8s infinite;
+    }
+    @keyframes pulse-ring {
+      0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.5); }
+      70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+    }
+    .btn-primary-gradient {
+      background: linear-gradient(105deg, #4f46e5 0%, #6366f1 100%);
+    }
+    .btn-primary-gradient:hover {
+      background: linear-gradient(105deg, #4338ca 0%, #4f46e5 100%);
+    }
+    .status-badge {
+      transition: all 0.2s;
+    }
+    .fade-in {
+      animation: fadeIn 0.4s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* estilos para scroll sutil */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #e2e8f0;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #94a3b8;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <div class="min-h-screen flex bg-slate-50">
+    <!-- Sidebar -->
+    <aside class="w-[280px] bg-white border-r border-slate-200/70 hidden md:flex flex-col">
+      <div class="px-6 py-6">
+        <div class="flex items-center gap-3">
+          <span class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-600">
+            <i class="fas fa-microphone-lines text-white"></i>
+          </span>
+          <span class="text-xl font-extrabold tracking-tight text-blue-600">OradorIA</span>
+        </div>
+      </div>
+
+      <nav class="px-4 space-y-2">
+        <a href="mainUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+          <i class="fas fa-house w-5"></i>
+          <span>Inicio</span>
+        </a>
+        <a href="analysisUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 bg-blue-50 text-blue-700 font-semibold" aria-current="page">
+          <i class="fas fa-magnifying-glass w-5 text-blue-600"></i>
+          <span>Nuevo Análisis</span>
+        </a>
+        <a href="recordUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+          <i class="fas fa-clock-rotate-left w-5"></i>
+          <span>Historial</span>
+        </a>
+        <a href="reportsUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+          <i class="fas fa-chart-column w-5"></i>
+          <span>Reportes</span>
+        </a>
+        <a href="profileUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+          <i class="fas fa-user w-5"></i>
+          <span>Perfil</span>
+        </a>
+        <a href="configurationUser.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+          <i class="fas fa-gear w-5"></i>
+          <span>Configuración</span>
+        </a>
+      </nav>
+
+      <div class="mt-auto">
+        <div class="mx-6 my-6 border-t border-slate-200/70"></div>
+
+        <div class="px-6 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="h-11 w-11 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">JP</div>
+            <div class="min-w-0">
+              <div class="font-semibold text-slate-900 truncate">Juan Pérez</div>
+              <div class="text-sm text-slate-500">Plan Profesional</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="px-6 pb-6">
+          <a href="login.html" class="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 transition">
+            <i class="fas fa-right-from-bracket"></i>
+            <span>Cerrar sesión</span>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <div class="flex-1 min-w-0">
+      <!-- Header -->
+      <header class="bg-white border-b border-slate-200/70">
+        <div class="px-6 py-4 flex items-center gap-4">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="h-10 w-10 rounded-2xl bg-blue-600 flex items-center justify-center text-white md:hidden" aria-hidden="true">
+              <i class="fas fa-microphone-lines"></i>
+            </div>
+            <div class="min-w-0">
+              <div class="text-lg font-extrabold text-slate-900 truncate">Nuevo Análisis</div>
+              <div class="text-xs text-slate-500 truncate">Análisis en tiempo real</div>
+            </div>
+          </div>
+
+          <div class="flex-1 hidden lg:block">
+            <label class="relative block">
+              <span class="absolute inset-y-0 left-3 flex items-center text-slate-400">
+                <i class="fas fa-search"></i>
+              </span>
+              <input class="w-full max-w-3xl rounded-xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-200" placeholder="Buscar..." type="search" />
+            </label>
+          </div>
+
+          <button class="relative h-10 w-10 rounded-full hover:bg-slate-50 transition flex items-center justify-center text-slate-600" aria-label="Notificaciones">
+            <i class="fas fa-bell"></i>
+            <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500"></span>
+          </button>
+
+          <div class="h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" aria-label="Usuario">JP</div>
+        </div>
+      </header>
+
+      <!-- MAIN CONTENT - Análisis en Tiempo Real -->
+      <main class="px-5 py-6 md:px-8 md:py-8">
+      <div class="max-w-7xl mx-auto">
+        <!-- Encabezado -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-8">
+          <div>
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">Análisis Avanzado</h1>
+            <p class="text-slate-500 mt-1 flex items-center gap-2"><i class="fas fa-robot text-indigo-400"></i> Entrenamiento en tiempo real · Voz, rostro y postura</p>
+          </div>
+          <div class="flex items-center gap-3 text-sm bg-white/70 rounded-full px-4 py-2 border border-slate-200 shadow-sm">
+            <i class="fas fa-circle text-emerald-500 text-xs"></i>
+            <span class="font-medium text-slate-700">Sesión activa lista</span>
+          </div>
+        </div>
+
+        <!-- Grid principal: cámara + asistente + consejos -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          
+          <!-- COLUMNA IZQUIERDA: PREVIEW CÁMARA Y CONTROLES -->
+          <div class="lg:col-span-2 space-y-6">
+            <!-- Tarjeta de video / cámara -->
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-200/80 overflow-hidden transition-all">
+              <div class="relative bg-gradient-to-br from-slate-900 to-slate-800 aspect-video flex items-center justify-center">
+                <!-- Video elemento -->
+                <video id="videoPlayer" class="w-full h-full object-cover" autoplay playsinline muted style="display: none;"></video>
+                <!-- Placeholder cuando la cámara está desactivada -->
+                <div id="cameraPlaceholder" class="absolute inset-0 flex flex-col items-center justify-center text-white backdrop-blur-sm bg-black/50">
+                  <i class="fas fa-camera-slash text-5xl mb-4 text-indigo-300"></i>
+                  <p class="text-xl font-medium">Cámara desactivada</p>
+                  <p class="text-sm text-white/70 mt-1">Activa tu cámara para comenzar el análisis</p>
+                </div>
+                <!-- Indicador de estado de grabación / micrófono -->
+                <div id="camStatusBadge" class="absolute top-4 left-4 bg-black/60 backdrop-blur-md rounded-full px-3 py-1.5 text-xs text-white flex items-center gap-2 z-10">
+                  <i id="camLedIcon" class="fas fa-video-slash text-red-400"></i>
+                  <span id="camStatusText">Cámara: OFF</span>
+                </div>
+                <div id="micStatusBadge" class="absolute top-4 right-4 bg-black/60 backdrop-blur-md rounded-full px-3 py-1.5 text-xs text-white flex items-center gap-2 z-10">
+                  <i id="micLedIcon" class="fas fa-microphone-slash text-red-400"></i>
+                  <span id="micStatusText">Mic: OFF</span>
+                </div>
+              </div>
+
+              <!-- Controles de acción -->
+              <div class="p-6 bg-white/90 border-t border-slate-100">
+                <div class="flex flex-wrap gap-3 justify-between items-center">
+                  <div class="flex flex-wrap gap-3">
+                    <button id="btnCamara" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-50 text-indigo-700 font-semibold hover:bg-indigo-100 transition shadow-sm border border-indigo-200">
+                      <i class="fas fa-camera"></i> Activar Cámara
+                    </button>
+                    <button id="btnMicrofono" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200 transition">
+                      <i class="fas fa-microphone"></i> Activar Micrófono
+                    </button>
+                    <button id="btnAnalizar" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl btn-primary-gradient text-white font-bold shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                      <i class="fas fa-play"></i> Comenzar Análisis
+                    </button>
+                  </div>
+                  <!-- Simulación de grabación activa -->
+                  <div id="recordingIndicator" class="hidden items-center gap-2 bg-red-50 px-4 py-2 rounded-full border border-red-200">
+                    <div class="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></div>
+                    <span class="text-sm font-medium text-red-700">Analizando...</span>
+                  </div>
+                </div>
+                <p class="text-xs text-slate-400 mt-4 flex items-center gap-1"><i class="fas fa-info-circle"></i> Para el análisis completo, asegúrate de activar cámara y micrófono.</p>
+              </div>
+            </div>
+
+            <!-- Consejos rápidos (widget) -->
+            <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-indigo-100 p-5 shadow-sm">
+              <div class="flex items-start gap-3">
+                <div class="bg-indigo-100 p-2 rounded-xl text-indigo-600"><i class="fas fa-lightbulb text-xl"></i></div>
+                <div>
+                  <h3 class="font-bold text-slate-800">Consejos para el análisis</h3>
+                  <ul class="mt-2 space-y-1.5 text-sm text-slate-600 list-disc list-inside">
+                    <li>Posiciónate frente a la cámara con buena iluminación</li>
+                    <li>Mantén contacto visual con la cámara (simula audiencia)</li>
+                    <li>Habla claro y con ritmo pausado para mejor precisión</li>
+                    <li>Evita ruido de fondo y utiliza auriculares si es posible</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- COLUMNA DERECHA: ASISTENTE VIRTUAL + MÉTRICAS DINÁMICAS -->
+          <div class="space-y-6">
+            <!-- Tarjeta Coach IA -->
+            <div class="bg-gradient-to-br from-indigo-50 via-white to-slate-50 rounded-3xl border border-indigo-100 shadow-lg overflow-hidden">
+              <div class="bg-indigo-600 px-6 py-4 flex items-center gap-3">
+                <div class="h-12 w-12 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-white text-2xl">
+                  <i class="fas fa-robot"></i>
+                </div>
+                <div>
+                  <h2 class="text-white font-extrabold text-xl">OradorIA Coach</h2>
+                  <p class="text-indigo-100 text-xs">Tu entrenador virtual</p>
+                </div>
+              </div>
+              <div class="p-6">
+                <div id="coachMessage" class="bg-white rounded-2xl p-4 border border-slate-200 shadow-inner text-slate-700 text-sm leading-relaxed min-h-[110px] transition-all">
+                  <i class="fas fa-comment-dots text-indigo-400 mr-2"></i> ¡Bienvenido a tu sesión de entrenamiento! Estoy listo para analizar tu voz, postura y lenguaje corporal. Cuando estés preparado, activa los dispositivos y comienza a hablar.
+                </div>
+                
+                <!-- métricas simuladas en tiempo real (feedback) -->
+                <div class="mt-5 space-y-3">
+                  <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                    <span class="text-slate-500 text-sm"><i class="fas fa-waveform mr-1 text-indigo-400"></i> Volumen estimado</span>
+                    <span id="volumenValue" class="font-mono font-bold text-slate-700">--</span>
+                  </div>
+                  <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                    <span class="text-slate-500 text-sm"><i class="fas fa-chart-line mr-1 text-emerald-500"></i> Fluidez (IA)</span>
+                    <span id="fluidezValue" class="font-mono font-bold text-slate-700">--</span>
+                  </div>
+                  <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                    <span class="text-slate-500 text-sm"><i class="fas fa-user-check mr-1 text-purple-500"></i> Postura estimada</span>
+                    <span id="posturaValue" class="font-mono font-bold text-slate-700">--</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-slate-500 text-sm"><i class="fas fa-clock mr-1 text-amber-500"></i> Tiempo de análisis</span>
+                    <span id="timerValue" class="font-mono font-bold text-indigo-600">00:00</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Siguiente paso / resumen -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center shadow-sm">
+              <i class="fas fa-chalkboard-user text-3xl text-indigo-300 mb-2"></i>
+              <p class="text-xs text-slate-500">Feedback en tiempo real basado en IA</p>
+              <p class="text-xs text-indigo-500 mt-1 font-medium">Postura · Voz · Velocidad · Muletillas</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Barra de estado o resultados (mensaje adicional) -->
+        <div class="mt-8 bg-indigo-50/60 rounded-2xl p-4 border border-indigo-200 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2 text-indigo-800 text-sm font-medium">
+            <i class="fas fa-circle-info text-indigo-500"></i>
+            <span>El análisis se detendrá automáticamente después de 30 segundos o puedes detenerlo manualmente.</span>
+          </div>
+          <button id="btnStopAnalysis" class="hidden px-5 py-2 bg-white border border-red-300 text-red-600 rounded-xl text-sm font-semibold hover:bg-red-50 transition">Detener Análisis</button>
+        </div>
+      </div>
+    </main>
+    </div>
+  </div>
+
+  <script>
+    // ---------- Elementos DOM ----------
+    const video = document.getElementById('videoPlayer');
+    const placeholder = document.getElementById('cameraPlaceholder');
+    const btnCamara = document.getElementById('btnCamara');
+    const btnMicrofono = document.getElementById('btnMicrofono');
+    const btnAnalizar = document.getElementById('btnAnalizar');
+    const btnStopAnalysis = document.getElementById('btnStopAnalysis');
+    const camStatusText = document.getElementById('camStatusText');
+    const camLedIcon = document.getElementById('camLedIcon');
+    const micStatusText = document.getElementById('micStatusText');
+    const micLedIcon = document.getElementById('micLedIcon');
+    const recordingIndicator = document.getElementById('recordingIndicator');
+    const coachMessageDiv = document.getElementById('coachMessage');
+    const volumenSpan = document.getElementById('volumenValue');
+    const fluidezSpan = document.getElementById('fluidezValue');
+    const posturaSpan = document.getElementById('posturaValue');
+    const timerSpan = document.getElementById('timerValue');
+    
+    // Estados
+    let cameraStream = null;
+    let mediaRecorder = null;
+    let audioContext = null;
+    let sourceNode = null;
+    let analyserNode = null;
+    let animationId = null;
+    let isMicActive = false;
+    let isCamActive = false;
+    let isAnalyzing = false;
+    let analysisTimer = null;
+    let analysisStartTime = 0;
+    let timerInterval = null;
+
+    // Variables para simular métricas inteligentes
+    let fakeMetricsInterval = null;
+
+    // Mensajes del coach
+    const messages = {
+      welcome: "¡Bienvenido a tu sesión de entrenamiento! Estoy listo para analizar tu voz, postura y lenguaje corporal. Cuando estés preparado, comienza a hablar.",
+      cameraOn: "✅ Cámara activada. Buena posición: recuerda mantener contacto visual y enderezar la espalda.",
+      micOn: "🎤 Micrófono activado. Comenzaré a escuchar tu tono y fluidez verbal.",
+      analyzingStarted: "🔍 ¡Análisis iniciado! Estoy evaluando ritmo, claridad y lenguaje corporal. Habla naturalmente.",
+      volumeHigh: "📢 Volumen alto, trata de modular un poco más suave para mayor claridad.",
+      volumeLow: "🔊 Volumen bajo, proyecta tu voz con más energía.",
+      goodFluency: "✨ Fluidez excelente, evitas muletillas, ¡sigue así!",
+      neutralFluency: "📝 Buena fluidez, intenta reducir pausas incómodas.",
+      postureMention: "🧘‍♂️ Tu postura se ve bien, mantén hombros relajados.",
+      analysisStop: "⏹️ Análisis detenido. Revisa tus métricas en el panel. ¡Gran progreso!"
+    };
+
+    function updateCoachMessage(msg, isError = false) {
+      coachMessageDiv.innerHTML = `<i class="fas fa-comment-dots text-indigo-400 mr-2"></i> ${msg}`;
+    }
+
+    // Actualizar estado de botón analizar
+    function updateAnalyzeButtonState() {
+      if (isCamActive && isMicActive && !isAnalyzing) {
+        btnAnalizar.disabled = false;
+        btnAnalizar.classList.remove('opacity-50', 'cursor-not-allowed');
+      } else if (isAnalyzing) {
+        btnAnalizar.disabled = true;
+      } else {
+        btnAnalizar.disabled = true;
+        btnAnalizar.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    // ----- CÁMARA -----
+    async function toggleCamera() {
+      if (isCamActive && cameraStream) {
+        // apagar cámara
+        cameraStream.getTracks().forEach(track => track.stop());
+        video.style.display = 'none';
+        placeholder.style.display = 'flex';
+        cameraStream = null;
+        isCamActive = false;
+        camStatusText.innerText = 'Cámara: OFF';
+        camLedIcon.className = 'fas fa-video-slash text-red-400';
+        btnCamara.innerHTML = '<i class="fas fa-camera"></i> Activar Cámara';
+        updateCoachMessage("Cámara desactivada. Puedes volver a activarla cuando quieras.");
+      } else {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+          cameraStream = stream;
+          video.srcObject = stream;
+          video.style.display = 'block';
+          placeholder.style.display = 'none';
+          isCamActive = true;
+          camStatusText.innerText = 'Cámara: ON';
+          camLedIcon.className = 'fas fa-video text-green-400';
+          btnCamara.innerHTML = '<i class="fas fa-camera-slash"></i> Desactivar Cámara';
+          updateCoachMessage(messages.cameraOn);
+        } catch (err) {
+          console.error("Error cámara:", err);
+          updateCoachMessage("No se pudo acceder a la cámara. Verifica permisos.", true);
+          alert("No se pudo acceder a la cámara. Permisos requeridos.");
+        }
+      }
+      updateAnalyzeButtonState();
+    }
+
+    // ----- MICRÓFONO + ANALIZADOR DE VOLUMEN (tiempo real visual)
+    async function toggleMicrophone() {
+      if (isMicActive && audioContext) {
+        // apagar micrófono
+        if (sourceNode) sourceNode.disconnect();
+        if (analyserNode) analyserNode.disconnect();
+        if (audioContext) await audioContext.close();
+        if (animationId) cancelAnimationFrame(animationId);
+        audioContext = null;
+        isMicActive = false;
+        micStatusText.innerText = 'Mic: OFF';
+        micLedIcon.className = 'fas fa-microphone-slash text-red-400';
+        btnMicrofono.innerHTML = '<i class="fas fa-microphone"></i> Activar Micrófono';
+        volumenSpan.innerText = '--';
+        updateCoachMessage("Micrófono desactivado.");
+      } else {
+        try {
+          const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          analyserNode = audioContext.createAnalyser();
+          analyserNode.fftSize = 256;
+          sourceNode = audioContext.createMediaStreamSource(micStream);
+          sourceNode.connect(analyserNode);
+          // no conectar destino para no generar eco
+          await audioContext.resume();
+          
+          isMicActive = true;
+          micStatusText.innerText = 'Mic: ON';
+          micLedIcon.className = 'fas fa-microphone text-green-400';
+          btnMicrofono.innerHTML = '<i class="fas fa-microphone-slash"></i> Desactivar Micrófono';
+          updateCoachMessage(messages.micOn);
+          
+          // Iniciar detección de volumen
+          const dataArray = new Uint8Array(analyserNode.frequencyBinCount);
+          function updateVolume() {
+            if (!isMicActive || !analyserNode) return;
+            analyserNode.getByteFrequencyData(dataArray);
+            let avg = 0;
+            for (let i = 0; i < dataArray.length; i++) avg += dataArray[i];
+            avg /= dataArray.length;
+            let percent = Math.min(100, Math.floor((avg / 255) * 100));
+            if (percent > 0) {
+              volumenSpan.innerText = `${percent}%`;
+              if (isAnalyzing) {
+                if (percent > 80) updateCoachMessage(messages.volumeHigh, false);
+                else if (percent < 20 && percent > 0) updateCoachMessage(messages.volumeLow, false);
+              }
+            } else {
+              if (isAnalyzing && percent === 0) volumenSpan.innerText = '0%';
+              else if (!isAnalyzing) volumenSpan.innerText = '--';
+            }
+            animationId = requestAnimationFrame(updateVolume);
+          }
+          if (animationId) cancelAnimationFrame(animationId);
+          animationId = requestAnimationFrame(updateVolume);
+        } catch (err) {
+          console.error("Error micrófono", err);
+          updateCoachMessage("Error al acceder al micrófono. Permisos necesarios.", true);
+          alert("No se pudo acceder al micrófono.");
+        }
+      }
+      updateAnalyzeButtonState();
+    }
+
+    // Simulación de métricas fluidas de fluidez y postura mientras se analiza
+    function startFakeMetricsSimulation() {
+      if (fakeMetricsInterval) clearInterval(fakeMetricsInterval);
+      fakeMetricsInterval = setInterval(() => {
+        if (!isAnalyzing) return;
+        // Fluidez simulada entre 55 y 98%
+        const fluidez = Math.floor(Math.random() * (98 - 60 + 1) + 60);
+        fluidezSpan.innerText = `${fluidez}%`;
+        // Postura simulada dinámica
+        const postura = Math.floor(Math.random() * (95 - 65 + 1) + 65);
+        posturaSpan.innerText = `${postura}%`;
+        
+        // feedback coach según fluidez
+        if (fluidez > 85) updateCoachMessage("✨ " + messages.goodFluency);
+        else if (fluidez > 68) updateCoachMessage("📈 " + messages.neutralFluency);
+        else updateCoachMessage("🎯 Intenta reducir pausas y muletillas. ¡Practica la fluidez!");
+        
+        if (postura > 80) updateCoachMessage(messages.postureMention);
+      }, 4000);
+    }
+    
+    function stopFakeMetricsSimulation() {
+      if (fakeMetricsInterval) clearInterval(fakeMetricsInterval);
+      fakeMetricsInterval = null;
+    }
+
+    // Temporizador
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      analysisStartTime = Date.now();
+      timerInterval = setInterval(() => {
+        if (!isAnalyzing) return;
+        const elapsedSeconds = Math.floor((Date.now() - analysisStartTime) / 1000);
+        const mins = Math.floor(elapsedSeconds / 60);
+        const secs = elapsedSeconds % 60;
+        timerSpan.innerText = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+        if (elapsedSeconds >= 30 && isAnalyzing) {
+          stopAnalysis('⏱️ Análisis completado (30s). Excelente sesión.');
+        }
+      }, 1000);
+    }
+
+    function stopTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+    }
+
+    // COMENZAR ANÁLISIS!
+    function startAnalysis() {
+      if (!isCamActive || !isMicActive) {
+        alert("🔴 Debes activar cámara y micrófono antes de iniciar el análisis.");
+        return;
+      }
+      if (isAnalyzing) return;
+      isAnalyzing = true;
+      recordingIndicator.classList.remove('hidden');
+      btnAnalizar.disabled = true;
+      btnAnalizar.classList.add('opacity-50');
+      btnStopAnalysis.classList.remove('hidden');
+      updateCoachMessage(messages.analyzingStarted);
+      // Resetear métricas simuladas
+      fluidezSpan.innerText = '...';
+      posturaSpan.innerText = '...';
+      volumenSpan.innerText = (volumenSpan.innerText !== '--' ? volumenSpan.innerText : '0%');
+      startTimer();
+      startFakeMetricsSimulation();
+      
+      // Simular detección de postura básica cada cierto tiempo extra
+      if (analysisTimer) clearTimeout(analysisTimer);
+      // El análisis se corta a los 30s o manual
+    }
+
+    function stopAnalysis(customMsg = null) {
+      if (!isAnalyzing) return;
+      isAnalyzing = false;
+      if (recordingIndicator) recordingIndicator.classList.add('hidden');
+      btnStopAnalysis.classList.add('hidden');
+      btnAnalizar.disabled = false;
+      updateAnalyzeButtonState();
+      stopTimer();
+      stopFakeMetricsSimulation();
+      if (customMsg) {
+        updateCoachMessage(customMsg);
+      } else {
+        updateCoachMessage(messages.analysisStop);
+      }
+      if (analysisTimer) clearTimeout(analysisTimer);
+      // No reiniciamos fluidez y postura completamente, se mantienen valores finales
+    }
+
+    // Eventos
+    btnCamara.addEventListener('click', toggleCamera);
+    btnMicrofono.addEventListener('click', toggleMicrophone);
+    btnAnalizar.addEventListener('click', startAnalysis);
+    btnStopAnalysis.addEventListener('click', () => stopAnalysis("⏹️ Análisis detenido por el usuario. Puedes empezar de nuevo."));
+    
+    // Inicial: Mensaje de bienvenida
+    updateCoachMessage(messages.welcome);
+    updateAnalyzeButtonState();
+    
+    // cleanup opcional (si se recarga la página, cerrar streams)
+    window.addEventListener('beforeunload', () => {
+      if (cameraStream) cameraStream.getTracks().forEach(t => t.stop());
+      if (audioContext) audioContext.close();
+    });
+  </script>
+</body>
+</html>

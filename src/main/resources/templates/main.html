@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Orador IA | Mejora tu Oratoria con Inteligencia Artificial</title>
+  <!-- Tailwind CSS v3 + Font Awesome Icons + Google Fonts (Inter) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <!-- Custom tailwind config override (optional smoothness) -->
+  <style>
+    * { font-family: 'Inter', system-ui, -apple-system, sans-serif; scroll-behavior: smooth; }
+    body { background: #fbfdfe; }
+    .glass-card {
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(2px);
+      border: 1px solid rgba(0,0,0,0.03);
+    }
+    .metric-glow {
+      transition: all 0.2s ease;
+    }
+    .btn-primary {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 20px -12px rgba(37, 99, 235, 0.35);
+    }
+    .feature-card {
+      transition: all 0.25s cubic-bezier(0.2, 0, 0, 1);
+    }
+    .feature-card:hover {
+      transform: translateY(-5px);
+    }
+    .live-badge {
+      animation: subtlePulse 1.5s infinite;
+    }
+    @keyframes subtlePulse {
+      0% { opacity: 0.7; text-shadow: 0 0 0px rgba(34,197,94,0);}
+      70% { opacity: 1; text-shadow: 0 0 3px rgba(34,197,94,0.5);}
+      100% { opacity: 0.7; text-shadow: 0 0 0px rgba(34,197,94,0);}
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <!-- Navigation Bar -->
+  <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/60 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-3 md:py-4 flex-wrap gap-3">
+        <!-- Logo + Brand -->
+        <div class="flex items-center space-x-2">
+          <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-600">
+            <i class="fas fa-microphone-lines text-white text-lg"></i>
+          </span>
+          <span class="font-extrabold text-xl tracking-tight text-blue-600" th:href="@{/}">OradorIA</span>
+          <span class="hidden md:inline-block text-xs font-medium bg-slate-100 text-slate-700 px-2 py-0.5 rounded-full ml-2">AI·Speech</span>
+        </div>
+        <!-- Desktop Menu (hidden on mobile, but we adapt with responsive) -->
+        <div class="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-700">
+          <a href="#" class="hover:text-blue-600 transition">Inicio</a>
+          <a href="#caracteristicas" class="hover:text-blue-600 transition">Características</a>
+          <a href="#beneficios" class="hover:text-blue-600 transition">Beneficios</a>
+          <a href="#precios" class="hover:text-blue-600 transition">Precios</a>
+          <a href="#contacto" class="hover:text-blue-600 transition">Contacto</a>
+        </div>
+        <div class="flex items-center space-x-3">
+          <a th:href="@{/Login}" class="text-sm font-medium text-gray-600 hover:text-blue-600 transition hidden sm:inline-block">Iniciar sesión</a>
+          <a th:href="@{/registro}" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded-full transition shadow-sm btn-primary">Registrarse</a>
+        </div>
+        <!-- Mobile menu icon (simple toggle placeholder, but we keep it clean) -->
+        <div class="md:hidden">
+          <button id="mobileMenuBtn" class="text-gray-600 focus:outline-none">
+            <i class="fas fa-bars text-xl"></i>
+          </button>
+        </div>
+      </div>
+      <!-- Mobile menu drawer (simple toggle) -->
+      <div id="mobileMenu" class="md:hidden hidden pb-4 flex flex-col space-y-3 text-sm font-medium text-gray-700 border-t border-gray-100 pt-3">
+        <a href="#" class="hover:text-blue-600 py-1">Inicio</a>
+        <a href="#caracteristicas" class="hover:text-blue-600 py-1">Características</a>
+        <a href="#beneficios" class="hover:text-blue-600 py-1">Beneficios</a>
+        <a href="#precios" class="hover:text-blue-600 py-1">Precios</a>
+        <a href="#contacto" class="hover:text-blue-600 py-1">Contacto</a>
+        <div class="pt-2 border-t border-gray-100 flex space-x-4">
+          <a th:href="@{/Login}" class="text-blue-600 font-semibold">Iniciar sesión</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-slate-50 -z-10"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <!-- Left Hero Content -->
+        <div class="text-center md:text-left">
+          <div class="inline-flex items-center gap-2 bg-indigo-100/70 rounded-full px-4 py-1.5 text-sm font-medium text-indigo-800 mb-6 backdrop-blur-sm">
+            <i class="fas fa-robot text-blue-600 text-xs"></i> <span>Powered by AI & análisis de voz</span>
+          </div>
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-900 leading-tight">
+            Mejora tu <span class="text-blue-600">Oratoria</span> con Inteligencia Artificial
+          </h1>
+          <p class="text-lg text-gray-600 mt-6 max-w-xl mx-auto md:mx-0">
+            Analiza tu voz, detecta muletillas y perfecciona tus habilidades de comunicación con IA. 
+            Conviértete en un orador cautivador con feedback en tiempo real.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-4 justify-center md:justify-start">
+            <a href="#demo-analisis" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-xl shadow-lg btn-primary inline-flex items-center gap-2">
+              <i class="fas fa-chalkboard-user"></i> Comenzar Gratis
+            </a>
+            <a href="#caracteristicas" class="border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-semibold py-3 px-6 rounded-xl transition inline-flex items-center gap-2">
+              <i class="fas fa-play-circle"></i> Ver demo
+            </a>
+          </div>
+          <div class="mt-8 flex flex-wrap gap-4 text-sm text-gray-500 justify-center md:justify-start">
+            <div class="flex items-center gap-1"><i class="fas fa-check-circle text-green-500"></i> Sin tarjeta de crédito</div>
+            <div class="flex items-center gap-1"><i class="fas fa-chart-line text-blue-400"></i> IA en tiempo real</div>
+          </div>
+        </div>
+
+        <!-- Right Card: Real-time Analytics (Interactive widget) -->
+        <div id="demo-analisis" class="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-100 p-5 md:p-6 glass-card">
+          <div class="flex justify-between items-center mb-4">
+            <div class="flex items-center gap-2">
+              <i class="fas fa-waveform text-blue-600 text-xl"></i>
+              <span class="font-bold text-gray-800">Analizando en tiempo real...</span>
+            </div>
+            <div class="bg-green-100 text-green-700 text-xs font-semibold px-2 py-1 rounded-full flex items-center gap-1 live-badge">
+              <i class="fas fa-circle text-[8px]"></i> EN VIVO
+            </div>
+          </div>
+          <div class="space-y-6">
+            <!-- Fluidez card -->
+            <div>
+              <div class="flex justify-between text-sm font-medium mb-1">
+                <span class="text-gray-700"><i class="fas fa-tachometer-alt mr-1 text-blue-400"></i> Fluidez</span>
+                <span id="fluidezValue" class="text-blue-700 font-bold">92%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div id="fluidezBar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-500 ease-out" style="width: 92%"></div>
+              </div>
+            </div>
+            <!-- Claridad card -->
+            <div>
+              <div class="flex justify-between text-sm font-medium mb-1">
+                <span class="text-gray-700"><i class="fas fa-ear-listen mr-1 text-sky-400"></i> Claridad</span>
+                <span id="claridadValue" class="text-sky-700 font-bold">88%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div id="claridadBar" class="bg-sky-400 h-2.5 rounded-full transition-all duration-500 ease-out" style="width: 88%"></div>
+              </div>
+            </div>
+            <!-- Confianza card -->
+            <div>
+              <div class="flex justify-between text-sm font-medium mb-1">
+                <span class="text-gray-700"><i class="fas fa-brain mr-1 text-blue-600"></i> Confianza</span>
+                <span id="confianzaValue" class="text-blue-700 font-bold">85%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div id="confianzaBar" class="bg-blue-500 h-2.5 rounded-full transition-all duration-500 ease-out" style="width: 85%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-6 pt-4 border-t border-gray-100 text-xs text-gray-400 flex justify-between items-center">
+            <span><i class="fas fa-microphone-alt mr-1"></i> Muletillas detectadas: <span id="muletillasCount" class="font-mono font-bold text-amber-600">3</span> (ej: "eh", "este")</span>
+            <button id="simulateSpeechBtn" class="text-blue-600 hover:text-blue-700 text-xs font-medium flex items-center gap-1 transition">
+              <i class="fas fa-sync-alt"></i> Simular mejora
+            </button>
+          </div>
+          <div class="mt-2 text-xs text-gray-500 bg-gray-50 p-2 rounded-lg">
+            <i class="fas fa-lightbulb text-yellow-500 mr-1"></i> Consejo IA: reduce repeticiones y pausas para aumentar fluidez.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Características Section -->
+  <section id="caracteristicas" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <span class="text-blue-600 font-semibold tracking-wide uppercase text-sm">Características potenciadas por IA</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2">Análisis inteligente de tu discurso</h2>
+        <p class="text-gray-500 max-w-2xl mx-auto mt-4">Tecnología de vanguardia para pulir cada detalle de tu expresión oral</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="feature-card bg-gray-50 rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition">
+          <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4"><i class="fas fa-waveform text-blue-600 text-2xl"></i></div>
+          <h3 class="font-bold text-xl">Detección de muletillas</h3>
+          <p class="text-gray-500 text-sm mt-2">Identifica automáticamente "ehh", "mmm", "este" y más de 15 patrones.</p>
+        </div>
+        <div class="feature-card bg-gray-50 rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition">
+          <div class="w-14 h-14 bg-sky-100 rounded-2xl flex items-center justify-center mx-auto mb-4"><i class="fas fa-chart-line text-sky-600 text-2xl"></i></div>
+          <h3 class="font-bold text-xl">Métricas en tiempo real</h3>
+          <p class="text-gray-500 text-sm mt-2">Fluidez, claridad y confianza actualizadas segundo a segundo.</p>
+        </div>
+        <div class="feature-card bg-gray-50 rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition">
+          <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4"><i class="fas fa-robot text-blue-600 text-2xl"></i></div>
+          <h3 class="font-bold text-xl">Feedback inteligente</h3>
+          <p class="text-gray-500 text-sm mt-2">Recomendaciones personalizadas para mejorar tu oratoria.</p>
+        </div>
+        <div class="feature-card bg-gray-50 rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition">
+          <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4"><i class="fas fa-chalkboard-user text-emerald-600 text-2xl"></i></div>
+          <h3 class="font-bold text-xl">Práctica guiada</h3>
+          <p class="text-gray-500 text-sm mt-2">Ejercicios y simulaciones con IA para sesiones ilimitadas.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Beneficios Section -->
+  <section id="beneficios" class="py-16 bg-gradient-to-br from-blue-50/40 to-slate-50/40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <span class="text-blue-600 font-semibold tracking-wide uppercase text-sm">Transforma tu comunicación</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2">Beneficios de entrenar con IA</h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-white rounded-xl p-6 shadow-md flex gap-4 items-start">
+          <i class="fas fa-tachometer-alt text-blue-600 text-3xl mt-1"></i>
+          <div><h3 class="font-bold text-lg">Aumenta tu seguridad</h3><p class="text-gray-500 text-sm">Reduce la ansiedad al hablar en público con métricas objetivas.</p></div>
+        </div>
+        <div class="bg-white rounded-xl p-6 shadow-md flex gap-4 items-start">
+          <i class="fas fa-chart-simple text-blue-600 text-3xl mt-1"></i>
+          <div><h3 class="font-bold text-lg">Progreso medible</h3><p class="text-gray-500 text-sm">Evolución semanal de fluidez y claridad, gráficos dinámicos.</p></div>
+        </div>
+        <div class="bg-white rounded-xl p-6 shadow-md flex gap-4 items-start">
+          <i class="fas fa-clock text-sky-500 text-3xl mt-1"></i>
+          <div><h3 class="font-bold text-lg">Entrena cuando quieras</h3><p class="text-gray-500 text-sm">Práctica flexible disponible 24/7 desde cualquier dispositivo.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Precios Section (simple) -->
+  <section id="precios" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <span class="text-blue-600 font-semibold uppercase text-sm">Planes flexibles</span>
+        <h2 class="text-3xl md:text-4xl font-bold mt-2">Elige tu camino al dominio oral</h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div class="border rounded-2xl p-6 hover:shadow-xl transition">
+          <h3 class="text-xl font-bold">Gratuito</h3>
+          <p class="text-3xl font-bold mt-2">$0<span class="text-base font-normal text-gray-500">/mes</span></p>
+          <ul class="mt-4 space-y-2 text-sm">
+            <li><i class="fas fa-check text-green-500 mr-2"></i> Análisis básico de voz</li>
+            <li><i class="fas fa-check text-green-500 mr-2"></i> 5 prácticas mensuales</li>
+            <li><i class="fas fa-check text-green-500 mr-2"></i> Detección muletillas</li>
+          </ul>
+          <a href="login.html" class="mt-6 block text-center border border-blue-600 text-blue-600 rounded-lg py-2 font-medium hover:bg-blue-50">Empezar</a>
+        </div>
+        <div class="border-2 border-blue-600 rounded-2xl p-6 shadow-xl relative bg-white">
+          <div class="absolute -top-3 left-5 bg-blue-600 text-white text-xs px-3 py-0.5 rounded-full">MÁS POPULAR</div>
+          <h3 class="text-xl font-bold">Pro</h3>
+          <p class="text-3xl font-bold mt-2">$12<span class="text-base font-normal text-gray-500">/mes</span></p>
+          <ul class="mt-4 space-y-2 text-sm">
+            <li><i class="fas fa-check text-green-500 mr-2"></i> Análisis IA en tiempo real</li>
+            <li><i class="fas fa-check text-green-500 mr-2"></i> Prácticas ilimitadas</li>
+            <li><i class="fas fa-check text-green-500 mr-2"></i> Consejos personalizados avanzados</li>
+            <li><i class="fas fa-check text-green-500 mr-2"></i> Reportes semanales</li>
+          </ul>
+          <a th:href="@{/Login}" class="mt-6 block text-center bg-blue-600 text-white rounded-lg py-2 font-medium hover:bg-blue-700">Comenzar prueba gratis</a>
+        </div>
+        <div class="border rounded-2xl p-6 hover:shadow-xl transition">
+          <h3 class="text-xl font-bold">Equipo</h3>
+          <p class="text-3xl font-bold mt-2">$29<span class="text-base font-normal text-gray-500">/mes</span></p>
+          <ul class="mt-4 space-y-2 text-sm">
+            <li><i class="fas fa-check text-green-500 mr-2"></i> Todo Plan Pro</li>
+            <li><i class="fas fa-check text-green-500 mr-2"></i> Gestión de equipos</li>
+            <li><i class="fas fa-check text-green-500 mr-2"></i> Estadísticas grupales</li>
+          </ul>
+          <a th:href="@{/Login}" class="mt-6 block text-center border border-gray-300 rounded-lg py-2 font-medium hover:bg-gray-50">Contactar ventas</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer (estilo como la referencia) -->
+  <footer id="contacto" class="bg-gradient-to-b from-slate-950 to-slate-900 text-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-14">
+        <!-- Brand -->
+        <div class="lg:pr-6">
+          <div class="flex items-center gap-3">
+            <span class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-blue-600">
+              <i class="fas fa-microphone-lines text-white"></i>
+            </span>
+            <span class="text-2xl font-extrabold tracking-tight text-white">OradorIA</span>
+          </div>
+          <p class="mt-4 max-w-sm text-slate-300 leading-relaxed">
+            Mejora tu oratoria con inteligencia artificial
+          </p>
+        </div>
+
+        <!-- Producto -->
+        <div>
+          <h3 class="text-base font-semibold text-white">Producto</h3>
+          <ul class="mt-4 space-y-3 text-slate-300">
+            <li><a class="hover:text-white transition" href="#caracteristicas">Características</a></li>
+            <li><a class="hover:text-white transition" href="#precios">Precios</a></li>
+            <li><a class="hover:text-white transition" href="#">API</a></li>
+          </ul>
+        </div>
+
+        <!-- Empresa -->
+        <div>
+          <h3 class="text-base font-semibold text-white">Empresa</h3>
+          <ul class="mt-4 space-y-3 text-slate-300">
+            <li><a class="hover:text-white transition" href="#">Sobre nosotros</a></li>
+            <li><a class="hover:text-white transition" href="#">Blog</a></li>
+            <li><a class="hover:text-white transition" href="#">Carreras</a></li>
+          </ul>
+        </div>
+
+        <!-- Legal -->
+        <div>
+          <h3 class="text-base font-semibold text-white">Legal</h3>
+          <ul class="mt-4 space-y-3 text-slate-300">
+            <li><a class="hover:text-white transition" href="#">Privacidad</a></li>
+            <li><a class="hover:text-white transition" href="#">Términos</a></li>
+            <li><a class="hover:text-white transition" href="#">Cookies</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mt-12 border-t border-white/10 pt-8 text-center text-sm text-slate-400">
+        © 2026 OradorIA. Todos los derechos reservados.
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript: Simulación de IA en tiempo real y muletillas dinámicas -->
+  <script>
+    (function() {
+      // Valores actuales de las métricas
+      let fluency = 92;
+      let clarity = 88;
+      let confidence = 85;
+      let fillersCount = 3;
+
+      // Elementos del DOM
+      const fluencyValueSpan = document.getElementById('fluidezValue');
+      const clarityValueSpan = document.getElementById('claridadValue');
+      const confidenceValueSpan = document.getElementById('confianzaValue');
+      const fluencyBar = document.getElementById('fluidezBar');
+      const clarityBar = document.getElementById('claridadBar');
+      const confidenceBar = document.getElementById('confianzaBar');
+      const muletillasSpan = document.getElementById('muletillasCount');
+      const simulateBtn = document.getElementById('simulateSpeechBtn');
+
+      // Función para actualizar UI de métricas y muletillas
+      function updateMetricsUI() {
+        fluencyValueSpan.innerText = fluency + '%';
+        clarityValueSpan.innerText = clarity + '%';
+        confidenceValueSpan.innerText = confidence + '%';
+        fluencyBar.style.width = fluency + '%';
+        clarityBar.style.width = clarity + '%';
+        confidenceBar.style.width = confidence + '%';
+        muletillasSpan.innerText = fillersCount;
+      }
+
+      // Simular una mejora progresiva (como si el usuario practicara)
+      function simulateImprovement() {
+        // aumento controlado con límite 99%
+        fluency = Math.min(99, fluency + Math.floor(Math.random() * 4) + 1);
+        clarity = Math.min(98, clarity + Math.floor(Math.random() * 3) + 1);
+        confidence = Math.min(97, confidence + Math.floor(Math.random() * 4) + 1);
+        // Reducción de muletillas (inteligente)
+        if (fillersCount > 0) {
+          fillersCount = Math.max(0, fillersCount - Math.floor(Math.random() * 2));
+        } else {
+          fillersCount = 0;
+        }
+        // Si por azar se mejora extra pero mantener coherencia
+        if (fluency > 99) fluency = 99;
+        if (clarity > 98) clarity = 98;
+        if (confidence > 97) confidence = 97;
+        updateMetricsUI();
+        // Animación adicional: feedback contextual
+        const adviceDiv = document.querySelector('#demo-analisis .bg-gray-50 p');
+        if (adviceDiv) {
+          if (fillersCount === 0 && fluency >= 95) {
+            adviceDiv.innerHTML = '<i class=\"fas fa-trophy text-yellow-500 mr-1\"></i> ¡Excelente! Tu discurso es claro y fluido. Nivel experto.';
+          } else if (fluency >= 90 && fillersCount <= 1) {
+            adviceDiv.innerHTML = '<i class=\"fas fa-thumbs-up text-indigo-500 mr-1\"></i> Muy bien, redujiste muletillas. Sigue practicando para la confianza.';
+          } else {
+            adviceDiv.innerHTML = '<i class=\"fas fa-lightbulb text-yellow-500 mr-1\"></i> Consejo IA: reduce repeticiones y pausas para aumentar fluidez.';
+          }
+        }
+        // Efecto visual cada mejora
+        const cards = [fluencyBar, clarityBar, confidenceBar];
+        cards.forEach(bar => {
+          bar.classList.add('transition-all', 'duration-300');
+        });
+      }
+
+      // Simular variación aleatoria tipo "análisis en tiempo real" (similar a micrófono activo)
+      let intervalId = null;
+      function startRealTimeFluctuation() {
+        if (intervalId) clearInterval(intervalId);
+        intervalId = setInterval(() => {
+          // Cambios suaves en tiempo real, simulando entrada de voz y detección
+          let newFluency = fluency + (Math.random() - 0.5) * 1.2;
+          let newClarity = clarity + (Math.random() - 0.5) * 1;
+          let newConfidence = confidence + (Math.random() - 0.5) * 1.3;
+          // Ajustes marginales de muletillas (podría subir o bajar)
+          let fillerDelta = Math.random() > 0.7 ? (Math.random() > 0.6 ? 1 : -1) : 0;
+          
+          // Limites realistas
+          newFluency = Math.min(99.5, Math.max(60, newFluency));
+          newClarity = Math.min(98, Math.max(65, newClarity));
+          newConfidence = Math.min(97, Math.max(60, newConfidence));
+          fluency = Math.round(newFluency);
+          clarity = Math.round(newClarity);
+          confidence = Math.round(newConfidence);
+          
+          let newFillers = fillersCount + fillerDelta;
+          newFillers = Math.min(7, Math.max(0, newFillers));
+          fillersCount = newFillers;
+          
+          updateMetricsUI();
+
+          // Cambiar mensaje dinámico basado en muletillas o métricas bajas
+          const adviceDiv = document.querySelector('#demo-analisis .bg-gray-50 p');
+          if (adviceDiv) {
+            if (fillersCount >= 3) {
+              adviceDiv.innerHTML = '<i class=\"fas fa-exclamation-triangle text-amber-500 mr-1\"></i> Muletillas frecuentes detectadas. Prueba pausas conscientes.';
+            } else if (fluency < 75) {
+              adviceDiv.innerHTML = '<i class=\"fas fa-microphone-slash mr-1 text-red-400\"></i> Baja fluidez. Recomendamos ejercicios de dicción.';
+            } else if (confidence < 75) {
+              adviceDiv.innerHTML = '<i class=\"fas fa-heartbeat mr-1 text-rose-400\"></i> Trabaja en lenguaje corporal y proyección vocal.';
+            } else {
+              adviceDiv.innerHTML = '<i class=\"fas fa-chart-line mr-1 text-indigo-400\"></i> Buen progreso, mantén el ritmo y evita repeticiones.';
+            }
+          }
+        }, 4800); // Actualización cada 4.8s para sentir monitoreo en vivo
+      }
+
+      // Botón simular mejora manual y también sirve para entrenar
+      if (simulateBtn) {
+        simulateBtn.addEventListener('click', () => {
+          simulateImprovement();
+          // feedback extra: cambiando temporalmente botón
+          simulateBtn.innerHTML = '<i class=\"fas fa-check-circle\"></i> ¡Mejorado!';
+          setTimeout(() => {
+            simulateBtn.innerHTML = '<i class=\"fas fa-sync-alt\"></i> Simular mejora';
+          }, 1600);
+        });
+      }
+
+      // Mobile menu toggle
+      const mobileBtn = document.getElementById('mobileMenuBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      if (mobileBtn && mobileMenu) {
+        mobileBtn.addEventListener('click', () => {
+          mobileMenu.classList.toggle('hidden');
+        });
+      }
+
+      // Formulario de contacto feedback simple
+      const contactForm = document.getElementById('contactForm');
+      const formFeedback = document.getElementById('formFeedback');
+      if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          if (formFeedback) {
+            formFeedback.classList.remove('hidden');
+            formFeedback.innerText = '¡Mensaje enviado! Nuestro equipo IA te responderá pronto.';
+            formFeedback.classList.add('text-green-300');
+            setTimeout(() => {
+              formFeedback.classList.add('hidden');
+            }, 3000);
+          }
+          contactForm.reset();
+        });
+      }
+
+      // Iniciar simulación de análisis en tiempo real.
+      startRealTimeFluctuation();
+      updateMetricsUI();
+    })();
+  </script>
+</body>
+</html>

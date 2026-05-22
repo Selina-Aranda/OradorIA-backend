@@ -1,0 +1,90 @@
+<!-- ========================= -->
+<!-- admin-settings.html -->
+<!-- ========================= -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+
+<title>Configuración | OradorIA</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body{
+background:#f8fafc;
+font-family:Inter,sans-serif;
+}
+
+.card{
+background:white;
+border-radius:24px;
+border:1px solid #e2e8f0;
+}
+</style>
+
+</head>
+
+<body class="p-8">
+
+<h1 class="text-3xl font-extrabold text-slate-800 mb-6">
+Configuración del Sistema
+</h1>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+<div class="card p-6">
+
+<h2 class="font-bold text-xl mb-4">
+Configuración IA
+</h2>
+
+<div class="space-y-4">
+
+<input type="text"
+placeholder="API OpenAI"
+class="w-full border rounded-xl px-4 py-3"/>
+
+<input type="text"
+placeholder="TensorFlow URL"
+class="w-full border rounded-xl px-4 py-3"/>
+
+<button class="bg-blue-600 text-white px-5 py-2 rounded-xl">
+Guardar
+</button>
+
+</div>
+
+</div>
+
+<div class="card p-6">
+
+<h2 class="font-bold text-xl mb-4">
+Configuración General
+</h2>
+
+<div class="space-y-4">
+
+<select class="w-full border rounded-xl px-4 py-3">
+<option>Español</option>
+<option>English</option>
+</select>
+
+<select class="w-full border rounded-xl px-4 py-3">
+<option>Modo Claro</option>
+<option>Modo Oscuro</option>
+</select>
+
+<button class="bg-indigo-600 text-white px-5 py-2 rounded-xl">
+Actualizar
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>
