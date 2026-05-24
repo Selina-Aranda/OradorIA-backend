@@ -10,22 +10,21 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/login", "/Login", "/registro", "/css/**", "/js/**", "/images/**",
-                                "/webjars/**")
-                        .permitAll()
-                        .anyRequest().permitAll())
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .permitAll())
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login")
-                        .permitAll());
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                http
+                                .authorizeHttpRequests(authorize -> authorize
+                                                .requestMatchers("/", "/login", "/Login", "/registro", "/css/**",
+                                                                "/js/**", "/images/**",
+                                                                "/webjars/**")
+                                                .permitAll()
+                                                .anyRequest().permitAll())
+                                .formLogin(form -> form.disable())
+                                .logout(logout -> logout
+                                                .logoutUrl("/logout")
+                                                .logoutSuccessUrl("/login")
+                                                .permitAll());
 
-        return http.build();
-    }
+                return http.build();
+        }
 }

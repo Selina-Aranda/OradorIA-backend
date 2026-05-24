@@ -27,7 +27,7 @@ public class LoginController {
 
     @GetMapping({ "/Login", "/login" })
     public String mostrarLogin() {
-        return "Login";
+        return "login";
     }
 
     @PostMapping({ "/Login", "/login" })
@@ -38,7 +38,7 @@ public class LoginController {
 
         UserEntity user = repo.findByEmail(email);
 
-        if (user != null) {
+        if (user != null && password != null && password.equals(user.getPassword())) {
             session.setAttribute("user", user);
             if (user.getIdRol() != null && user.getIdRol() == 1) {
                 return "redirect:/admin-dashboard";
@@ -47,14 +47,14 @@ public class LoginController {
             }
         } else {
             model.addAttribute("error", "Usuario o contraseña incorrectos");
-            return "Login";
+            return "login";
         }
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/Login";
+        return "redirect:/main";
     }
 
     // registro
@@ -62,7 +62,7 @@ public class LoginController {
     @GetMapping("/registro")
     public String registro(Model model) {
         model.addAttribute("user", new User());
-        return "Login";
+        return "login";
     }
 
     @PostMapping("/registro")
