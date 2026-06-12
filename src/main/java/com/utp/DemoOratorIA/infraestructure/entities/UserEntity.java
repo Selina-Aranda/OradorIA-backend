@@ -34,18 +34,14 @@ public class UserEntity {
     private Integer idRol;
     @Column(name = "id_plan")
     private Integer idPlan;
-    @Column(name = "nombre")
-    private String nombre;
+    @Column(name = "nombres")
+    private String nombres;
     @Column(name = "apellidos")
     private String apellidos;
     @Column(name = "email")
     private String email;
     @Column(name = "password")
     private String password;
-    @Column(name = "telefono")
-    private String telefono;
-    @Column(name = "foto_perfil")
-    private String fotoPerfil;
     @Column(name = "fecha_registro")
     private LocalDateTime fechaRegistro;
     @Column(name = "ultimo_login")

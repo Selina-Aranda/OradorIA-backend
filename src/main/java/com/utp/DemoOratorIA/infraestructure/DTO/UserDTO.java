@@ -8,9 +8,7 @@ public record UserDTO (
     String nombre,
     String apellidos,
     String email,
-    String password,
-    String telefono,
-    String fotoPerfil
+    String password
 ) {
     
 }

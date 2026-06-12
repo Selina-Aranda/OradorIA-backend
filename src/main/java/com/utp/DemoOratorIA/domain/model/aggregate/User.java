@@ -10,13 +10,10 @@ public class User {
 private Integer idUsuario;
     private Integer idRol;
     private Integer idPlan;
-
     private String nombres;
     private String apellidos;
     private String email;
     private String password;
-    private String telefono;
-    private String fotoPerfil;
 
     private UserStatus estado;
 
@@ -31,6 +28,11 @@ private Integer idUsuario;
     public Integer getIdRol() {
         return idRol;
     }
+
+    public void setIdRol(Integer idRol) {
+        this.idRol = idRol;
+    }
+
 
     public Integer getIdPlan() {
         return idPlan;
@@ -52,14 +54,6 @@ private Integer idUsuario;
         return password;
     }
 
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public String getFotoPerfil() {
-        return fotoPerfil;
-    }
-
     public UserStatus getEstado() {
         return estado;
     }
@@ -71,6 +65,43 @@ private Integer idUsuario;
     public LocalDateTime getUltimoLogin() {
         return ultimoLogin;
     }
+
+    public void setNombres(String nombres) {
+        this.nombres = nombres;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public void setIdPlan(Integer idPlan) {
+        this.idPlan = idPlan;
+    }
+
+    public void setEstado(UserStatus estado) {
+        this.estado = estado;
+    }
+
+    public void setFechaRegistro(LocalDateTime fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
+    }
+
+    public void setUltimoLogin(LocalDateTime ultimoLogin) {
+        this.ultimoLogin = ultimoLogin;
+    }
+
+
 
     public static class Builder {
         private User user;
@@ -111,16 +142,6 @@ private Integer idUsuario;
 
         public Builder password(String password) {
             this.user.password = password;
-            return this;
-        }
-
-        public Builder telefono(String telefono) {
-            this.user.telefono = telefono;
-            return this;
-        }
-
-        public Builder fotoPerfil(String fotoPerfil) {
-            this.user.fotoPerfil = fotoPerfil;
             return this;
         }
 

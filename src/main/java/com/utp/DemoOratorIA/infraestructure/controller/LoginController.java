@@ -1,14 +1,16 @@
 package com.utp.DemoOratorIA.infraestructure.controller;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.utp.DemoOratorIA.domain.model.aggregate.User;
+import com.utp.DemoOratorIA.domain.model.enums.UserStatus;
 import com.utp.DemoOratorIA.domain.model.repositories.IUserRepository;
 import com.utp.DemoOratorIA.infraestructure.entities.UserEntity;
 import com.utp.DemoOratorIA.infraestructure.repositories.JPAUserRepository;
@@ -66,8 +68,16 @@ public class LoginController {
     }
 
     @PostMapping("/registro")
-    public String guardarRegistro(@ModelAttribute User user) {
+    public String guardarRegistro(User user) {
+
+        user.setIdRol(2);
+
+        // si tienes los setters
+        user.setEstado(UserStatus.ACTIVE);
+        user.setFechaRegistro(LocalDateTime.now());
+
         userRepository.save(user);
+
         return "Login";
     }
 }
