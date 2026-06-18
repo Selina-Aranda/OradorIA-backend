@@ -64,11 +64,9 @@
 
         <div class="px-6 pb-4">
           <div class="flex items-center gap-3">
-            <div class="h-11 w-11 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
-              JP
-            </div>
+            <div class="h-11 w-11 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" th:text="${#strings.substring(session.user.nombres.split(' ')[0],0,1) + #strings.substring(session.user.nombres.split(' ')[1],0,1)}"></div>
             <div class="min-w-0">
-              <div class="font-semibold text-slate-900 truncate">Juan Pérez</div>
+              <div class="font-semibold text-slate-900 truncate" th:text="${session.user.nombres}"></div>
               <div class="text-sm text-slate-500">Plan Profesional</div>
             </div>
           </div>
@@ -116,9 +114,7 @@
             <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500"></span>
           </button>
 
-          <div class="h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" aria-label="Usuario">
-            JP
-          </div>
+          <div class="h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" aria-label="Usuario" th:text="${#strings.substring(session.user.nombres.split(' ')[0],0,1) + #strings.substring(session.user.nombres.split(' ')[1],0,1)}"></div>
         </div>
       </header>
 
@@ -126,7 +122,7 @@
       <main class="px-6 py-8">
         <div class="max-w-6xl">
           <h1 class="text-4xl font-extrabold tracking-tight">Dashboard</h1>
-          <p class="mt-2 text-slate-600">Bienvenido de nuevo, Juan. Aquí está tu progreso.</p>
+          <p class="mt-2 text-slate-600">Bienvenido de nuevo, <span th:text="${session.user.nombres}"></span>. Aquí está tu progreso.</p>
 
           <!-- Stats cards -->
           <section class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
