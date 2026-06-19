@@ -2,9 +2,17 @@ package com.utp.DemoOratorIA.infraestructure.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.ui.Model;
+import org.springframework.beans.factory.annotation.Autowired;
+
+
+import com.utp.DemoOratorIA.application.service.UserService;
 
 @Controller
 public class MainUserController {
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/analysis-user")
     public String mostrarNuevoAnalisis() {
@@ -57,7 +65,8 @@ public class MainUserController {
     }
 
     @GetMapping("/admin-users")
-    public String mostrarUsuarios() {
+    public String mostrarUsuarios(Model model) {
+        model.addAttribute("usuarios", userService.listar());
         return "admin-users";
     }
 }
