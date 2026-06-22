@@ -2,6 +2,7 @@ package com.utp.DemoOratorIA.infraestructure.mappers;
 
 import com.utp.DemoOratorIA.domain.model.aggregate.Analisis;
 import com.utp.DemoOratorIA.infraestructure.entities.AnalisisEntity;
+import com.utp.DemoOratorIA.infraestructure.DTO.AnalisisDTO;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -29,5 +30,17 @@ public class AnalisisMapper {
                 .descripcion(domain.getDescripcion())
                 .estado(domain.getEstado())
                 .build();
+    }
+
+    public AnalisisDTO toDTO(Analisis domain){
+        if (domain == null) return null;
+
+        AnalisisDTO dto = new AnalisisDTO();
+        dto.setIdAnalisis(domain.getIdAnalisis());
+        dto.setIdUsuario(domain.getIdUsuario());
+        dto.setTitulo(domain.getTitulo());
+        dto.setDescripcion(domain.getDescripcion());
+        dto.setEstado(domain.getEstado());
+        return dto;
     }
 }

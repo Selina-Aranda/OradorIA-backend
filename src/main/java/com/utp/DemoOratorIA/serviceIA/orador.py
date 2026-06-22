@@ -270,6 +270,43 @@ def detectar_pausas(path="audio.wav", umbral_silencio=30, min_duracion=0.5):
     }
 
 
+
+def ejecutar_analisis():
+    
+    model = whisper.load_model("base")
+
+    hilo_audio = threading.Thread(target=grabar_audio)
+    hilo_video = threading.Thread(target=analizar_video)
+
+    hilo_audio.start()
+    hilo_video.start()
+
+    hilo_audio.join()
+    hilo_video.join()
+
+    texto = transcribir(model)
+
+    muletillas_texto = detectar_muletillas_texto(texto)
+    ppm = palabras_por_minuto(texto)
+    pausas = detectar_pausas("audio.wav")
+
+    resultado = analisis_ia(
+        texto,
+        ppm,
+        muletillas_texto,
+        miradas_eventos,
+        pausas
+    )
+
+    return {
+        "texto": texto,
+        "ppm": ppm,
+        "muletillas": muletillas_texto,
+        "miradas": miradas_eventos,
+        "pausas": pausas,
+        "analisis": resultado
+    }
+
 # =========================
 # MAIN
 # =========================
