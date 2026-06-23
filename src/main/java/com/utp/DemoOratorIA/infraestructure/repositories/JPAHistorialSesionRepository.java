@@ -1,5 +1,8 @@
 package com.utp.DemoOratorIA.infraestructure.repositories;
 
-public class JPAHistorialSesionRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.utp.DemoOratorIA.infraestructure.entities.HistorialSesionEntity;
+
+public interface JPAHistorialSesionRepository extends JpaRepository<HistorialSesionEntity, Integer> {
 }

@@ -1,6 +1,6 @@
 package com.utp.DemoOratorIA.domain.model.enums;
 
-public enum TypeNotification {
+public enum NotificationType {
     INFO,
     ALERTA,
     SISTEMA,
