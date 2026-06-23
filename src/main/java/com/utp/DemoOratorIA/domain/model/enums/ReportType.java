@@ -1,6 +1,6 @@
 package com.utp.DemoOratorIA.domain.model.enums;
 
-public enum TypeReports {
+public enum ReportType {
     PDF,
     EXCEL,
     GENERAL,
