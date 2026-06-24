@@ -1,34 +1,61 @@
 package com.utp.DemoOratorIA.infraestructure.adapters;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+
+import org.springframework.stereotype.Repository;
+
 import com.utp.DemoOratorIA.domain.model.aggregate.Analisis;
 import com.utp.DemoOratorIA.domain.model.repositories.IAnalisisRepository;
 import com.utp.DemoOratorIA.infraestructure.entities.AnalisisEntity;
 import com.utp.DemoOratorIA.infraestructure.mappers.AnalisisMapper;
 import com.utp.DemoOratorIA.infraestructure.repositories.JPAAnalisisRepository;
-import org.springframework.stereotype.Component;
 
-import java.util.Optional;
 
-@Component
+
+
+@Repository
 public class AnalisisRepositoryAdapter implements IAnalisisRepository {
 
-    private final JPAAnalisisRepository jpaRepository;
+    private final JPAAnalisisRepository jpa;
     private final AnalisisMapper mapper;
 
-    public AnalisisRepositoryAdapter(JPAAnalisisRepository jpaRepository, AnalisisMapper mapper) {
-        this.jpaRepository = jpaRepository;
+    public AnalisisRepositoryAdapter(JPAAnalisisRepository jpa, AnalisisMapper mapper) {
+        this.jpa = jpa;
         this.mapper = mapper;
     }
 
     @Override
     public Analisis save(Analisis analisis) {
-        AnalisisEntity entity = mapper.toEntity(analisis);
-        return mapper.toDomain(jpaRepository.save(entity));
+        AnalisisEntity analisisEntity = mapper.toEntity(analisis);
+        AnalisisEntity savedEntity = jpa.save(analisisEntity);
+        return mapper.toDomain(savedEntity);
     }
 
     @Override
-    public Optional<Analisis> findById(Long id) {
-        return jpaRepository.findById(id)
-                .map(mapper::toDomain);
+    public Analisis findById(Integer id) {
+        AnalisisEntity analisisEntity = jpa.findById(id).orElse(null);
+        return analisisEntity != null ? mapper.toDomain(analisisEntity) : null;
     }
+
+    @Override
+    public Analisis update(Analisis analisis) {
+        AnalisisEntity analisisEntity = mapper.toEntity(analisis);
+        AnalisisEntity updatedEntity = jpa.save(analisisEntity);
+        return mapper.toDomain(updatedEntity);
+    }
+
+    @Override
+    public List<Analisis> list() {
+        return jpa.findAll().stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void delete(Integer id) {
+        jpa.deleteById(id);
+    }
+
 }

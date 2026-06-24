@@ -9,10 +9,27 @@ import com.utp.DemoOratorIA.infraestructure.entities.ResultadoIAEntity;
 public class ResultadoMapper {
 
     public ResultadoIA toDomain(ResultadoIAEntity entity) {
-        if (entity == null) return null;
+        if (entity == null) {
+            return null;
+        }
 
         return new ResultadoIA.Builder()
                 .idResultado(entity.getIdResultado())
+                .idAnalisis(entity.getIdAnalisis())
+                .fluidez(entity.getFluidez())
+                .claridad(entity.getClaridad())
+                .volumen(entity.getVolumen())
+                .velocidad(entity.getVelocidad())
+                .postura(entity.getPostura())
+                .contactoVisual(entity.getContactoVisual())
+                .confianza(entity.getConfianza())
+                .expresionFacial(entity.getExpresionFacial())
+                .muletillasDetectadas(entity.getMuletillasDetectadas())
+                .pausasIncomodas(entity.getPausasIncomodas())
+                .puntuacionGeneral(entity.getPuntuacionGeneral())
+                .nivel(entity.getNivel())
+                .observaciones(entity.getObservaciones())
+                .fechaResultado(entity.getFechaResultado())
                 .entradaUsuario(entity.getEntradaUsuario())
                 .respuestaIA(entity.getRespuestaIA())
                 .puntuacion(entity.getPuntuacion())
@@ -20,15 +37,34 @@ public class ResultadoMapper {
                 .build();
     }
 
-    public ResultadoIAEntity toEntity(ResultadoIA res) {
-        if (res == null) return null;
+    public ResultadoIAEntity toEntity(ResultadoIA resultado) {
+        if (resultado == null) {
+            return null;
+        }
 
-        return ResultadoIAEntity.builder()
-                .idResultado(res.getIdResultado())
-                .entradaUsuario(res.getEntradaUsuario())
-                .respuestaIA(res.getRespuestaIA())
-                .puntuacion(res.getPuntuacion())
-                .fecha(res.getFecha())
-                .build();
+        ResultadoIAEntity entity = new ResultadoIAEntity();
+
+        entity.setIdResultado(resultado.getIdResultado());
+        entity.setIdAnalisis(resultado.getIdAnalisis());
+        entity.setFluidez(resultado.getFluidez());
+        entity.setClaridad(resultado.getClaridad());
+        entity.setVolumen(resultado.getVolumen());
+        entity.setVelocidad(resultado.getVelocidad());
+        entity.setPostura(resultado.getPostura());
+        entity.setContactoVisual(resultado.getContactoVisual());
+        entity.setConfianza(resultado.getConfianza());
+        entity.setExpresionFacial(resultado.getExpresionFacial());
+        entity.setMuletillasDetectadas(resultado.getMuletillasDetectadas());
+        entity.setPausasIncomodas(resultado.getPausasIncomodas());
+        entity.setPuntuacionGeneral(resultado.getPuntuacionGeneral());
+        entity.setNivel(resultado.getNivel());
+        entity.setObservaciones(resultado.getObservaciones());
+        entity.setFechaResultado(resultado.getFechaResultado());
+        entity.setEntradaUsuario(resultado.getEntradaUsuario());
+        entity.setRespuestaIA(resultado.getRespuestaIA());
+        entity.setPuntuacion(resultado.getPuntuacion());
+        entity.setFecha(resultado.getFecha());
+
+        return entity;
     }
 }

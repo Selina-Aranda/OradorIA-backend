@@ -8,13 +8,16 @@ import com.utp.DemoOratorIA.infraestructure.entities.RecomendacionEntity;
 @Component
 public class RecomendacionMapper {
 
-    public Recomendacion toDomain(RecomendacionEntity entity) {
-        if (entity == null) return null;
+    public Recomendacion toDomain(RecomendacionEntity recomendacionEntity) {
+        if (recomendacionEntity == null) return null;
 
         return new Recomendacion.Builder()
-                .idRecomendacion(entity.getIdRecomendacion())
-                .titulo(entity.getTitulo())
-                .descripcion(entity.getDescripcion())
+                .idRecomendacion(recomendacionEntity.getIdRecomendacion())
+                .idResultado(recomendacionEntity.getIdResultado())
+                .categoria(recomendacionEntity.getCategoria())
+                .descripcion(recomendacionEntity.getDescripcion())
+                .prioridad(recomendacionEntity.getPrioridad())
+                .titulo(recomendacionEntity.getTitulo())
                 .build();
     }
 
@@ -23,8 +26,11 @@ public class RecomendacionMapper {
 
         return RecomendacionEntity.builder()
                 .idRecomendacion(rec.getIdRecomendacion())
-                .titulo(rec.getTitulo())
+                .idResultado(rec.getIdResultado())
+                .categoria(rec.getCategoria())
                 .descripcion(rec.getDescripcion())
+                .prioridad(rec.getPrioridad())
+                .titulo(rec.getTitulo())
                 .build();
     }
 }

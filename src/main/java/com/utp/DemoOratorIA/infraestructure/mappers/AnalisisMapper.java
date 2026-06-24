@@ -8,39 +8,34 @@ import org.springframework.stereotype.Component;
 @Component
 public class AnalisisMapper {
 
-    public Analisis toDomain(AnalisisEntity entity) {
-        if (entity == null) return null;
-
-        return new Analisis.Builder()
-                .idAnalisis(entity.getIdAnalisis())
-                .idUsuario(entity.getIdUsuario())
-                .titulo(entity.getTitulo())
-                .descripcion(entity.getDescripcion())
-                .estado(entity.getEstado())
-                .build();
-    }
-
-    public AnalisisEntity toEntity(Analisis domain){
-        if (domain == null) return null;
-
+    public AnalisisEntity toEntity(Analisis analisisEntity) {
         return AnalisisEntity.builder()
-                .idAnalisis(domain.getIdAnalisis())
-                .idUsuario(domain.getIdUsuario())
-                .titulo(domain.getTitulo())
-                .descripcion(domain.getDescripcion())
-                .estado(domain.getEstado())
+                .idAnalisis(analisisEntity.getIdAnalisis())
+                .idUsuario(analisisEntity.getIdUsuario())
+                .titulo(analisisEntity.getTitulo())
+                .descripcion(analisisEntity.getDescripcion())
+                .fechaAnalisis(analisisEntity.getFechaAnalisis())
+                .duracionSegundos(analisisEntity.getDuracionSegundos())
+                .videoUrl(analisisEntity.getVideoUrl())
+                .audioUrl(analisisEntity.getAudioUrl())
+                .textoTranscrito(analisisEntity.getTextoTranscrito())
+                .estado(analisisEntity.getEstado())
                 .build();
     }
 
-    public AnalisisDTO toDTO(Analisis domain){
-        if (domain == null) return null;
-
-        AnalisisDTO dto = new AnalisisDTO();
-        dto.setIdAnalisis(domain.getIdAnalisis());
-        dto.setIdUsuario(domain.getIdUsuario());
-        dto.setTitulo(domain.getTitulo());
-        dto.setDescripcion(domain.getDescripcion());
-        dto.setEstado(domain.getEstado());
-        return dto;
+    public Analisis toDomain(AnalisisEntity analisis) {
+        return new Analisis.Builder()
+                .idAnalisis(analisis.getIdAnalisis())
+                .idUsuario(analisis.getIdUsuario())
+                .titulo(analisis.getTitulo())
+                .descripcion(analisis.getDescripcion())
+                .estado(analisis.getEstado())
+                .fechaAnalisis(analisis.getFechaAnalisis())
+                .duracionSegundos(analisis.getDuracionSegundos())
+                .videoUrl(analisis.getVideoUrl())
+                .audioUrl(analisis.getAudioUrl())
+                .textoTranscrito(analisis.getTextoTranscrito())
+                .build();
     }
+
 }

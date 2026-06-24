@@ -1,8 +1,11 @@
 package com.utp.DemoOratorIA.infraestructure.mappers;
 
+import org.springframework.stereotype.Component;
+
 import com.utp.DemoOratorIA.domain.model.aggregate.Suscripciones;
 import com.utp.DemoOratorIA.infraestructure.entities.SuscripcionesEntity;
 
+@Component
 public class SuscripcionesMapper {
     
     public Suscripciones toDomain(SuscripcionesEntity suscripcionesEntity){

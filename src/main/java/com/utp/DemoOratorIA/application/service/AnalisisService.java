@@ -1,47 +1,39 @@
 package com.utp.DemoOratorIA.application.service;
 
-import com.utp.DemoOratorIA.domain.model.aggregate.Analisis;
-import com.utp.DemoOratorIA.domain.model.enums.AnalysisStatus;
-import com.utp.DemoOratorIA.domain.model.repositories.IAnalisisRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
+
+
+import com.utp.DemoOratorIA.domain.model.aggregate.Analisis;
+import com.utp.DemoOratorIA.domain.model.repositories.IAnalisisRepository;
 
 @Service
 public class AnalisisService {
-    private final IAnalisisRepository analisisRepository;
-    private final RestTemplate restTemplate;
 
-    public AnalisisService(IAnalisisRepository analisisRepository, RestTemplate restTemplate) {
+    private final IAnalisisRepository analisisRepository;
+
+    public AnalisisService(IAnalisisRepository analisisRepository) {
         this.analisisRepository = analisisRepository;
-        this.restTemplate = restTemplate;
     }
 
-    public Analisis ejecutar(Long idUsuario, String titulo, String descripcion){
+    public Analisis save(Analisis analisis) {
+        return analisisRepository.save(analisis);
+    }
 
-        Analisis analisis = new Analisis.Builder()
-                .idUsuario(idUsuario)
-                .titulo(titulo)
-                .descripcion(descripcion)
-                .estado(AnalysisStatus.PROCESANDO)
-                .build();
+    public List<Analisis> listar() {
+        return analisisRepository.list();
+    }
 
-        analisis = analisisRepository.save(analisis);
+    public Analisis findById(Integer id) {
+        return analisisRepository.findById(id);
+    }
 
-        String respuesta = restTemplate.getForObject(
-            "http://127.0.0.1:8000/analizar", 
-            String.class
-        );
+    public Analisis update(Analisis analisis) {
+        return analisisRepository.update(analisis);
+    }
 
-        analisis = new Analisis.Builder()
-                .idAnalisis(analisis.getIdAnalisis())
-                .idUsuario(analisis.getIdUsuario())
-                .titulo(analisis.getTitulo())
-                .descripcion(respuesta)
-                .estado(AnalysisStatus.COMPLETADO)
-                .build();
-
-        analisisRepository.save(analisis);
-
-        return analisis;
+    public void delete(Integer id) {
+        analisisRepository.delete(id);
     }
 }

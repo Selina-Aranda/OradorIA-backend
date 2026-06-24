@@ -3,13 +3,15 @@ package com.utp.DemoOratorIA.infraestructure.adapters;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Repository;
+
 import com.utp.DemoOratorIA.domain.model.aggregate.Suscripciones;
 import com.utp.DemoOratorIA.domain.model.repositories.ISuscripcionesRepository;
 import com.utp.DemoOratorIA.infraestructure.entities.SuscripcionesEntity;
-import com.utp.DemoOratorIA.infraestructure.entities.UserEntity;
 import com.utp.DemoOratorIA.infraestructure.mappers.SuscripcionesMapper;
 import com.utp.DemoOratorIA.infraestructure.repositories.JPASuscripcionesRepository;
 
+@Repository
 public class SuscripcionesRepositoryAdapter implements ISuscripcionesRepository{
 
     private final JPASuscripcionesRepository jpa;
