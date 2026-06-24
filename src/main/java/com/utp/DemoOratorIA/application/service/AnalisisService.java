@@ -3,6 +3,7 @@ package com.utp.DemoOratorIA.application.service;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 import com.utp.DemoOratorIA.domain.model.aggregate.Analisis;
@@ -25,7 +26,7 @@ public class AnalisisService {
         return analisisRepository.list();
     }
 
-    public Analisis findById(Integer id) {
+    public Optional<Analisis> findById(Integer id) {
         return analisisRepository.findById(id);
     }
 

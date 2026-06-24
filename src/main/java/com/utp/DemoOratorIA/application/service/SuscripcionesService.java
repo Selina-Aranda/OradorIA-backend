@@ -1,6 +1,7 @@
 package com.utp.DemoOratorIA.application.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class SuscripcionesService {
         return susRepository.list();
     }
 
-    public Suscripciones findById(Integer id) {
+    public Optional<Suscripciones> findById(Integer id) {
         return susRepository.findById(id);
     }
 

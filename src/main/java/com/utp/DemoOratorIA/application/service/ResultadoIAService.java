@@ -1,6 +1,7 @@
 package com.utp.DemoOratorIA.application.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ public class ResultadoIAService {
         return resultadoRepository.list();
     }
 
-    public ResultadoIA findById(Integer id) {
+    public Optional<ResultadoIA> findById(Integer id) {
         return resultadoRepository.findById(id);
     }
 

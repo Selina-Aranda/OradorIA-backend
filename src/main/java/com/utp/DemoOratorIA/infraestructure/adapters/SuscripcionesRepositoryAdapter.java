@@ -2,6 +2,7 @@ package com.utp.DemoOratorIA.infraestructure.adapters;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
@@ -30,9 +31,9 @@ public class SuscripcionesRepositoryAdapter implements ISuscripcionesRepository{
     }
 
     @Override
-    public Suscripciones findById(Integer id) {
-            SuscripcionesEntity suscripcionesEntity = jpa.findById(id).orElse(null);
-            return suscripcionesEntity != null ? mapper.toDomain(suscripcionesEntity) : null;
+    public Optional<Suscripciones> findById(Integer id) {
+            return jpa.findById(id)
+                    .map(mapper::toDomain);
     }
 
     @Override

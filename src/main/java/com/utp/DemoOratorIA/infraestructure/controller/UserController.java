@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,12 +36,19 @@ public class UserController {
 
     @GetMapping("/{id}")
     public User buscarPorId(@PathVariable Integer id) {
-        return userService.findById(id);
+        return userService.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     }
 
     @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Integer id) {
         userService.delete(id);
+    }
+
+    @PutMapping("/{id}")
+    public User actualizar(@PathVariable Integer id, @RequestBody User user) {
+        user.setIdUsuario(id);
+        return userService.update(user);
     }
 
    

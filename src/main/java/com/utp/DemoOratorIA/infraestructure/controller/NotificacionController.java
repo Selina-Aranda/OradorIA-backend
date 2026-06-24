@@ -32,17 +32,11 @@ public class NotificacionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Notificacion> obtenerPorId(
-            @PathVariable Integer id) {
+    public ResponseEntity<Notificacion> obtenerPorId(@PathVariable Integer id) {
 
-        Notificacion notificacion =
-                notificacionService.findById(id);
-
-        if (notificacion == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(notificacion);
+        return notificacionService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping

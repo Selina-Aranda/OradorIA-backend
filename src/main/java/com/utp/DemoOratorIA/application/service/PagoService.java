@@ -1,6 +1,7 @@
 package com.utp.DemoOratorIA.application.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ public class PagoService {
         return pagoRepository.list();
     }
 
-    public Pago findById(Integer id) {
+    public Optional<Pago> findById(Integer id) {
         return pagoRepository.findById(id);
     }
 

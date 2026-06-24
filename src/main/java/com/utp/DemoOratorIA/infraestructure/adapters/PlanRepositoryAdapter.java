@@ -2,6 +2,8 @@ package com.utp.DemoOratorIA.infraestructure.adapters;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Optional;
+
 
 import org.springframework.stereotype.Repository;
 
@@ -30,9 +32,9 @@ public class PlanRepositoryAdapter implements IPlanRepository {
     }
 
     @Override
-    public Plan findById(Integer id) {
-        PlanEntity entity = jpa.findById(id).orElse(null);
-        return entity != null ? mapper.toDomain(entity) : null;
+    public Optional<Plan> findById(Integer id) {
+            return jpa.findById(id)
+                    .map(mapper::toDomain);
     }
 
     @Override
