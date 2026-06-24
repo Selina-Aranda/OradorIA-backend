@@ -1,10 +1,9 @@
 package com.utp.DemoOratorIA.infraestructure.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.ui.Model;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import com.utp.DemoOratorIA.application.service.UserService;
 
@@ -44,11 +43,11 @@ public class MainUserController {
         return "reportsUser";
     }
 
-    @GetMapping("/admin-analysis")
+    @GetMapping("/main-user-analysis")
     public String mostrarAnalisis() {
         return "admin-analysis";
     }
-    
+
     @GetMapping("/admin-reports")
     public String mostrarReportesAdmin() {
         return "admin-reports";
