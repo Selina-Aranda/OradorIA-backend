@@ -34,13 +34,9 @@ public class ReporteController {
     @GetMapping("/{id}")
     public ResponseEntity<Reporte> obtenerPorId(@PathVariable Integer id) {
 
-        Reporte reporte = reporteService.findById(id);
-
-        if (reporte == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(reporte);
+        return reporteService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping

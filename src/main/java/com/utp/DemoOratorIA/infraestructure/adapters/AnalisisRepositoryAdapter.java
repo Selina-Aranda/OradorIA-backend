@@ -2,7 +2,7 @@ package com.utp.DemoOratorIA.infraestructure.adapters;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
@@ -11,9 +11,6 @@ import com.utp.DemoOratorIA.domain.model.repositories.IAnalisisRepository;
 import com.utp.DemoOratorIA.infraestructure.entities.AnalisisEntity;
 import com.utp.DemoOratorIA.infraestructure.mappers.AnalisisMapper;
 import com.utp.DemoOratorIA.infraestructure.repositories.JPAAnalisisRepository;
-
-
-
 
 @Repository
 public class AnalisisRepositoryAdapter implements IAnalisisRepository {
@@ -34,9 +31,9 @@ public class AnalisisRepositoryAdapter implements IAnalisisRepository {
     }
 
     @Override
-    public Analisis findById(Integer id) {
-        AnalisisEntity analisisEntity = jpa.findById(id).orElse(null);
-        return analisisEntity != null ? mapper.toDomain(analisisEntity) : null;
+    public Optional<Analisis> findById(Integer id) {
+        return jpa.findById(id)
+                .map(mapper::toDomain);
     }
 
     @Override

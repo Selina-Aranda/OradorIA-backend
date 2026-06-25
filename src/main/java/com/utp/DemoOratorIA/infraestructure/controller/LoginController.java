@@ -3,6 +3,7 @@ package com.utp.DemoOratorIA.infraestructure.controller;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,29 +28,44 @@ public class LoginController {
     @Autowired
     private IUserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @GetMapping({ "/Login", "/login" })
     public String mostrarLogin() {
         return "login";
     }
 
-    @PostMapping({ "/Login", "/login" })
+   @PostMapping({ "/Login", "/login" })
     public String login(@RequestParam String email,
-            @RequestParam(required = false) String password,
-            HttpSession session,
-            Model model) {
+                        @RequestParam(required = false) String password,
+                        HttpSession session,
+                        Model model) {
 
         UserEntity user = repo.findByEmail(email);
 
-        if (user != null && password != null && password.equals(user.getPassword())) {
-            session.setAttribute("user", user);
-            if (user.getIdRol() != null && user.getIdRol() == 1) {
-                return "redirect:/admin-dashboard";
-            } else {
-                return "redirect:/mainUser";
-            }
-        } else {
+        if (user == null) {
             model.addAttribute("error", "Usuario o contraseña incorrectos");
             return "login";
+        }
+
+        if (password == null || password.isBlank()) {
+            model.addAttribute("error", "Ingrese la contraseña");
+            return "login";
+        }
+
+        // 🔥 AQUÍ está el cambio importante
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            model.addAttribute("error", "Usuario o contraseña incorrectos");
+            return "login";
+        }
+
+        session.setAttribute("user", user);
+
+        if (user.getIdRol() != null && user.getIdRol() == 1) {
+            return "redirect:/admin-dashboard";
+        } else {
+            return "redirect:/mainUser";
         }
     }
 

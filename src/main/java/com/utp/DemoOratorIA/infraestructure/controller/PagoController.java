@@ -33,13 +33,9 @@ public class PagoController {
     @GetMapping("/{id}")
     public ResponseEntity<Pago> obtenerPorId(@PathVariable Integer id) {
 
-        Pago pago = pagoService.findById(id);
-
-        if (pago == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(pago);
+        return pagoService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping

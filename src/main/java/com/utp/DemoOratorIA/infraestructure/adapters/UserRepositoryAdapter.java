@@ -1,7 +1,8 @@
     package com.utp.DemoOratorIA.infraestructure.adapters;
 
     import java.util.List;
-    import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
     import org.springframework.stereotype.Repository;
 
@@ -36,10 +37,9 @@
         }
 
         @Override
-        public User findById(Integer id) {
-                UserEntity userEntity = jpa.findById(id).orElse(null);
-                return userEntity != null ? mapper.toDomain(userEntity) : null;
-
+        public Optional<User> findById(Integer id) {
+            return jpa.findById(id)
+                    .map(mapper::toDomain);
         }
 
         @Override

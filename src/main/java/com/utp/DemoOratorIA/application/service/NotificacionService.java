@@ -2,6 +2,7 @@
 package com.utp.DemoOratorIA.application.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class NotificacionService {
         return notificacionRepository.list();
     }
 
-    public Notificacion findById(Integer id) {
+    public Optional<Notificacion> findById(Integer id) {
         return notificacionRepository.findById(id);
     }
 

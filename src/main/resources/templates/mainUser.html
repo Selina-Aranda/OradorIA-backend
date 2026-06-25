@@ -64,7 +64,7 @@
 
         <div class="px-6 pb-4">
           <div class="flex items-center gap-3">
-            <div class="h-11 w-11 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" th:text="${#strings.substring(session.user.nombres.split(' ')[0],0,1) + #strings.substring(session.user.nombres.split(' ')[1],0,1)}"></div>
+            <div class="h-11 w-11 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" th:text="${#strings.substring(session.user.nombres,0,1) + ' ' + #strings.substring(session.user.apellidos,0,1)}"></div>
             <div class="min-w-0">
               <div class="font-semibold text-slate-900 truncate" th:text="${session.user.nombres}"></div>
               <div class="text-sm text-slate-500">Plan Profesional</div>
@@ -114,7 +114,7 @@
             <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500"></span>
           </button>
 
-          <div class="h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" aria-label="Usuario" th:text="${#strings.substring(session.user.nombres.split(' ')[0],0,1) + #strings.substring(session.user.nombres.split(' ')[1],0,1)}"></div>
+          <div class="h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" aria-label="Usuario" th:text="${#strings.substring(session.user.nombres,0,1) + ' ' + #strings.substring(session.user.apellidos,0,1)}"></div>
         </div>
       </header>
 

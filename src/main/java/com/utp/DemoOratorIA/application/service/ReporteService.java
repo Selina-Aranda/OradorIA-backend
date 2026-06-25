@@ -2,6 +2,7 @@
 package com.utp.DemoOratorIA.application.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class ReporteService {
         return reporteRepository.list();
     }
 
-    public Reporte findById(Integer id) {
+    public Optional<Reporte> findById(Integer id) {
         return reporteRepository.findById(id);
     }
 

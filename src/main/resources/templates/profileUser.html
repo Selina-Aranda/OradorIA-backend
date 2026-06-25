@@ -80,16 +80,16 @@
 
         <div class="px-6 pb-4">
           <div class="flex items-center gap-3">
-            <div class="h-11 w-11 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">JP</div>
+            <div class="h-11 w-11 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" th:text="${#strings.substring(session.user.nombres,0,1) + ' ' + #strings.substring(session.user.apellidos,0,1)}"></div>
             <div class="min-w-0">
-              <div class="font-semibold text-slate-900 truncate">Juan Pérez</div>
+              <div class="font-semibold text-slate-900 truncate" th:text="${session.user.nombres}"></div>
               <div class="text-sm text-slate-500">Plan Profesional</div>
             </div>
           </div>
         </div>
 
         <div class="px-6 pb-6">
-          <a href="login.html" class="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 transition">
+          <a th:href="@{/logout}" class="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 transition">
             <i class="fas fa-right-from-bracket"></i>
             <span>Cerrar sesión</span>
           </a>
@@ -125,7 +125,7 @@
             <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500"></span>
           </button>
 
-          <div class="h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" aria-label="Usuario">JP</div>
+          <div class="h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" aria-label="Usuario" th:text="${#strings.substring(session.user.nombres,0,1) + ' ' + #strings.substring(session.user.apellidos,0,1)}"></div>
         </div>
       </header>
 
@@ -144,9 +144,7 @@
             <!-- Avatar -->
             <div class="flex items-start">
               <div class="relative">
-                <div class="profile-avatar h-40 w-40 rounded-full flex items-center justify-center text-white text-6xl font-extrabold">
-                  JP
-                </div>
+                <div class="profile-avatar h-40 w-40 rounded-full flex items-center justify-center text-white text-6xl font-extrabold" th:text="${#strings.substring(session.user.nombres,0,1) + ' ' + #strings.substring(session.user.apellidos,0,1)}"></div>
                 <button type="button" class="absolute bottom-3 right-2 h-12 w-12 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg">
                   <i class="fas fa-camera"></i>
                 </button>
@@ -157,11 +155,11 @@
             <div class="flex-1">
               <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                 <div>
-                  <h2 class="text-3xl font-extrabold text-slate-900">Juan Pérez</h2>
+                  <h2 class="text-3xl font-extrabold text-slate-900" th:text="${session.user.nombres}"></h2>
                   <div class="mt-4 space-y-3 text-slate-600">
                     <div class="flex items-center gap-3">
                       <i class="far fa-envelope w-5 text-slate-500"></i>
-                      <span class="text-lg">juan.perez@email.com</span>
+                      <span class="text-lg" th:text="${session.user.email}"></span>
                     </div>
                     <div class="flex items-center gap-3">
                       <i class="fas fa-map-marker-alt w-5 text-slate-500"></i>

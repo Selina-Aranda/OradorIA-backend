@@ -2,6 +2,8 @@ package com.utp.DemoOratorIA.infraestructure.adapters;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Optional;
+
 
 import org.springframework.stereotype.Repository;
 
@@ -35,13 +37,10 @@ public class NotificacionRepositoryAdapter implements INotificacionRepository {
     }
 
     @Override
-    public Notificacion findById(Integer id) {
+    public Optional<Notificacion> findById(Integer id) {
 
-        NotificacionEntity entity = jpa.findById(id).orElse(null);
-
-        return entity != null
-                ? mapper.toDomain(entity)
-                : null;
+            return jpa.findById(id)
+                    .map(mapper::toDomain);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.utp.DemoOratorIA.application.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ public class HistorialSesionService {
         return historialSesionRepository.list();
     }
 
-    public HistorialSesion findById(Integer id) {
+    public Optional<HistorialSesion> findById(Integer id) {
         return historialSesionRepository.findById(id);
     }
 
