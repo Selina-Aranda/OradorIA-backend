@@ -3,7 +3,6 @@ package com.utp.DemoOratorIA.application.service;
 import java.util.List;
 import java.util.Optional;
 
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,29 +11,38 @@ import com.utp.DemoOratorIA.domain.model.repositories.IUserRepository;
 
 @Service
 public class UserService {
-    
+
     private final IUserRepository userRepository;
-     private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public UserService(IUserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-         this.passwordEncoder = passwordEncoder;
+        this.passwordEncoder = passwordEncoder;
     }
-    
+
     public User save(User user) {
+
+        System.out.println("Antes: " + user.getPassword());
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        System.out.println("Después: " + user.getPassword());
+
         return userRepository.save(user);
     }
 
-    public List<User> listar(){
+    public List<User> listar() {
         return userRepository.list();
     }
+
     public Optional<User> findById(Integer id) {
         return userRepository.findById(id);
     }
+
     public User update(User user) {
 
         User existing = userRepository.findById(user.getIdUsuario())
-            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         existing.setNombres(user.getNombres());
         existing.setApellidos(user.getApellidos());
@@ -49,9 +57,11 @@ public class UserService {
 
         return userRepository.update(existing);
     }
+
     public void delete(Integer id) {
         userRepository.delete(id);
     }
+
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }

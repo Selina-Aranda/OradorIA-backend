@@ -1,22 +1,16 @@
-
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
-
     <title>Suscripciones | OradorIA</title>
 
-    <!-- Tailwind -->
-  <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- FontAwesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet" />
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet" />
 
     <style>
         body {
@@ -29,232 +23,197 @@
             border-radius: 24px;
             border: 1px solid #e2e8f0;
         }
+
         .sidebar-link {
-        transition: .2s;
+            transition: .2s;
         }
 
         .sidebar-link:hover {
-        background: #f8fafc;
-        color: #0f172a;
+            background: #f8fafc;
+            color: #0f172a;
         }
 
         .sidebar-active {
-        background: #eff6ff;
-        color: #2563eb;
-        font-weight: 600;
+            background: #eff6ff;
+            color: #2563eb;
+            font-weight: 600;
         }
     </style>
-
 </head>
 
-<body class="antialiased">
+<body>
 
-    <div class="min-h-screen flex">
+<div class="min-h-screen flex">
 
-        <!-- SIDEBAR -->
-        <aside class="w-[280px] bg-white border-r border-slate-200 hidden md:flex flex-col">
+    <!-- SIDEBAR -->
+    <aside class="w-[280px] bg-white border-r border-slate-200 hidden md:flex flex-col">
 
-            <!-- LOGO -->
-            <div class="px-6 py-6">
+        <div class="px-6 py-6">
+            <div class="flex items-center gap-3">
+                <span class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-600">
+                    <i class="fas fa-microphone-lines text-white"></i>
+                </span>
 
-                <div class="flex items-center gap-3">
-
-                    <span class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-600">
-                        <i class="fas fa-microphone-lines text-white"></i>
-                    </span>
-
-                    <span class="text-xl font-extrabold text-blue-600">
-                        OradorIA Admin
-                    </span>
-
-                </div>
-
+                <span class="text-xl font-extrabold text-blue-600">
+                    OradorIA Admin
+                </span>
             </div>
-
-            <!-- MENU -->
-            <nav class="px-4 space-y-2">
-
-                <!-- DASHBOARD -->
-                <a th:href="@{/admin-dashboard}" class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3">
-
-                    <i class="fas fa-chart-pie w-5"></i>
-
-                    <span>Dashboard</span>
-
-                </a>
-
-                <!-- USUARIOS -->
-                <a th:href="@{/admin-users}"
-                    class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600">
-
-                    <i class="fas fa-users w-5"></i>
-
-                    <span>Usuarios</span>
-
-                </a>
-
-                <!-- ANALISIS -->
-                <a th:href="@{/admin-analysis}"
-                    class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600">
-
-                    <i class="fa-solid fa-magnifying-glass"></i>
-
-                    <span>Análisis</span>
-
-                </a>
-
-                <!-- REPORTES -->
-                <a th:href="@{/admin-reports}"
-                    class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600">
-
-                    <i class="fas fa-chart-column w-5"></i>
-
-                    <span>Reportes</span>
-
-                </a>
-
-                <!-- SUSCRIPCIONES -->
-                <a th:href="@{/admin-subscriptions}"
-                    class="sidebar-active flex items-center gap-3 rounded-xl px-4 py-3">
-
-                    <i class="fas fa-credit-card w-5"></i>
-
-                    <span>Suscripciones</span>
-
-                </a>
-
-                <!-- CONFIGURACION -->
-                <a th:href="@{/admin-settings}"
-                    class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600">
-
-                    <i class="fas fa-gear w-5"></i>
-
-                    <span>Configuración</span>
-
-                </a>
-
-                <!-- SALIR ADMIN -->
-                <div class="pt-4 mt-4 border-t border-slate-200">
-
-                    <a th:href=@{/logout}
-                        class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-red-500 hover:bg-red-50 hover:text-red-600">
-
-                        <i class="fas fa-right-from-bracket w-5"></i>
-
-                        <span>Salir del Admin</span>
-
-                    </a>
-
-                </div>
-
-            </nav>
-
-            <div class="mt-auto px-6 pb-8">
-
-                <div class="border-t border-slate-200 pt-5">
-
-                    <div class="flex items-center gap-3">
-
-                        <div
-                            class="h-11 w-11 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
-                            AD
-                        </div>
-
-                        <div>
-
-                            <div class="font-semibold text-slate-900" th:text="${session.user.nombres}"></div>
-
-                            <div class="text-sm text-slate-500">
-                                Control total
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </aside>
-
-        <div class="flex-1 min-w-0">
-        <header class="bg-white border-b border-slate-200">
-
-        <div class="px-6 py-4 flex items-center justify-between">
-
-          <div>
-
-            <h1 class="text-2xl font-extrabold text-slate-900">
-              Gestión de Suscripciones
-            </h1>
-
-            <p class="text-sm text-slate-500">
-              Panel central de gestión OradorIA
-            </p>
-
-          </div>
-
-          <div class="flex items-center gap-4">
-
-            <!-- NOTIFICACIONES -->
-            <button class="relative h-10 w-10 rounded-full hover:bg-slate-100 flex items-center justify-center">
-
-              <i class="fas fa-bell text-slate-600"></i>
-
-              <span class="absolute top-2 right-2 h-2 w-2 bg-red-500 rounded-full"></span>
-
-            </button>
-
-            <!-- AVATAR -->
-            <div class="h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
-              AD
-            </div>
-
-          </div>
-
         </div>
 
-      </header>
+        <nav class="px-4 space-y-2">
 
-        <div class="card p-6">
+            <a th:href="@{/admin-dashboard}" class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3">
+                <i class="fas fa-chart-pie w-5"></i>
+                <span>Dashboard</span>
+            </a>
 
-            <table class="w-full">
-                <thead class="bg-slate-100">
+            <a th:href="@{/admin-users}" class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3">
+                <i class="fas fa-users w-5"></i>
+                <span>Usuarios</span>
+            </a>
+
+            <a th:href="@{/admin-analysis}" class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <span>Análisis</span>
+            </a>
+
+            <a th:href="@{/admin-reports}" class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3">
+                <i class="fas fa-chart-column w-5"></i>
+                <span>Reportes</span>
+            </a>
+
+            <a th:href="@{/admin-subscriptions}" class="sidebar-active flex items-center gap-3 rounded-xl px-4 py-3">
+                <i class="fas fa-credit-card w-5"></i>
+                <span>Suscripciones</span>
+            </a>
+
+            <a th:href="@{/admin-settings}" class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3">
+                <i class="fas fa-gear w-5"></i>
+                <span>Configuración</span>
+            </a>
+
+            <div class="pt-4 mt-4 border-t border-slate-200">
+                <a th:href="@{/logout}"
+                   class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-red-500">
+                    <i class="fas fa-right-from-bracket w-5"></i>
+                    <span>Salir del Admin</span>
+                </a>
+            </div>
+
+        </nav>
+    </aside>
+
+    <!-- CONTENT -->
+    <div class="flex-1 min-w-0">
+
+        <header class="bg-white border-b border-slate-200">
+            <div class="px-6 py-4">
+                <h1 class="text-2xl font-extrabold">Gestión de Suscripciones</h1>
+            </div>
+        </header>
+
+        <div class="p-6">
+
+            <div class="card p-6">
+
+                <table class="w-full">
+                    <thead class="bg-slate-100">
                     <tr>
-                        <th class="text-left p-4">ID</th>
-                        <th class="text-left p-4">Usuario</th>
-                        <th class="text-left p-4">Plan</th>
-                        <th class="text-left p-4">Estado</th>
-                        <th class="text-left p-4">Fecha Inicio</th>
-                        <th class="text-left p-4">Acciones</th>
+                        <th class="p-4 text-left">ID</th>
+                        <th class="p-4 text-left">Usuario</th>
+                        <th class="p-4 text-left">Plan</th>
+                        <th class="p-4 text-left">Estado</th>
+                        <th class="p-4 text-left">Fecha Inicio</th>
+                        <th class="p-4 text-left">Acciones</th>
                     </tr>
-                </thead>
-            
-                <tbody>
+                    </thead>
+
+                    <tbody>
                     <tr th:each="s : ${suscripciones}">
                         <td th:text="${s.idSuscripcion}"></td>
                         <td th:text="${s.idUsuario}"></td>
                         <td th:text="${s.idPlan}"></td>
                         <td th:text="${s.estado}"></td>
-                        <td th:text="${#temporals.format(s.fechaInicio,'dd/MM/yyyy')}"></td>
-            
-                        <td>
-                            <button class="text-blue-600">
-                                <i class="fas fa-eye"></i>
+
+                        <td th:text="${s.fechaInicio != null ? #temporals.format(s.fechaInicio,'dd/MM/yyyy') : ''}">
+                        </td>
+
+                        <td class="p-4 flex gap-3">
+
+                            <!-- EDITAR -->
+                            <button type="button"
+                                    class="text-blue-600"
+                                    th:attr="data-id=${s.idSuscripcion},
+                                             data-usuario=${s.idUsuario},
+                                             data-plan=${s.idPlan},
+                                             data-fechainicio=${s.fechaInicio},
+                                             data-fechafin=${s.fechaFin},
+                                             data-estado=${s.estado},
+                                             data-renovacion=${s.renovacionAutomatica}"
+                                    onclick="openEditModal(this)">
+                                <i class="fas fa-pen"></i>
                             </button>
-            
-                            <button class="text-red-600">
+
+                            <!-- ELIMINAR -->
+                            <button type="button"
+                                    class="text-red-600"
+                                    th:onclick="|deleteSuscripcion(${s.idSuscripcion})|">
                                 <i class="fas fa-trash"></i>
                             </button>
+
                         </td>
                     </tr>
-                </tbody>
-            </table>
+                    </tbody>
 
-        </div>
+                </table>
+
+            </div>
         </div>
     </div>
-</body>
+</div>
 
+<script>
+
+    function openEditModal(btn) {
+        document.getElementById("idSuscripcion").value = btn.dataset.id;
+        document.getElementById("idUsuario").value = btn.dataset.usuario;
+        document.getElementById("idPlan").value = btn.dataset.plan;
+        document.getElementById("fechaInicio").value = btn.dataset.fechainicio;
+        document.getElementById("fechaFin").value = btn.dataset.fechafin;
+        document.getElementById("estado").value = btn.dataset.estado;
+        document.getElementById("renovacionAutomatica").checked =
+            btn.dataset.renovacion === "true";
+
+        document.getElementById("subscriptionModal").classList.remove("hidden");
+        document.getElementById("subscriptionModal").classList.add("flex");
+    }
+
+    function closeModal() {
+        document.getElementById("subscriptionModal").classList.add("hidden");
+        document.getElementById("subscriptionModal").classList.remove("flex");
+    }
+
+    async function deleteSuscripcion(id) {
+
+        if (!confirm("¿Eliminar esta suscripción?")) return;
+
+        try {
+            const response = await fetch('/subscriptions/' + id, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert("No se pudo eliminar la suscripción");
+            }
+
+        } catch (error) {
+            alert("Error de conexión");
+        }
+    }
+
+</script>
+
+</body>
 </html>
