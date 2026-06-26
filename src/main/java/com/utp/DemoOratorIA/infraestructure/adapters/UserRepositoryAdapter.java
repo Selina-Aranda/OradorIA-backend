@@ -60,15 +60,5 @@ import java.util.stream.Collectors;
         public void delete(Integer id) {
             jpa.deleteById(id);
         }
-
-    @Override
-    public long countUsuarios() {
-        return jpa.countByIdRol(2);
-    }
-
-    @Override
-    public long countPremiunUsers() {
-        return jpa.countByIdPlan(3);
-    }
         
     }

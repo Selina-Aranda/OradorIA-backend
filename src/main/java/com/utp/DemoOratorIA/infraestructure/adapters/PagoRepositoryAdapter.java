@@ -1,8 +1,9 @@
 package com.utp.DemoOratorIA.infraestructure.adapters;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.Optional;
+
 
 import org.springframework.stereotype.Repository;
 
@@ -62,10 +63,5 @@ public class PagoRepositoryAdapter implements IPagoRepository {
     @Override
     public void delete(Integer id) {
         jpa.deleteById(id);
-    }
-
-    @Override
-    public Double obtenerIngresosMensuales(int anio, int mes) {
-        return jpa.obtenerIngresosMensuales(anio, mes);
     }
 }
