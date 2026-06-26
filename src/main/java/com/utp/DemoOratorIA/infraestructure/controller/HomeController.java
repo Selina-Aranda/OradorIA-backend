@@ -22,7 +22,7 @@ public class HomeController {
         return "main";
     }
 
-    @GetMapping("/dashboard")
+    @GetMapping("/admin-dashboard")
     public String adminDashboard(HttpSession session) {
         UserEntity user = (UserEntity) session.getAttribute("user");
         if (user == null || user.getIdRol() == null || user.getIdRol() != 1) {

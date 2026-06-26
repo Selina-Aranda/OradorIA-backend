@@ -13,24 +13,13 @@ import com.utp.DemoOratorIA.domain.model.repositories.IAnalisisRepository;
 public class AnalisisService {
 
     private final IAnalisisRepository analisisRepository;
-    private final ActividadRecienteService actividadService;
 
-    public AnalisisService(IAnalisisRepository analisisRepository, ActividadRecienteService actividadService) {
+    public AnalisisService(IAnalisisRepository analisisRepository) {
         this.analisisRepository = analisisRepository;
-        this.actividadService = actividadService;
     }
 
     public Analisis save(Analisis analisis) {
-
-        Analisis nuevoAnalisis = analisisRepository.save(analisis);
-
-        actividadService.registrar(
-                analisis.getIdUsuario(),
-                "ANALISIS",
-                "Nuevo análisis completado"
-        );
-
-        return nuevoAnalisis;
+        return analisisRepository.save(analisis);
     }
 
     public List<Analisis> listar() {

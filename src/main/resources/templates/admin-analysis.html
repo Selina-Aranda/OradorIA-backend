@@ -225,7 +225,9 @@
             <h2 class="text-slate-500">Análisis Totales</h2>
     
             <p class="text-4xl font-extrabold mt-3"
-               th:text="${totalAnalisis}"></p>
+               th:text="${totalAnalisis}">
+                0
+            </p>
         </div>
     
         <div class="card p-6">
@@ -233,7 +235,7 @@
     
             <p class="text-4xl font-extrabold text-indigo-600 mt-3"
                th:text="${#numbers.formatDecimal(promedioFluidez,1,1)} + '%'">
-    
+                0%
             </p>
         </div>
     
@@ -242,7 +244,7 @@
     
             <p class="text-4xl font-extrabold text-emerald-500 mt-3"
                th:text="${#numbers.formatDecimal(promedioPostura,1,1)} + '%'">
-                
+                0%
             </p>
         </div>
     
