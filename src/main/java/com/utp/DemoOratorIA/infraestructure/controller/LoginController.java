@@ -14,7 +14,6 @@ import com.utp.DemoOratorIA.application.service.ActividadRecienteService;
 import com.utp.DemoOratorIA.application.service.UserService;
 import com.utp.DemoOratorIA.domain.model.aggregate.User;
 import com.utp.DemoOratorIA.domain.model.enums.UserStatus;
-import com.utp.DemoOratorIA.domain.model.repositories.IUserRepository;
 import com.utp.DemoOratorIA.infraestructure.entities.UserEntity;
 import com.utp.DemoOratorIA.infraestructure.repositories.JPAUserRepository;
 
@@ -31,8 +30,7 @@ public class LoginController {
     private JPAUserRepository repo;
 
     @Autowired
-    private IUserRepository userRepository;
-
+    private UserService userService;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -46,9 +44,9 @@ public class LoginController {
 
     @PostMapping({ "/Login", "/login" })
     public String login(@RequestParam String email,
-                        @RequestParam(required = false) String password,
-                        HttpSession session,
-                        Model model) {
+            @RequestParam(required = false) String password,
+            HttpSession session,
+            Model model) {
 
         UserEntity user = repo.findByEmail(email);
 
