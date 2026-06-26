@@ -10,4 +10,10 @@ public interface JPAUserRepository extends JpaRepository<UserEntity, Integer> {
 
     UserEntity findByEmail(String email);
     Optional<UserEntity> findById(Integer id);
+
+    //Metodo paraa contar usuarios
+    long countByIdRol(Integer idRol);
+
+    //Mostrar cantidad de usuarios premiun
+    long countByIdPlan(Integer idPlan);
 }
