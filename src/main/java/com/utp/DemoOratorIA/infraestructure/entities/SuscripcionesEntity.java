@@ -1,6 +1,6 @@
 package com.utp.DemoOratorIA.infraestructure.entities;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import com.utp.DemoOratorIA.domain.model.enums.SuscripcionesStatus;
 
@@ -22,27 +22,32 @@ import lombok.Setter;
 @Table(name = "suscripciones")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class SuscripcionesEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_suscripcion")
-    private Integer idSuscripciones;
+    private Integer idSuscripcion;
+
     @Column(name = "id_usuario")
     private Integer idUsuario;
+
     @Column(name = "id_plan")
     private Integer idPlan;
+
     @Column(name = "fecha_inicio")
-    private LocalDateTime fechaInicio;
+    private LocalDate fechaInicio;
+
     @Column(name = "fecha_fin")
-    private LocalDateTime fechaFin;
-    @Column(name = "renovacion_automatica")
-    private Boolean renovacionAutomatica;
+    private LocalDate fechaFin;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "estado")
     private SuscripcionesStatus estado;
 
+    @Column(name = "renovacion_automatica")
+    private Boolean renovacionAutomatica;
 }
