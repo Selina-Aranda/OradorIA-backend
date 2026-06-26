@@ -58,11 +58,6 @@ public class MainUserController {
         return "admin-settings";
     }
 
-    @GetMapping("/admin-subscriptions")
-    public String mostrarSubs() {
-        return "admin-subscriptions";
-    }
-
     @GetMapping("/admin-users")
     public String mostrarUsuarios(Model model) {
         model.addAttribute("usuarios", userService.listar());
