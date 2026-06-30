@@ -30,8 +30,6 @@ public class LoginController {
     private JPAUserRepository repo;
 
     @Autowired
-    private UserService userService;
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -69,10 +67,9 @@ public class LoginController {
 
         // REGISTRAR ACTIVIDAD
         actividadService.registrar(
-            user.getId(),
-            "Inicio de sesión",
-            "ACTIVO"
-        );
+                user.getId(),
+                "Inicio de sesión",
+                "ACTIVO");
 
         if (user.getIdRol() != null && user.getIdRol() == 1) {
             return "redirect:/admin-dashboard";
@@ -105,14 +102,11 @@ public class LoginController {
         User usuarioGuardado = userService.save(user);
 
         actividadService.registrar(
-            usuarioGuardado.getIdUsuario(),
-            "Registro de usuario",
-            "COMPLETADO"
-        );
+                usuarioGuardado.getIdUsuario(),
+                "Registro de usuario",
+                "COMPLETADO");
 
         return "Login";
     }
 
-
-    
 }
