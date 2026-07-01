@@ -313,88 +313,108 @@
     </div>
   </div>
 
-  <script>
-    // ======================== DATOS SIMULADOS PERO REALISTAS (evolución real) ========================
-    // Datos mensuales: desde Enero 2026 hasta Mayo 2026 (además algunos meses anteriores para demostrar todo el período)
-    const monthlyData = [
-      { month: "Ene", year: 2026, score: 65, fluency: 58, fillers: 35, durationMinutes: 28 },
-      { month: "Feb", year: 2026, score: 72, fluency: 64, fillers: 28, durationMinutes: 42 },
-      { month: "Mar", year: 2026, score: 78, fluency: 71, fillers: 22, durationMinutes: 58 },
-      { month: "Abr", year: 2026, score: 82, fluency: 77, fillers: 18, durationMinutes: 67 },
-      { month: "May", year: 2026, score: 87, fluency: 83, fillers: 12, durationMinutes: 71 }
-    ];
-    
-    // Agregar datos históricos adicionales para el "último año" y "todo"
-    const extendedHistory = [
-      { month: "Dic", year: 2025, score: 59, fluency: 52, fillers: 41, durationMinutes: 22 },
-      { month: "Nov", year: 2025, score: 56, fluency: 49, fillers: 44, durationMinutes: 19 },
-      { month: "Oct", year: 2025, score: 52, fluency: 45, fillers: 46, durationMinutes: 18 },
-      { month: "Sep", year: 2025, score: 48, fluency: 41, fillers: 49, durationMinutes: 15 },
-      { month: "Ago", year: 2025, score: 45, fluency: 39, fillers: 52, durationMinutes: 14 },
-      { month: "Jul", year: 2025, score: 44, fluency: 38, fillers: 54, durationMinutes: 12 }
-    ];
-    
-    const fullDataset = [...extendedHistory.reverse(), ...monthlyData]; // orden cronológico ascendente (jul 2025 - may 2026)
-    
-    // IDs de gráficos
+  <script th:inline="javascript">
+    // ======================== DATOS REALES DESDE EL BACKEND ========================
+    let fullDataset = [];
+    let resumenMejoras = null;
     let scoreChart;
-    let currentPeriod = "all"; // 'lastMonth', 'last3Months', 'lastYear', 'all'
-    
-    // Función para filtrar datos según período
-    function filterDataByPeriod(period) {
-      const now = new Date();
-      const currentYear = now.getFullYear();
-      const currentMonth = now.getMonth() + 1; // 1-12
-      // Para determinar filtro basado en meses hacia atrás
-      if (period === "lastMonth") {
-        // mostrar solo el último mes disponible: Mayo 2026 (asumiendo que es el más reciente)
-        const lastMonthData = monthlyData.slice(-1); // [Mayo]
-        return lastMonthData;
-      } else if (period === "last3Months") {
-        return monthlyData.slice(-3); // Mar, Abr, May
-      } else if (period === "lastYear") {
-        // últimos 12 meses (desde junio 2025 hasta mayo 2026 aprox)
-        const oneYearAgo = fullDataset.filter(item => {
-          const itemDate = new Date(item.year, getMonthNumber(item.month), 1);
-          const limitDate = new Date(currentYear, currentMonth - 12, 1);
-          return itemDate >= limitDate;
-        });
-        return oneYearAgo;
+    let currentPeriod = "all";
+
+    async function cargarEstadisticas() {
+      try {
+        const response = await fetch('/api/reportes/estadisticas');
+        if (!response.ok) {
+          console.error('No se pudieron cargar las estadísticas:', response.status);
+          return;
+        }
+        const data = await response.json();
+
+        fullDataset = (data.datosMensuales || []).map(d => ({
+          month: d.etiquetaMes,
+          year: d.anio,
+          score: d.puntajePromedio,
+          fluency: d.fluidezPromedio,
+          claridad: d.claridadPromedio,
+          confianza: d.confianzaPromedio,
+          fillers: d.muletillasPromedio,
+          durationMinutes: Math.round(d.duracionTotalMinutos),
+          totalAnalisis: d.totalAnalisis
+        }));
+
+        resumenMejoras = {
+          mejoraFluidez: data.mejoraFluidez,
+          mejoraClaridad: data.mejoraClaridad,
+          mejoraConfianza: data.mejoraConfianza,
+          reduccionMuletillas: data.reduccionMuletillas,
+          mejoraTotal: data.mejoraTotal,
+          promedioGeneral: data.promedioGeneral,
+          promedioMuletillas: data.promedioMuletillas,
+          totalSesiones: data.totalSesiones
+        };
+
+        aplicarResumenMejoras();
+        updateReports();
+
+      } catch (error) {
+        console.error('Error al cargar estadísticas de reportes:', error);
       }
-      return fullDataset; // "all"
     }
-    
-    function getMonthNumber(monthName) {
-      const months = { "Ene":0, "Feb":1, "Mar":2, "Abr":3, "May":4, "Jun":5, "Jul":6, "Ago":7, "Sep":8, "Oct":9, "Nov":10, "Dic":11 };
-      return months[monthName];
+
+    function aplicarResumenMejoras() {
+      if (!resumenMejoras) return;
+      const setBar = (textId, barId, valorTexto) => {
+        const textEl = document.getElementById(textId);
+        const barEl = document.getElementById(barId);
+        if (!textEl || !barEl) return;
+        textEl.innerText = valorTexto;
+        const pct = Math.min(100, Math.abs(parseFloat(valorTexto)) || 0);
+        barEl.style.width = pct + '%';
+      };
+      setBar('improveFluency', 'barFluency', resumenMejoras.mejoraFluidez);
+      setBar('improveClarity', 'barClarity', resumenMejoras.mejoraClaridad);
+      setBar('improveConfidence', 'barConfidence', resumenMejoras.mejoraConfianza);
+      setBar('improveFillers', 'barFillers', resumenMejoras.reduccionMuletillas);
     }
-    
-    // Actualizar gráficos y tabla según período
+
+    function filterDataByPeriod(period) {
+      if (period === "lastMonth") return fullDataset.slice(-1);
+      if (period === "last3Months") return fullDataset.slice(-3);
+      if (period === "lastYear") return fullDataset.slice(-12);
+      return fullDataset;
+    }
+
     function updateReports() {
       const filtered = filterDataByPeriod(currentPeriod);
-      if (filtered.length === 0) return;
-      
-      // Preparar labels y valores
+
+      if (filtered.length === 0) {
+        document.getElementById('avgScoreMetric').innerText = '0';
+        document.getElementById('avgFillersMetric').innerText = '0';
+        document.getElementById('totalSessions').innerText = '0';
+        document.getElementById('totalImprovement').innerHTML = '0%';
+        const barsHost = document.getElementById('fillersReductionBars');
+        if (barsHost) barsHost.innerHTML = '<p class="text-slate-400 text-sm">Aún no hay análisis registrados en este período.</p>';
+        const comparisonTbody = document.getElementById('comparisonTableBody');
+        if (comparisonTbody) comparisonTbody.innerHTML = '<tr><td class="px-5 py-4 text-slate-400" colspan="6">Aún no hay datos para mostrar.</td></tr>';
+        return;
+      }
+
       const labels = filtered.map(d => `${d.month} ${d.year}`);
       const scores = filtered.map(d => d.score);
-      const fluencyValues = filtered.map(d => d.fluency);
       const fillerValues = filtered.map(d => d.fillers);
-      
-      // Actualizar métricas generales (con datos totales del período)
+
       const avgScore = (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1);
       const avgFillers = (fillerValues.reduce((a,b)=>a+b,0)/fillerValues.length).toFixed(1);
-      const totalSessionsCount = filtered.reduce((acc, d) => acc + Math.max(1, Math.floor(d.durationMinutes / 5)), 0); // estimación conv
+      const totalSessionsCount = filtered.reduce((acc, d) => acc + (d.totalAnalisis || 0), 0);
       const firstScore = filtered[0]?.score || 0;
       const lastScore = filtered[filtered.length-1]?.score || 0;
-      let improvement = ((lastScore - firstScore) / (firstScore || 1)) * 100;
+      let improvement = firstScore ? ((lastScore - firstScore) / firstScore) * 100 : 0;
       improvement = improvement > 0 ? `+${improvement.toFixed(0)}%` : `${improvement.toFixed(0)}%`;
-      
+
       document.getElementById('avgScoreMetric').innerText = avgScore;
       document.getElementById('avgFillersMetric').innerText = avgFillers;
-      document.getElementById('totalSessions').innerText = filtered.length * 2 + 8; // solo visual
+      document.getElementById('totalSessions').innerText = totalSessionsCount;
       document.getElementById('totalImprovement').innerHTML = improvement;
-      
-      // Update Score Chart
+
       if (scoreChart) scoreChart.destroy();
       const ctxScore = document.getElementById('scoreChart').getContext('2d');
       scoreChart = new Chart(ctxScore, {
@@ -421,7 +441,6 @@
         }
       });
 
-      // Reducción de muletillas (barras) — mostrar hasta los últimos 5 meses del período
       const barsHost = document.getElementById('fillersReductionBars');
       if (barsHost) {
         const slice = filtered.slice(-5);
@@ -438,33 +457,18 @@
         }).join('');
       }
 
-      // Comparativa mensual
       const comparisonTbody = document.getElementById('comparisonTableBody');
       if (comparisonTbody) {
         comparisonTbody.innerHTML = filtered.map((d, idx) => {
           const prev = filtered[idx - 1];
-          const analyses = Math.max(1, Math.floor(d.durationMinutes / 5));
-
-          let deltaText = "—";
-          let deltaClass = "text-slate-400";
-          let deltaIcon = "fa-minus";
+          const analyses = d.totalAnalisis || 0;
+          let deltaText = "—", deltaClass = "text-slate-400", deltaIcon = "fa-minus";
           if (prev) {
             const delta = d.score - prev.score;
-            if (delta > 0) {
-              deltaText = `+${delta}`;
-              deltaClass = "text-emerald-600";
-              deltaIcon = "fa-arrow-trend-up";
-            } else if (delta < 0) {
-              deltaText = `${delta}`;
-              deltaClass = "text-rose-600";
-              deltaIcon = "fa-arrow-trend-down";
-            } else {
-              deltaText = "0";
-              deltaClass = "text-slate-500";
-              deltaIcon = "fa-minus";
-            }
+            if (delta > 0) { deltaText = `+${delta}`; deltaClass = "text-emerald-600"; deltaIcon = "fa-arrow-trend-up"; }
+            else if (delta < 0) { deltaText = `${delta}`; deltaClass = "text-rose-600"; deltaIcon = "fa-arrow-trend-down"; }
+            else { deltaText = "0"; deltaClass = "text-slate-500"; deltaIcon = "fa-minus"; }
           }
-
           return `
             <tr class="border-b border-slate-100 hover:bg-slate-50">
               <td class="px-5 py-3 font-semibold text-slate-700">${d.month} ${d.year}</td>
@@ -473,18 +477,14 @@
               <td class="px-5 py-3">${d.fillers}</td>
               <td class="px-5 py-3">${d.durationMinutes} min</td>
               <td class="px-5 py-3 font-extrabold ${deltaClass}">
-                <span class="inline-flex items-center gap-2">
-                  <i class="fas ${deltaIcon}"></i>
-                  <span>${deltaText}</span>
-                </span>
+                <span class="inline-flex items-center gap-2"><i class="fas ${deltaIcon}"></i><span>${deltaText}</span></span>
               </td>
             </tr>
           `;
         }).join('');
       }
     }
-    
-    // Configurar botones de período
+
     function initPeriodButtons() {
       const btns = document.querySelectorAll('.period-btn');
       btns.forEach(btn => {
@@ -493,21 +493,19 @@
           btns.forEach(b => b.classList.add('bg-slate-100', 'text-slate-700'));
           btn.classList.remove('bg-slate-100', 'text-slate-700');
           btn.classList.add('active', 'bg-indigo-600', 'text-white');
-          const period = btn.getAttribute('data-period');
-          currentPeriod = period;
+          currentPeriod = btn.getAttribute('data-period');
           updateReports();
         });
       });
     }
-    
-    // Exportar reporte como TXT / CSV
-    function exportReport() {
+
+    async function exportReport() {
       const filtered = filterDataByPeriod(currentPeriod);
       let content = "ORADORIA - REPORTE DE ESTADÍSTICAS\n";
       content += `Período: ${currentPeriod}\nFecha: ${new Date().toLocaleDateString()}\n\n`;
-      content += "Mes, Puntaje, Fluidez(%), Muletillas, Duración(min)\n";
+      content += "Mes, Puntaje, Fluidez, Muletillas, Duración(min), Análisis\n";
       filtered.forEach(d => {
-        content += `${d.month} ${d.year}, ${d.score}, ${d.fluency}, ${d.fillers}, ${d.durationMinutes}\n`;
+        content += `${d.month} ${d.year}, ${d.score}, ${d.fluency}, ${d.fillers}, ${d.durationMinutes}, ${d.totalAnalisis}\n`;
       });
       const blob = new Blob([content], { type: "text/csv;charset=utf-8;" });
       const link = document.createElement("a");
@@ -518,16 +516,22 @@
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
+
+      try {
+        await fetch(`/api/reportes/exportar?periodo=${encodeURIComponent(currentPeriod)}`, { method: 'POST' });
+      } catch (error) {
+        console.error('No se pudo registrar la exportación del reporte:', error);
+      }
     }
-    
-    // Inicializar todo
+
     document.addEventListener('DOMContentLoaded', () => {
       initPeriodButtons();
-      updateReports();
+      cargarEstadisticas();
       const exportBtn = document.getElementById('exportBtn');
       if (exportBtn) exportBtn.addEventListener('click', exportReport);
     });
-    
   </script>
+
+  
 </body>
 </html>

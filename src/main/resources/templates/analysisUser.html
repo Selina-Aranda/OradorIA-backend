@@ -337,6 +337,7 @@
     let analysisTimer = null;
     let analysisStartTime = 0;
     let timerInterval = null;
+    let idAnalisisActual = null; // id real del análisis creado en el backend
 
     // Variables para simular métricas inteligentes
     let fakeMetricsInterval = null;
@@ -520,12 +521,34 @@
     }
 
     // COMENZAR ANÁLISIS!
-    function startAnalysis() {
+    async function startAnalysis() {
       if (!isCamActive || !isMicActive) {
         alert("🔴 Debes activar cámara y micrófono antes de iniciar el análisis.");
         return;
       }
       if (isAnalyzing) return;
+
+      // 1) Crear el análisis real en el backend (queda ligado al usuario de la sesión)
+      try {
+        const response = await fetch('/api/analisis/iniciar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ titulo: 'Sesión de práctica', descripcion: 'Análisis en tiempo real' })
+        });
+
+        if (!response.ok) {
+          throw new Error('No se pudo crear el análisis en el servidor: ' + response.status);
+        }
+
+        const analisis = await response.json();
+        idAnalisisActual = analisis.idAnalisis;
+
+      } catch (error) {
+        console.error('Error al iniciar el análisis:', error);
+        alert('No se pudo iniciar el análisis. Intenta nuevamente.');
+        return;
+      }
+
       isAnalyzing = true;
       recordingIndicator.classList.remove('hidden');
       btnAnalizar.disabled = true;
@@ -547,6 +570,9 @@
     function stopAnalysis(customMsg = null) {
       if (!isAnalyzing) return;
       isAnalyzing = false;
+
+      const duracionSegundos = Math.floor((Date.now() - analysisStartTime) / 1000);
+
       if (recordingIndicator) recordingIndicator.classList.add('hidden');
       btnStopAnalysis.classList.add('hidden');
       btnAnalizar.disabled = false;
@@ -560,7 +586,47 @@
       }
       if (analysisTimer) clearTimeout(analysisTimer);
       // No reiniciamos fluidez y postura completamente, se mantienen valores finales
+
+      // 2) Cerrar el análisis en el backend con la duración real
+      finalizarAnalisis(duracionSegundos);
     }
+
+    // Guarda la duración real del análisis. El resultado de la IA (fluidez, muletillas,
+    // confianza, etc.) se guarda por separado vía POST /resultado-ia una vez que el
+    // servicio de IA ("eco") termina de procesar el audio/video de esta sesión.
+    async function finalizarAnalisis(duracionSegundos) {
+      if (!idAnalisisActual) return;
+
+      try {
+        await fetch(`/api/analisis/${idAnalisisActual}/finalizar`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ duracionSegundos })
+        });
+
+        // TODO (integración con el equipo de IA):
+        // Aquí es donde se debe invocar al servicio de IA "eco" pasándole el
+        // audio/transcripción de idAnalisisActual, y con su respuesta hacer:
+        //
+        // await fetch('/resultado-ia', {
+        //   method: 'POST',
+        //   headers: { 'Content-Type': 'application/json' },
+        //   body: JSON.stringify({
+        //     idAnalisis: idAnalisisActual,
+        //     fluidez: ..., claridad: ..., confianza: ...,
+        //     muletillasDetectadas: ..., puntuacionGeneral: ...
+        //   })
+        // });
+
+      } catch (error) {
+        console.error('Error al finalizar el análisis:', error);
+      } finally {
+        idAnalisisActual = null;
+      }
+    }
+
+    
+
 
     // Eventos
     btnCamara.addEventListener('click', toggleCamera);
