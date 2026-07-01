@@ -1,8 +1,12 @@
 package com.utp.DemoOratorIA.infraestructure.controller;
 
+import java.time.LocalDateTime;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,6 +38,18 @@ public class ResultadoIAController {
                 .orElseThrow(() -> new RuntimeException("Resultado no encontrado"));
 
         return ResponseEntity.ok(resultadoMapper.toDTO(resultado));
+    }
+
+    @PostMapping
+    public ResponseEntity<ResultadoIADTO> guardar(@RequestBody ResultadoIA resultado) {
+
+        if (resultado.getFechaResultado() == null) {
+            resultado.setFechaResultado(LocalDateTime.now());
+        }
+
+        ResultadoIA guardado = resultadoIAService.save(resultado);
+
+        return ResponseEntity.ok(resultadoMapper.toDTO(guardado));
     }
 
 }

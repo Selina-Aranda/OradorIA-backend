@@ -1,3 +1,4 @@
+
 package com.utp.DemoOratorIA.infraestructure.repositories;
 
 import java.util.List;
@@ -47,5 +48,25 @@ List<ResultadoIAEntity> findByIdUsuario(Integer idUsuario);
     WHERE a.idUsuario = :idUsuario
 """)
 List<Object[]> obtenerPuntajesUsuario(@Param("idUsuario") Integer idUsuario);
+
+@Query(value = """
+    SELECT
+        YEAR(a.fecha_analisis) AS anio,
+        MONTH(a.fecha_analisis) AS mes,
+        COUNT(DISTINCT a.id_analisis) AS total_analisis,
+        AVG(r.puntuacion_general) AS promedio_puntaje,
+        AVG(r.fluidez) AS promedio_fluidez,
+        AVG(r.claridad) AS promedio_claridad,
+        AVG(r.confianza) AS promedio_confianza,
+        AVG(r.muletillas_detectadas) AS promedio_muletillas,
+        SUM(a.duracion_segundos) / 60 AS duracion_total_minutos
+    FROM analisis a
+    INNER JOIN resultados_ia r
+        ON a.id_analisis = r.id_analisis
+    WHERE a.id_usuario = :idUsuario
+    GROUP BY YEAR(a.fecha_analisis), MONTH(a.fecha_analisis)
+    ORDER BY anio ASC, mes ASC
+    """, nativeQuery = true)
+List<Object[]> obtenerEvolucionMensual(@Param("idUsuario") Integer idUsuario);
 
 }
