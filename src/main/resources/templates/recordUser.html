@@ -97,7 +97,7 @@
             <div class="h-11 w-11 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" th:text="${#strings.substring(session.user.nombres,0,1) + ' ' + #strings.substring(session.user.apellidos,0,1)}"></div>
             <div class="min-w-0">
               <div class="font-semibold text-slate-900 truncate" th:text="${session.user.nombres}"></div>
-              <div class="text-sm text-slate-500">Plan Profesional</div>
+              <div class="text-sm text-slate-500" th:text="${plan.nombre}"></div>
             </div>
           </div>
         </div>
@@ -160,32 +160,27 @@
         </div>
 
         <!-- Tarjetas resumen (estadísticas) -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
           <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
             <div class="flex items-center justify-between">
               <div class="h-11 w-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center"><i class="fas fa-chart-column text-xl"></i></div>
-              <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">+18%</span>
             </div>
+<<<<<<< HEAD
             <div class="mt-3 text-3xl font-extrabold text-slate-800" id="totalAnalisis">20</div>
+=======
+            <div class="mt-3 text-3xl font-extrabold text-slate-800" id="totalAnalisis" th:text="${totalAnalisis}"></div>
+>>>>>>> 167cb2cb162a459c693768000783285616ec1294
             <div class="text-sm text-slate-500">Total de análisis</div>
           </div>
           <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
-            <div class="flex items-center justify-between">
-              <div class="h-11 w-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center"><i class="fas fa-chart-simple"></i></div>
-              <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">+5%</span>
-            </div>
-            <div class="mt-3 text-3xl font-extrabold text-slate-800" id="puntajePromedio">83</div>
+            <div class="h-11 w-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center"><i class="fas fa-trophy"></i></div>
+            <div class="mt-3 text-3xl font-extrabold text-slate-800" id="puntajePromedio"  th:text="${#numbers.formatDecimal(puntajePromedio,1,1)}"></div>
             <div class="text-sm text-slate-500">Puntaje promedio</div>
           </div>
           <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
             <div class="h-11 w-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center"><i class="fas fa-trophy"></i></div>
-            <div class="mt-3 text-3xl font-extrabold text-slate-800" id="mejorPuntaje">92</div>
+            <div class="mt-3 text-3xl font-extrabold text-slate-800" id="mejorPuntaje" th:text="${#numbers.formatDecimal(mejorPuntaje,1,1)}"></div>
             <div class="text-sm text-slate-500">Mejor puntaje</div>
-          </div>
-          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
-            <div class="h-11 w-11 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center"><i class="fas fa-hourglass-half"></i></div>
-            <div class="mt-3 text-3xl font-extrabold text-slate-800" id="tiempoTotal">2h 34m</div>
-            <div class="text-sm text-slate-500">Tiempo total</div>
           </div>
         </div>
 
@@ -213,17 +208,241 @@
             <table class="w-full text-left">
               <thead class="bg-slate-50 border-b border-slate-200">
                 <tr class="text-sm font-semibold text-slate-700">
-                  <th class="px-6 py-4">Análisis</th>
+                  <th class="px-6 py-4">Título</th>
                   <th class="px-6 py-4">Fecha</th>
-                  <th class="px-6 py-4">Duración</th>
-                  <th class="px-6 py-4">Puntaje</th>
-                  <th class="px-6 py-4">Muletillas</th>
-                  <th class="px-6 py-4">Tendencia</th>
+                  <th class="px-6 py-4">Fluidez</th>
+                  <th class="px-6 py-4">Postura</th>
+                  <th class="px-6 py-4">Estado</th>
                   <th class="px-6 py-4">Acción</th>
                 </tr>
               </thead>
-              <tbody id="tablaAnalisisBody">
-                <!-- JS dinámico -->
+              <tbody>
+              <tr th:each="a : ${analisis}">
+
+                    <td th:text="${a.titulo}"></td>
+
+                    <td th:text="${#temporals.format(a.fecha,'dd/MM/yyyy HH:mm')}"></td>
+
+                    <td th:text="${a.fluidez}"></td>
+
+                    <td th:text="${a.postura}"></td>
+
+                    <td>
+
+                        <span th:text="${a.estado}"></span>
+
+                    </td>
+
+                  <td class="px-6 py-4">
+                      <button
+                          type="button"
+                          class="text-indigo-600 hover:text-indigo-800 font-medium text-sm flex items-center gap-1"
+                          th:attr="data-id=${a.idAnalisis}"
+                          onclick="verDetalle(this)">
+                          <i class="fas fa-eye"></i>
+                          Ver detalles
+                      </button>
+                  </td>
+
+                </tr>
+
+                  <div id="detalleModal"
+                      class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+
+                      <div class="bg-white rounded-3xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-y-auto">
+
+                          <!-- Header -->
+                          <div class="flex items-center justify-between px-8 py-6 border-b">
+
+                              <div class="flex items-center gap-4">
+
+                                  <div class="w-14 h-14 rounded-2xl bg-indigo-100 flex items-center justify-center">
+                                      <i class="fas fa-chart-line text-indigo-600 text-2xl"></i>
+                                  </div>
+
+                                  <div>
+
+                                      <h2 class="text-2xl font-bold text-slate-800">
+                                          Resultado del análisis IA
+                                      </h2>
+
+                                      <p class="text-slate-500">
+                                          Evaluación completa de la presentación
+                                      </p>
+
+                                  </div>
+
+                              </div>
+
+                              <button onclick="cerrarModal()"
+                                  class="w-10 h-10 rounded-full hover:bg-red-50 text-slate-500 hover:text-red-500 transition">
+
+                                  <i class="fas fa-times"></i>
+
+                              </button>
+
+                          </div>
+
+                          <!-- Puntaje -->
+                          <div class="px-8 pt-6">
+
+                              <div
+                                  class="rounded-2xl bg-gradient-to-r from-indigo-600 to-blue-600 text-white p-6 flex justify-between items-center">
+
+                                  <div>
+
+                                      <p class="text-indigo-100 uppercase tracking-widest text-sm">
+                                          Puntuación General
+                                      </p>
+
+                                      <h2 id="puntuacion"
+                                          class="text-5xl font-black mt-2">
+                                      </h2>
+
+                                  </div>
+
+                                  <i class="fas fa-award text-6xl opacity-30"></i>
+
+                              </div>
+
+                          </div>
+
+                          <!-- Métricas -->
+                          <div class="grid md:grid-cols-4 gap-5 p-8">
+
+                              <div class="rounded-2xl bg-slate-50 p-5 border">
+                                  <p class="text-slate-500 text-sm">Fluidez</p>
+                                  <h3 id="fluidez" class="text-3xl font-bold text-indigo-600"></h3>
+                              </div>
+
+                              <div class="rounded-2xl bg-slate-50 p-5 border">
+                                  <p class="text-slate-500 text-sm">Claridad</p>
+                                  <h3 id="claridad" class="text-3xl font-bold text-indigo-600"></h3>
+                              </div>
+
+                              <div class="rounded-2xl bg-slate-50 p-5 border">
+                                  <p class="text-slate-500 text-sm">Volumen</p>
+                                  <h3 id="volumen" class="text-3xl font-bold text-indigo-500"></h3>
+                              </div>
+
+                              <div class="rounded-2xl bg-slate-50 p-5 border">
+                                  <p class="text-slate-500 text-sm">Velocidad</p>
+                                  <h3 id="velocidad" class="text-3xl font-bold text-indigo-600"></h3>
+                              </div>
+
+                              <div class="rounded-2xl bg-slate-50 p-5 border">
+                                  <p class="text-slate-500 text-sm">Postura</p>
+                                  <h3 id="postura" class="text-3xl font-bold text-indigo-600"></h3>
+                              </div>
+
+                              <div class="rounded-2xl bg-slate-50 p-5 border">
+                                  <p class="text-slate-500 text-sm">Contacto Visual</p>
+                                  <h3 id="contactoVisual" class="text-3xl font-bold text-indigo-600"></h3>
+                              </div>
+
+                              <div class="rounded-2xl bg-slate-50 p-5 border">
+                                  <p class="text-slate-500 text-sm">Confianza</p>
+                                  <h3 id="confianza" class="text-3xl font-bold text-indigo-600"></h3>
+                              </div>
+
+                              <div class="rounded-2xl bg-slate-50 p-5 border">
+                                  <p class="text-slate-500 text-sm">Expresión Facial</p>
+                                  <h3 id="expresionFacial" class="text-3xl font-bold text-indigo-600"></h3>
+                              </div>
+
+                          </div>
+
+                          <!-- Indicadores -->
+                          <div class="grid md:grid-cols-2 gap-6 px-8">
+
+                              <div
+                                  class="rounded-2xl border border-red-200 bg-red-50 p-6">
+
+                                  <div class="flex items-center gap-3 mb-3">
+
+                                      <i class="fas fa-comment-dots text-red-500 text-xl"></i>
+
+                                      <h3 class="font-bold text-red-700">
+                                          Muletillas Detectadas
+                                      </h3>
+
+                                  </div>
+
+                                  <span id="muletillas"
+                                      class="text-4xl font-black text-red-600">
+                                  </span>
+
+                              </div>
+
+                              <div
+                                  class="rounded-2xl border border-yellow-200 bg-yellow-50 p-6">
+
+                                  <div class="flex items-center gap-3 mb-3">
+
+                                      <i class="fas fa-pause-circle text-yellow-600 text-xl"></i>
+
+                                      <h3 class="font-bold text-yellow-700">
+                                          Pausas Incómodas
+                                      </h3>
+
+                                  </div>
+
+                                  <span id="pausas"
+                                      class="text-4xl font-black text-yellow-600">
+                                  </span>
+
+                              </div>
+
+                          </div>
+
+                          <!-- Observaciones -->
+                          <div class="p-8">
+
+                              <div
+                                  class="rounded-2xl border border-indigo-200 bg-indigo-50 p-6">
+
+                                  <h3 class="font-bold text-indigo-700 mb-3 flex items-center gap-2">
+
+                                      <i class="fas fa-lightbulb"></i>
+
+                                      Observaciones
+
+                                  </h3>
+
+                                  <p id="observaciones"
+                                      class="text-slate-700 leading-7">
+                                  </p>
+
+                              </div>
+
+                          </div>
+
+                          <!-- IA -->
+                          <div class="px-8 pb-8">
+
+                              <div
+                                  class="rounded-2xl border border-indigo-200 bg-indigo-50 p-6">
+
+                                  <h3 class="font-bold text-indigo-700 mb-3 flex items-center gap-2">
+
+                                      <i class="fas fa-robot"></i>
+
+                                      Recomendación de la IA
+
+                                  </h3>
+
+                                  <p id="respuestaIA"
+                                      class="text-slate-700 leading-7">
+                                  </p>
+
+                              </div>
+
+                          </div>
+
+                      </div>
+
+                  </div>
+
               </tbody>
             </table>
           </div>
@@ -257,7 +476,11 @@
   </div>
 
   <script>
+<<<<<<< HEAD
    
+=======
+
+>>>>>>> 167cb2cb162a459c693768000783285616ec1294
     // Helper formatear duración (segundos a mm:ss)
     function formatDuration(seg) {
       let mins = Math.floor(seg / 60);
@@ -273,23 +496,6 @@
       return `<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold ${cls}">${icon} ${trend}</span>`;
     }
 
-    // Función para calcular estadísticas y actualizar resumen
-    function updateStats(data) {
-      let total = data.length;
-      let avgScore = Math.round(data.reduce((acc, cur) => acc + cur.puntaje, 0) / total);
-      let bestScore = Math.max(...data.map(d => d.puntaje));
-      let totalSeconds = data.reduce((acc, cur) => acc + cur.duracionSeg, 0);
-      let hours = Math.floor(totalSeconds / 3600);
-      let minutes = Math.floor((totalSeconds % 3600) / 60);
-      let timeStr = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
-      if (hours === 0 && minutes === 0 && totalSeconds > 0) timeStr = `${totalSeconds}s`;
-      else if (hours === 0 && minutes === 0 && totalSeconds === 0) timeStr = "0m";
-      
-      document.getElementById('totalAnalisis').innerText = total;
-      document.getElementById('puntajePromedio').innerText = avgScore;
-      document.getElementById('mejorPuntaje').innerText = bestScore;
-      document.getElementById('tiempoTotal').innerText = timeStr;
-    }
 
     // Filtros: texto + rango fecha (semana/mes)
     let currentFilter = "todos"; // 'todos', 'semana', 'mes'
@@ -323,118 +529,56 @@
       return filtered;
     }
 
-    // Renderizar tabla y cards
-    function renderHistory() {
-      const dataFiltered = getFilteredData();
-      const tbody = document.getElementById('tablaAnalisisBody');
-      const mobileContainer = document.getElementById('mobileCardsContainer');
-      const emptyDiv = document.getElementById('emptyMessage');
-      
-      if (dataFiltered.length === 0) {
-        tbody.innerHTML = '';
-        mobileContainer.innerHTML = '';
-        emptyDiv.classList.remove('hidden');
-        updateStats(dataFiltered);
-        return;
-      }
-      emptyDiv.classList.add('hidden');
-      
-      // Renderizar tabla desktop
-      tbody.innerHTML = dataFiltered.map(item => `
-        <tr class="table-row-hover border-b border-slate-100 transition">
-          <td class="px-6 py-4 font-semibold text-slate-800">${item.nombre}</td>
-          <td class="px-6 py-4 text-slate-600 text-sm">${new Date(item.fecha).toLocaleDateString('es-ES', {day:'numeric', month:'short'})}</td>
-          <td class="px-6 py-4 text-slate-600">${formatDuration(item.duracionSeg)}</td>
-          <td class="px-6 py-4 font-extrabold text-indigo-600">${item.puntaje}</td>
-          <td class="px-6 py-4 text-slate-600">${item.muletillas}</td>
-          <td class="px-6 py-4">${getTrendHtml(item.tendencia)}</td>
-          <td class="px-6 py-4">
-            <button onclick="showDetail(${item.id})" class="text-indigo-600 hover:text-indigo-800 font-medium text-sm flex items-center gap-1"><i class="fas fa-eye"></i> Ver detalles</button>
-          </td>
-        </tr>
-      `).join('');
-      
-      // Renderizar mobile cards
-      mobileContainer.innerHTML = dataFiltered.map(item => `
-        <div class="p-5 border-b border-slate-100">
-          <div class="flex justify-between items-start">
-            <div><h3 class="font-extrabold text-slate-800">${item.nombre}</h3>
-            <span class="text-xs text-slate-400"><i class="far fa-calendar-alt mr-1"></i>${new Date(item.fecha).toLocaleDateString('es-ES')}</span></div>
-            <span class="text-xl font-black text-indigo-600">${item.puntaje}</span>
-          </div>
-          <div class="grid grid-cols-3 gap-2 mt-3 text-sm">
-            <div><span class="text-slate-400">Duración</span><br><span class="font-semibold">${formatDuration(item.duracionSeg)}</span></div>
-            <div><span class="text-slate-400">Muletillas</span><br><span class="font-semibold">${item.muletillas}</span></div>
-            <div><span class="text-slate-400">Tendencia</span><br>${getTrendHtml(item.tendencia)}</div>
-          </div>
-          <div class="mt-3 flex justify-end">
-            <button onclick="showDetail(${item.id})" class="text-indigo-500 text-sm font-medium bg-indigo-50 px-3 py-1.5 rounded-xl"><i class="fas fa-chart-simple mr-1"></i>Ver detalles</button>
-          </div>
-        </div>
-      `).join('');
-      
-      updateStats(dataFiltered);
-    }
-    
-    // Modal de detalles
-    window.showDetail = (id) => {
-      const analysis = rawData.find(a => a.id === id);
-      if (!analysis) return;
-      const modal = document.getElementById('detailModal');
-      const modalContent = document.getElementById('modalContent');
-      modalContent.innerHTML = `
-        <div class="space-y-3">
-          <div class="flex justify-between border-b pb-2"><span class="font-semibold">Título:</span><span>${analysis.nombre}</span></div>
-          <div class="flex justify-between border-b pb-2"><span class="font-semibold">Fecha:</span><span>${new Date(analysis.fecha).toLocaleDateString('es-ES')}</span></div>
-          <div class="flex justify-between border-b pb-2"><span class="font-semibold">Duración:</span><span>${formatDuration(analysis.duracionSeg)}</span></div>
-          <div class="flex justify-between border-b pb-2"><span class="font-semibold">Puntaje:</span><span class="text-indigo-700 font-bold">${analysis.puntaje}</span></div>
-          <div class="flex justify-between border-b pb-2"><span class="font-semibold">Muletillas:</span><span>${analysis.muletillas} veces</span></div>
-          <div class="flex justify-between border-b pb-2"><span class="font-semibold">Tendencia:</span><span>${analysis.tendencia} puntos</span></div>
-          <div class="pt-2"><span class="font-semibold">Feedback IA:</span><p class="text-sm text-slate-600 mt-1">${analysis.descripcionDetalle}</p></div>
-        </div>
-      `;
-      modal.classList.remove('hidden');
-    };
-    
-    function closeModal() {
-      document.getElementById('detailModal').classList.add('hidden');
-    }
-    
-    // Eventos de filtros y búsqueda
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        document.querySelectorAll('.filter-btn').forEach(b => {
-          b.classList.remove('bg-indigo-600', 'text-white');
-          b.classList.add('bg-slate-100', 'text-slate-700');
+        async function verDetalle(button){
+
+            const idAnalisis = button.dataset.id;
+
+            const response = await fetch("/resultado-ia/" + idAnalisis);
+
+            if(!response.ok){
+                alert("No se pudo obtener el detalle.");
+                return;
+            }
+
+            const data = await response.json();
+
+            document.getElementById("fluidez").innerText = data.fluidez;
+            document.getElementById("claridad").innerText = data.claridad;
+            document.getElementById("volumen").innerText = data.volumen;
+            document.getElementById("velocidad").innerText = data.velocidad;
+            document.getElementById("postura").innerText = data.postura;
+            document.getElementById("contactoVisual").innerText = data.contactoVisual;
+            document.getElementById("confianza").innerText = data.confianza;
+            document.getElementById("expresionFacial").innerText = data.expresionFacial;
+            document.getElementById("muletillas").innerText = data.muletillasDetectadas;
+            document.getElementById("pausas").innerText = data.pausasIncomodas;
+            document.getElementById("puntuacion").innerText = data.puntuacionGeneral;
+            document.getElementById("observaciones").innerText = data.observaciones;
+            document.getElementById("respuestaIA").innerText = data.respuestaIA;
+
+            const modal = document.getElementById("detalleModal");
+
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        }
+
+        function cerrarModal(){
+
+            const modal = document.getElementById("detalleModal");
+
+            modal.classList.remove("flex");
+            modal.classList.add("hidden");
+
+        }
+
+        document.getElementById("detalleModal").addEventListener("click", function(e){
+
+            if(e.target === this){
+                cerrarModal();
+            }
+
         });
-        btn.classList.remove('bg-slate-100', 'text-slate-700');
-        btn.classList.add('bg-indigo-600', 'text-white');
-        const filterValue = btn.getAttribute('data-filter');
-        currentFilter = filterValue;
-        renderHistory();
-      });
-    });
     
-    const searchInput = document.getElementById('searchInput');
-    searchInput.addEventListener('input', (e) => {
-      searchTerm = e.target.value;
-      renderHistory();
-    });
-    
-    // botón "Filtrar" extra: muestra un avance o resetea (simula más opciones)
-    document.getElementById('filterButtonExtra').addEventListener('click', () => {
-      alert("Filtros adicionales próximamente: por rango de puntaje y categorías. Por ahora puedes usar búsqueda y períodos.");
-    });
-    
-    document.getElementById('closeModalBtn').addEventListener('click', closeModal);
-    document.getElementById('closeModalFooter').addEventListener('click', closeModal);
-    window.addEventListener('click', (e) => {
-      const modal = document.getElementById('detailModal');
-      if (e.target === modal) closeModal();
-    });
-    
-    // inicializar datos y render
-    renderHistory();
   </script>
   <style>
     .animate-fade-in {

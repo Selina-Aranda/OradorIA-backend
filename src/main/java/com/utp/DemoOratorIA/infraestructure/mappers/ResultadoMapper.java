@@ -3,6 +3,7 @@ package com.utp.DemoOratorIA.infraestructure.mappers;
 import org.springframework.stereotype.Component;
 
 import com.utp.DemoOratorIA.domain.model.aggregate.ResultadoIA;
+import com.utp.DemoOratorIA.infraestructure.DTO.ResultadoIADTO;
 import com.utp.DemoOratorIA.infraestructure.entities.ResultadoIAEntity;
 
 @Component
@@ -66,5 +67,34 @@ public class ResultadoMapper {
         entity.setFecha(resultado.getFecha());
 
         return entity;
+    }
+
+    public ResultadoIADTO toDTO(ResultadoIA resultado) {
+
+        if (resultado == null) {
+            return null;
+        }
+
+        return new ResultadoIADTO(
+                    resultado.getIdResultado(),
+                    resultado.getIdAnalisis(),
+                    resultado.getFluidez(),
+                    resultado.getClaridad(),
+                    resultado.getVolumen(),
+                    resultado.getVelocidad(),
+                    resultado.getPostura(),
+                    resultado.getContactoVisual(),
+                    resultado.getConfianza(),
+                    resultado.getExpresionFacial(),
+                    resultado.getMuletillasDetectadas(),
+                    resultado.getPausasIncomodas(),
+                    resultado.getPuntuacionGeneral(),
+                    resultado.getObservaciones(),
+                    resultado.getFechaResultado(),
+                    resultado.getEntradaUsuario(),
+                    resultado.getRespuestaIA(),
+                    resultado.getPuntuacion(),
+                    resultado.getFecha()
+            );
     }
 }

@@ -29,7 +29,7 @@ public class MainUserController {
         return "mainUser";
     }
 
-    @GetMapping("/profile-user")
+    @GetMapping("/main-profile-user")
     public String mostrarPerfilUsuario() {
         return "profileUser";
     }
@@ -52,11 +52,6 @@ public class MainUserController {
     @GetMapping("/admin-reports")
     public String mostrarReportesAdmin() {
         return "admin-reports";
-    }
-
-    @GetMapping("/admin-settings")
-    public String mostrarConfigAdmin() {
-        return "admin-settings";
     }
 
     @GetMapping("/admin-users")
