@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Planes | OradorIA</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
+</head>
+
+<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-white min-h-screen">
+
+    <!-- Encabezado -->
+    <section class="pt-16 pb-10 text-center">
+
+        <span class="bg-blue-100 text-blue-700 px-4 py-2 rounded-full font-semibold text-sm">
+            ORADOR IA
+        </span>
+
+        <h1 class="text-5xl font-extrabold text-slate-800 mt-6">
+            Lleva tus presentaciones
+            <span class="text-blue-600">al siguiente nivel</span>
+        </h1>
+
+        <p class="text-slate-500 mt-5 text-lg max-w-3xl mx-auto">
+            Desbloquea herramientas avanzadas de inteligencia artificial,
+            análisis en tiempo real y reportes profesionales para mejorar
+            tu capacidad de hablar en público.
+        </p>
+
+    </section>
+
+    <!-- Planes -->
+    <section class="pb-20">
+
+        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 px-8">
+
+            <!-- PRO -->
+            <div
+                class="relative bg-white rounded-3xl shadow-xl border-2 border-blue-500 p-10 hover:scale-105 transition duration-300">
+
+                <div
+                    class="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-6 py-2 rounded-full font-bold text-sm shadow">
+                    MÁS POPULAR
+                </div>
+
+                <div class="text-center">
+
+                    <div class="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center mx-auto">
+
+                        <i class="fas fa-rocket text-4xl text-blue-600"></i>
+
+                    </div>
+
+                    <h2 class="text-3xl font-bold mt-6 text-slate-800">
+                        Plan Pro
+                    </h2>
+
+                    <div class="mt-4">
+
+                        <span class="text-6xl font-extrabold text-blue-600">
+                            $12
+                        </span>
+
+                        <span class="text-slate-500 text-xl">
+                            /mes
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <ul class="mt-10 space-y-5 text-slate-700">
+
+                    <li class="flex gap-3">
+                        <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                        Análisis IA en tiempo real
+                    </li>
+
+                    <li class="flex gap-3">
+                        <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                        Prácticas ilimitadas
+                    </li>
+
+                    <li class="flex gap-3">
+                        <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                        Consejos personalizados avanzados
+                    </li>
+
+                    <li class="flex gap-3">
+                        <i class="fas fa-check-circle text-blue-600 mt-1"></i>
+                        Reportes semanales
+                    </li>
+
+                </ul>
+
+                <a th:href="@{/pago(plan='profesional')}"
+                    class="mt-10 block w-full text-center bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold transition">
+
+                    Elegir Profesional
+                </a>
+            </div>
+
+            <!-- PREMIUM -->
+            <div
+                class="relative bg-white rounded-3xl shadow-xl border border-yellow-400 p-10 hover:scale-105 transition duration-300">
+
+                <div class="text-center">
+
+                    <div class="w-20 h-20 rounded-full bg-yellow-100 flex items-center justify-center mx-auto">
+
+                        <i class="fas fa-crown text-4xl text-yellow-500"></i>
+
+                    </div>
+
+                    <h2 class="text-3xl font-bold mt-6 text-slate-800">
+                        Premium
+                    </h2>
+
+                    <div class="mt-4">
+
+                        <span class="text-6xl font-extrabold text-yellow-500">
+                            $29
+                        </span>
+
+                        <span class="text-slate-500 text-xl">
+                            /mes
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <ul class="mt-10 space-y-5 text-slate-700">
+
+                    <li class="flex gap-3">
+                        <i class="fas fa-check-circle text-yellow-500 mt-1"></i>
+                        Todo lo incluido en Pro
+                    </li>
+
+                    <li class="flex gap-3">
+                        <i class="fas fa-check-circle text-yellow-500 mt-1"></i>
+                        Historial ilimitado de análisis
+                    </li>
+
+                    <li class="flex gap-3">
+                        <i class="fas fa-check-circle text-yellow-500 mt-1"></i>
+                        Exportación de reportes en PDF
+                    </li>
+
+                    <li class="flex gap-3">
+                        <i class="fas fa-check-circle text-yellow-500 mt-1"></i>
+                        Soporte prioritario 24/7
+                    </li>
+
+                </ul>
+
+                <a th:href="@{/pago(plan='premium')}"
+                    class="mt-10 block w-full text-center bg-yellow-500 hover:bg-yellow-600 text-white py-4 rounded-xl font-bold transition">
+
+                    Elegir Premium
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</body>
+
+</html>
