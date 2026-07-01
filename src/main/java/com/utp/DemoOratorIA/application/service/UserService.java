@@ -6,8 +6,10 @@ import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.utp.DemoOratorIA.domain.model.aggregate.Plan;
 import com.utp.DemoOratorIA.domain.model.aggregate.User;
 import com.utp.DemoOratorIA.domain.model.repositories.IActividadRecienteRepository;
+import com.utp.DemoOratorIA.domain.model.repositories.IPlanRepository;
 import com.utp.DemoOratorIA.domain.model.repositories.IUserRepository;
 
 import jakarta.transaction.Transactional;
@@ -19,13 +21,15 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final ActividadRecienteService actividadService;
     private final IActividadRecienteRepository actividadRecienteRepository;
+    private final IPlanRepository planRepository;
 
     public UserService(IUserRepository userRepository, PasswordEncoder passwordEncoder,
-            ActividadRecienteService actividadService, IActividadRecienteRepository actividadRecienteRepository) {
+            ActividadRecienteService actividadService, IActividadRecienteRepository actividadRecienteRepository,  IPlanRepository planRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.actividadService = actividadService;
         this.actividadRecienteRepository = actividadRecienteRepository;
+        this.planRepository = planRepository;
     }
 
     public User save(User user) {
@@ -86,6 +90,15 @@ public class UserService {
 
     public long contarUsuariosPremiun() {
         return userRepository.countPremiunUsers();
+    }
+
+    public Plan obtenerPlanUsuario(Integer idUsuario) {
+
+    User user = userRepository.findById(idUsuario)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+    return planRepository.findById(user.getIdPlan())
+            .orElseThrow(() -> new RuntimeException("Plan no encontrado"));
     }
 
 }
