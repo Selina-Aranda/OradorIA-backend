@@ -1,13 +1,12 @@
 package com.utp.DemoOratorIA.application.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.utp.DemoOratorIA.domain.model.repositories.ResultadoQueryRepository;
 import com.utp.DemoOratorIA.infraestructure.DTO.AnalisisResultadoDTO;
-import com.utp.DemoOratorIA.infraestructure.entities.ResultadoIAEntity;
+import com.utp.DemoOratorIA.infraestructure.repositories.ResultadoQueryRepository;
 
 @Service
 public class ResultadoQueryService {
@@ -18,19 +17,22 @@ public class ResultadoQueryService {
         this.repository = repository;
     }
 
-    public List<AnalisisResultadoDTO> listar(Integer idAnalisis) {
+     public List<AnalisisResultadoDTO> listar(Integer idUsuario) {
 
-        List<ResultadoIAEntity> data = repository.findByIdAnalisis(idAnalisis);
+        List<Object[]> data = repository.listarAnalisisUsuario(idUsuario);
 
         return data.stream()
                 .map(r -> new AnalisisResultadoDTO(
-                        r.getIdAnalisis(),
-                        "Analisis IA",
-                        "COMPLETADO",
-                        r.getFecha(),
-                        safe(r.getFluidez()),
-                        safe(r.getPostura())))
-                .collect(Collectors.toList());
+
+                        ((Number) r[0]).intValue(),
+                        (String) r[1],
+                        (String) r[2],
+                        (LocalDateTime) r[3],
+                        r[4] != null ? ((Number) r[4]).doubleValue() : 0.0,
+                        r[5] != null ? ((Number) r[5]).doubleValue() : 0.0
+
+                ))
+                .toList();
     }
 
     private Double safe(Double v) {

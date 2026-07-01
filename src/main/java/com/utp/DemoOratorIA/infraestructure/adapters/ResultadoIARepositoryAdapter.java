@@ -1,10 +1,8 @@
 package com.utp.DemoOratorIA.infraestructure.adapters;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.Optional;
-
-
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
@@ -57,5 +55,11 @@ public class ResultadoIARepositoryAdapter implements IResultadoIARepository {
     @Override
     public void delete(Integer id) {
         jpa.deleteById(id);
+    }
+
+    @Override
+    public Optional<ResultadoIA> findByIdAnalisis(Integer idAnalisis) {
+            return jpa.findByIdAnalisis(idAnalisis)
+            .map(mapper::toDomain);
     }
 }
