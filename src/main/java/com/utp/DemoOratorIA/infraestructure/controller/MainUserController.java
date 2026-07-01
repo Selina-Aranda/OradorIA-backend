@@ -53,11 +53,6 @@ public class MainUserController {
         return "admin-reports";
     }
 
-    @GetMapping("/admin-settings")
-    public String mostrarConfigAdmin() {
-        return "admin-settings";
-    }
-
     @GetMapping("/admin-users")
     public String mostrarUsuarios(Model model) {
         model.addAttribute("usuarios", userService.listar());
