@@ -8,4 +8,11 @@ import com.utp.DemoOratorIA.infraestructure.entities.ResultadoIAEntity;
 
 public interface JPAResultadoIARepository extends JpaRepository<ResultadoIAEntity, Integer> {
     Optional<ResultadoIAEntity> findByIdAnalisis(Integer idAnalisis);
+
+    // Último resultado registrado
+    ResultadoIAEntity findTopByOrderByFechaResultadoDesc();
+
+    // Resultado con mayor puntaje
+    ResultadoIAEntity findTopByOrderByPuntuacionGeneralDesc();
+
 }

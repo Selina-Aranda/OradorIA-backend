@@ -19,7 +19,7 @@ public class ResultadoIARepositoryAdapter implements IResultadoIARepository {
     private final ResultadoMapper mapper;
 
     public ResultadoIARepositoryAdapter(JPAResultadoIARepository jpa,
-                                        ResultadoMapper mapper) {
+            ResultadoMapper mapper) {
         this.jpa = jpa;
         this.mapper = mapper;
     }
@@ -33,8 +33,8 @@ public class ResultadoIARepositoryAdapter implements IResultadoIARepository {
 
     @Override
     public Optional<ResultadoIA> findById(Integer id) {
-            return jpa.findById(id)
-                    .map(mapper::toDomain);
+        return jpa.findById(id)
+                .map(mapper::toDomain);
     }
 
     @Override
@@ -59,7 +59,32 @@ public class ResultadoIARepositoryAdapter implements IResultadoIARepository {
 
     @Override
     public Optional<ResultadoIA> findByIdAnalisis(Integer idAnalisis) {
-            return jpa.findByIdAnalisis(idAnalisis)
-            .map(mapper::toDomain);
+        return jpa.findByIdAnalisis(idAnalisis)
+                .map(mapper::toDomain);
+
+    }
+
+    @Override
+    public ResultadoIA obtenerUltimoResultado() {
+
+        ResultadoIAEntity entity = jpa.findTopByOrderByFechaResultadoDesc();
+
+        if (entity == null) {
+            return null;
+        }
+
+        return mapper.toDomain(entity);
+    }
+
+    @Override
+    public ResultadoIA obtenerMejorResultado() {
+
+        ResultadoIAEntity entity = jpa.findTopByOrderByPuntuacionGeneralDesc();
+
+        if (entity == null) {
+            return null;
+        }
+
+        return mapper.toDomain(entity);
     }
 }
