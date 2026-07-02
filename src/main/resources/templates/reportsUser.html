@@ -12,6 +12,8 @@
 
   <!-- Chart.js CDN para gráficos profesionales -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <!-- html2canvas: para exportar el reporte como imagen -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <style>
     * {
@@ -308,6 +310,46 @@
             </table>
           </div>
         </div>
+        <!-- Plantilla oculta para exportar el reporte como imagen (nunca se muestra en pantalla) -->
+        <div id="reportCardTemplate" class="w-[900px] bg-white p-10" style="position:absolute; left:-9999px; top:0;">
+          <div class="flex items-center justify-between pb-6 mb-8 border-b-4 border-indigo-600">
+            <div class="flex items-center gap-3">
+              <div class="h-12 w-12 rounded-2xl bg-blue-600 flex items-center justify-center text-white text-2xl">
+                <i class="fas fa-microphone-lines"></i>
+              </div>
+              <div>
+                <div class="text-2xl font-extrabold text-blue-600">OradorIA</div>
+                <div class="text-sm text-slate-500">Reporte de Estadísticas</div>
+              </div>
+            </div>
+            <div class="text-right">
+              <div id="reportCardUserName" class="text-base font-bold text-slate-800"></div>
+              <div id="reportCardDate" class="text-xs text-slate-400"></div>
+            </div>
+          </div>
+
+          <div id="reportCardPeriod" class="inline-block bg-indigo-50 text-indigo-700 text-xs font-bold px-4 py-2 rounded-full mb-8"></div>
+
+          <div id="reportCardStats" class="grid grid-cols-4 gap-4 mb-10"></div>
+
+          <div class="mb-10">
+            <div class="text-lg font-extrabold text-slate-800 mb-4 flex items-center gap-2">
+              <i class="fas fa-chart-line text-indigo-500"></i> Evolución de Puntaje
+            </div>
+            <img id="reportCardChartImg" class="w-full rounded-xl border border-slate-200" />
+          </div>
+
+          <div>
+            <div class="text-lg font-extrabold text-slate-800 mb-4 flex items-center gap-2">
+              <i class="fas fa-rocket text-indigo-500"></i> Resumen de Mejoras
+            </div>
+            <div id="reportCardBars"></div>
+          </div>
+
+          <div class="mt-10 pt-4 border-t border-slate-200 text-center text-xs text-slate-400">
+            Generado automáticamente por OradorIA
+          </div>
+        </div>
       </div>
     </main>
     </div>
@@ -319,6 +361,16 @@
     let resumenMejoras = null;
     let scoreChart;
     let currentPeriod = "all";
+
+    // Nombre del usuario logueado, inyectado por Thymeleaf (para el encabezado de la imagen exportada)
+    const nombreUsuario = /*[[${session.user.nombres} + ' ' + ${session.user.apellidos}]]*/ 'Usuario';
+
+    const periodLabels = {
+      lastMonth: 'Último mes',
+      last3Months: 'Últimos 3 meses',
+      lastYear: 'Último año',
+      all: 'Todo el historial'
+    };
 
     async function cargarEstadisticas() {
       try {
@@ -499,32 +551,111 @@
       });
     }
 
-    async function exportReport() {
-      const filtered = filterDataByPeriod(currentPeriod);
-      let content = "ORADORIA - REPORTE DE ESTADÍSTICAS\n";
-      content += `Período: ${currentPeriod}\nFecha: ${new Date().toLocaleDateString()}\n\n`;
-      content += "Mes, Puntaje, Fluidez, Muletillas, Duración(min), Análisis\n";
-      filtered.forEach(d => {
-        content += `${d.month} ${d.year}, ${d.score}, ${d.fluency}, ${d.fillers}, ${d.durationMinutes}, ${d.totalAnalisis}\n`;
+    // Arma una tarjeta HTML con el resumen del reporte y la convierte en imagen (PNG)
+    function statCardHtml(icon, label, value, bgClass, textClass) {
+      return `
+        <div class="${bgClass} rounded-2xl p-4 text-center">
+          <div class="text-2xl mb-2">${icon}</div>
+          <div class="text-xs text-slate-500 mb-1">${label}</div>
+          <div class="text-xl font-extrabold ${textClass}">${value}</div>
+        </div>
+      `;
+    }
+
+    function barRowHtml(label, valueText, barColorClass, trackColorClass) {
+      const pct = Math.min(100, Math.abs(parseFloat(valueText)) || 0);
+      const textColorClass = barColorClass.replace('bg-', 'text-');
+      return `
+        <div class="mb-4">
+          <div class="flex justify-between text-sm mb-1.5">
+            <span class="font-semibold text-slate-700">${label}</span>
+            <span class="font-extrabold ${textColorClass}">${valueText}</span>
+          </div>
+          <div class="h-2.5 rounded-full ${trackColorClass} overflow-hidden">
+            <div class="h-full rounded-full ${barColorClass}" style="width:${pct}%"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function generarImagenReporte() {
+      const template = document.getElementById('reportCardTemplate');
+
+      // Encabezado
+      document.getElementById('reportCardUserName').innerText = nombreUsuario;
+      document.getElementById('reportCardDate').innerText = new Date().toLocaleDateString('es-PE', {
+        year: 'numeric', month: 'long', day: 'numeric'
       });
-      const blob = new Blob([content], { type: "text/csv;charset=utf-8;" });
-      const link = document.createElement("a");
-      const url = URL.createObjectURL(blob);
-      link.href = url;
-      link.setAttribute("download", `oratoria_report_${currentPeriod}.csv`);
+      document.getElementById('reportCardPeriod').innerText =
+        '📅 ' + (periodLabels[currentPeriod] || 'Todo el historial');
+
+      // Tarjetas de métricas (usa el resumen ya calculado en el backend)
+      const promedioGeneral = document.getElementById('avgScoreMetric').innerText;
+      const mejoraTotal = document.getElementById('totalImprovement').innerText;
+      const promedioMuletillas = document.getElementById('avgFillersMetric').innerText;
+      const totalSesiones = document.getElementById('totalSessions').innerText;
+
+      document.getElementById('reportCardStats').innerHTML = [
+        statCardHtml('📊', 'Promedio general', promedioGeneral, 'bg-indigo-50', 'text-indigo-600'),
+        statCardHtml('📈', 'Mejora total', mejoraTotal, 'bg-emerald-50', 'text-emerald-600'),
+        statCardHtml('🎤', 'Muletillas (prom)', promedioMuletillas, 'bg-amber-50', 'text-amber-600'),
+        statCardHtml('⏳', 'Total sesiones', totalSesiones, 'bg-purple-50', 'text-purple-600')
+      ].join('');
+
+      // Reusa el gráfico que ya está dibujado en pantalla (Chart.js sabe exportarse solo)
+      const chartImg = document.getElementById('reportCardChartImg');
+      if (scoreChart) {
+        chartImg.src = scoreChart.toBase64Image();
+        chartImg.style.display = 'block';
+      } else {
+        chartImg.style.display = 'none';
+      }
+
+      // Barras de "Resumen de Mejoras" (mismos datos que se ven en pantalla)
+      document.getElementById('reportCardBars').innerHTML = [
+        barRowHtml('Fluidez', resumenMejoras?.mejoraFluidez ?? '0%', 'bg-emerald-500', 'bg-emerald-100'),
+        barRowHtml('Claridad', resumenMejoras?.mejoraClaridad ?? '0%', 'bg-blue-500', 'bg-blue-100'),
+        barRowHtml('Confianza', resumenMejoras?.mejoraConfianza ?? '0%', 'bg-violet-500', 'bg-violet-100'),
+        barRowHtml('Reducción Muletillas', resumenMejoras?.reduccionMuletillas ?? '0%', 'bg-rose-500', 'bg-rose-100')
+      ].join('');
+
+      // Renderiza la tarjeta oculta como imagen (x2 para que se vea nítida)
+      const canvas = await html2canvas(template, { scale: 2, backgroundColor: '#ffffff', useCORS: true });
+      const dataUrl = canvas.toDataURL('image/png');
+
+      const link = document.createElement('a');
+      link.href = dataUrl;
+      link.download = `oradoria_reporte_${currentPeriod}.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+    }
 
+    // Exportar reporte como imagen PNG + registrar la exportación en el backend
+    async function exportReport() {
+      const filtered = filterDataByPeriod(currentPeriod);
+
+      if (filtered.length === 0) {
+        alert('Aún no hay datos para exportar en este período.');
+        return;
+      }
+
+      try {
+        await generarImagenReporte();
+      } catch (error) {
+        console.error('Error al generar la imagen del reporte:', error);
+        alert('No se pudo generar la imagen del reporte. Intenta de nuevo.');
+        return;
+      }
+
+      // Deja constancia del reporte generado (tabla "reportes")
       try {
         await fetch(`/api/reportes/exportar?periodo=${encodeURIComponent(currentPeriod)}`, { method: 'POST' });
       } catch (error) {
         console.error('No se pudo registrar la exportación del reporte:', error);
       }
     }
-
-    document.addEventListener('DOMContentLoaded', () => {
+     document.addEventListener('DOMContentLoaded', () => {
       initPeriodButtons();
       cargarEstadisticas();
       const exportBtn = document.getElementById('exportBtn');
