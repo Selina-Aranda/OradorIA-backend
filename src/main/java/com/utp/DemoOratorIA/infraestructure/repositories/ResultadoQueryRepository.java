@@ -97,4 +97,33 @@ List<Object[]> obtenerEvolucionMensual(@Param("idUsuario") Integer idUsuario);
     """)
 List<ReporteMensualDTO> obtenerReporteMensual(@Param("idUsuario") Integer idUsuario);
 
+@Query(value = """
+    SELECT
+        AVG(puntuacion_general),
+        AVG(fluidez),
+        AVG(claridad),
+        AVG(confianza),
+        AVG(muletillas_detectadas),
+        COUNT(*)
+    FROM resultados_ia
+    """, nativeQuery = true)
+List<Object[]> promediosGlobales();
+
+@Query(value = """
+    SELECT nivel, COUNT(*)
+    FROM resultados_ia
+    WHERE nivel IS NOT NULL
+    GROUP BY nivel
+    """, nativeQuery = true)
+List<Object[]> contarPorNivel();
+
+@Query(value = """
+    SELECT palabra, SUM(cantidad) AS total
+    FROM muletillas_detectadas
+    GROUP BY palabra
+    ORDER BY total DESC
+    LIMIT 6
+    """, nativeQuery = true)
+List<Object[]> topMuletillas();
+
 }
