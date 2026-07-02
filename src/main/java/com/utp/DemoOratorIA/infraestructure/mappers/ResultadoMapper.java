@@ -76,25 +76,27 @@ public class ResultadoMapper {
         }
 
         return new ResultadoIADTO(
-                    resultado.getIdResultado(),
-                    resultado.getIdAnalisis(),
-                    resultado.getFluidez(),
-                    resultado.getClaridad(),
-                    resultado.getVolumen(),
-                    resultado.getVelocidad(),
-                    resultado.getPostura(),
-                    resultado.getContactoVisual(),
-                    resultado.getConfianza(),
-                    resultado.getExpresionFacial(),
-                    resultado.getMuletillasDetectadas(),
-                    resultado.getPausasIncomodas(),
-                    resultado.getPuntuacionGeneral(),
-                    resultado.getObservaciones(),
-                    resultado.getFechaResultado(),
-                    resultado.getEntradaUsuario(),
-                    resultado.getRespuestaIA(),
-                    resultado.getPuntuacion(),
-                    resultado.getFecha()
-            );
+                resultado.getIdResultado(),
+                resultado.getIdAnalisis(),
+                resultado.getFluidez(),
+                resultado.getClaridad(),
+                resultado.getVolumen(),
+                resultado.getVelocidad(),
+                resultado.getPostura(),
+                resultado.getContactoVisual(),
+                resultado.getConfianza(),
+                resultado.getExpresionFacial(),
+                resultado.getMuletillasDetectadas(),
+                resultado.getPausasIncomodas(),
+                resultado.getPuntuacionGeneral(),
+                resultado.getObservaciones(),
+                resultado.getFechaResultado(),
+                resultado.getEntradaUsuario(),
+                resultado.getRespuestaIA(),
+                resultado.getPuntuacion(),
+                resultado.getFecha(),
+                resultado.getNivel()
+
+        );
     }
 }

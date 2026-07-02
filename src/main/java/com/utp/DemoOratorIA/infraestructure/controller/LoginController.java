@@ -97,7 +97,7 @@ public class LoginController {
 
         user.setIdRol(2);
         user.setIdPlan(1); // Plan Básico por defecto
-        user.setEstado(UserStatus.ACTIVO);
+        user.setEstado(UserStatus.ACTIVE);
         user.setFechaRegistro(LocalDateTime.now());
 
         User usuarioGuardado = userService.save(user);
