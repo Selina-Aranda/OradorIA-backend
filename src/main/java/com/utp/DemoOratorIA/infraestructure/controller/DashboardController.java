@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.utp.DemoOratorIA.application.service.ActividadRecienteService;
 import com.utp.DemoOratorIA.application.service.DashboardService;
 import com.utp.DemoOratorIA.application.service.PagoService;
+import com.utp.DemoOratorIA.application.service.ResultadoIAService;
 import com.utp.DemoOratorIA.application.service.ResultadoQueryService;
 import com.utp.DemoOratorIA.application.service.UserService;
+import com.utp.DemoOratorIA.domain.model.aggregate.ResultadoIA;
 import com.utp.DemoOratorIA.infraestructure.DTO.DashboardAnalisisDTO;
-
 
 @Controller
 public class DashboardController {
@@ -30,16 +31,18 @@ public class DashboardController {
 
     @Autowired
     private ActividadRecienteService actividadService;
+    @Autowired
+    private ResultadoIAService resultadoIAService;
 
     @GetMapping("/admin-dashboard")
-    public String dashboard(Model model){
+    public String dashboard(Model model) {
 
         Integer idAnalisis = 1;
 
         long totalUsuarios = userService.contarUsuarios();
         model.addAttribute("totalUsuarios", totalUsuarios);
 
-         DashboardAnalisisDTO stats = dashboardService.getEstadisticas(idAnalisis);
+        DashboardAnalisisDTO stats = dashboardService.getEstadisticas(idAnalisis);
         model.addAttribute("totalAnalisis", stats.totalAnalisis());
 
         long totalUsuariosPremiun = userService.contarUsuariosPremiun();
@@ -49,8 +52,19 @@ public class DashboardController {
 
         model.addAttribute("actividades", actividadService.listar());
 
+        model.addAttribute("totalAnalisis", stats.totalAnalisis());
+        ResultadoIA mejorResultado = resultadoIAService.obtenerMejorResultado();
+        ResultadoIA ultimoResultado = resultadoIAService.obtenerUltimoResultado();
+
+        model.addAttribute(
+                "mejorPuntaje",
+                mejorResultado != null ? mejorResultado.getPuntuacionGeneral() : 0);
+
+        model.addAttribute(
+                "nivel",
+                ultimoResultado != null ? ultimoResultado.getNivel() : "SIN NIVEL");
 
         return "admin-dashboard";
     }
-    
+
 }
