@@ -76,5 +76,12 @@ public Plan cargarPlan(HttpSession session) {
         model.addAttribute("promedioPostura", stats.promedioPostura());
         model.addAttribute("puntajePromedio", stats.puntajePromedio());
         model.addAttribute("mejorPuntaje", stats.mejorPuntaje());
+        model.addAttribute("muletillasPromedio", stats.muletillasPromedio());
+        model.addAttribute("promedioConfianza", stats.promedioConfianza());
+
+        model.addAttribute(
+        "reporteMensual",
+        dashboardService.obtenerReporteMensual(user.getId())
+        );
     }
 }

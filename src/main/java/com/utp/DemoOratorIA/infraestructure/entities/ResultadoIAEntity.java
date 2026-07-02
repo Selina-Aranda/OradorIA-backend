@@ -91,4 +91,5 @@ public class ResultadoIAEntity {
 
     @Column(name = "fecha")
     private LocalDateTime fecha;
+
 }

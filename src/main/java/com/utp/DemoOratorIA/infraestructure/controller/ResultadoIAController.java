@@ -15,29 +15,33 @@ import com.utp.DemoOratorIA.domain.model.aggregate.ResultadoIA;
 import com.utp.DemoOratorIA.infraestructure.DTO.ResultadoIADTO;
 import com.utp.DemoOratorIA.infraestructure.mappers.ResultadoMapper;
 
-
 @RestController
 @RequestMapping("/resultado-ia")
 public class ResultadoIAController {
-    
-  private final ResultadoIAService resultadoIAService;
+
+    private final ResultadoIAService resultadoIAService;
     private final ResultadoMapper resultadoMapper;
 
     public ResultadoIAController(ResultadoIAService resultadoIAService,
-                                 ResultadoMapper resultadoMapper) {
+            ResultadoMapper resultadoMapper) {
         this.resultadoIAService = resultadoIAService;
         this.resultadoMapper = resultadoMapper;
     }
 
     @GetMapping("/{idAnalisis}")
-    public ResponseEntity<ResultadoIADTO> obtenerDetalle(
-            @PathVariable Integer idAnalisis) {
+    public ResponseEntity<ResultadoIADTO> obtenerDetalle(@PathVariable Integer idAnalisis) {
 
         ResultadoIA resultado = resultadoIAService
                 .findByIdAnalisis(idAnalisis)
                 .orElseThrow(() -> new RuntimeException("Resultado no encontrado"));
 
-        return ResponseEntity.ok(resultadoMapper.toDTO(resultado));
+        System.out.println("Nivel dominio = " + resultado.getNivel());
+
+        ResultadoIADTO dto = resultadoMapper.toDTO(resultado);
+
+        System.out.println("Nivel DTO = " + dto.nivel());
+
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping

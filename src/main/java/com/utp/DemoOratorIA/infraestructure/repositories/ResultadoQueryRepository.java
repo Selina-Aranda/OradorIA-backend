@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.utp.DemoOratorIA.infraestructure.DTO.ReporteMensualDTO;
 import com.utp.DemoOratorIA.infraestructure.entities.ResultadoIAEntity;
 
 public interface ResultadoQueryRepository extends JpaRepository<ResultadoIAEntity, Integer> {
@@ -68,33 +69,32 @@ List<Object[]> obtenerPuntajesUsuario(@Param("idUsuario") Integer idUsuario);
     """, nativeQuery = true)
 List<Object[]> obtenerEvolucionMensual(@Param("idUsuario") Integer idUsuario);
 
-@Query(value = """
-    SELECT
-        AVG(puntuacion_general),
-        AVG(fluidez),
-        AVG(claridad),
-        AVG(confianza),
-        AVG(muletillas_detectadas),
-        COUNT(*)
-    FROM resultados_ia
-    """, nativeQuery = true)
-List<Object[]> promediosGlobales();
+    @Query("""
+    SELECT new com.utp.DemoOratorIA.infraestructure.DTO.ReporteMensualDTO(
 
-@Query(value = """
-    SELECT nivel, COUNT(*)
-    FROM resultados_ia
-    WHERE nivel IS NOT NULL
-    GROUP BY nivel
-    """, nativeQuery = true)
-List<Object[]> contarPorNivel();
+        YEAR(r.fechaResultado),
+        MONTH(r.fechaResultado),
+        '',
+        CAST(COUNT(r) AS integer),
+        AVG(r.puntuacionGeneral),
+        AVG(r.fluidez),
+        AVG(r.claridad),
+        AVG(r.confianza),
+        AVG(r.muletillasDetectadas),
+        SUM(a.duracionSegundos) / 60.0
 
-@Query(value = """
-    SELECT palabra, SUM(cantidad) AS total
-    FROM muletillas_detectadas
-    GROUP BY palabra
-    ORDER BY total DESC
-    LIMIT 6
-    """, nativeQuery = true)
-List<Object[]> topMuletillas();
+    )
+    FROM AnalisisEntity a
+    JOIN ResultadoIAEntity r
+        ON a.idAnalisis = r.idAnalisis
+    WHERE a.idUsuario = :idUsuario
+    GROUP BY
+        YEAR(r.fechaResultado),
+        MONTH(r.fechaResultado)
+    ORDER BY
+        YEAR(r.fechaResultado),
+        MONTH(r.fechaResultado)
+    """)
+List<ReporteMensualDTO> obtenerReporteMensual(@Param("idUsuario") Integer idUsuario);
 
 }
