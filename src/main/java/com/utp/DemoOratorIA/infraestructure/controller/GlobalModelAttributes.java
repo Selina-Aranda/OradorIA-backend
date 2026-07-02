@@ -35,18 +35,17 @@ public class GlobalModelAttributes {
     }
 
     @ModelAttribute("plan")
-    public Plan cargarPlan(HttpSession session) {
+public Plan cargarPlan(HttpSession session) {
 
-        UserEntity user = (UserEntity) session.getAttribute("user");
+    UserEntity user = (UserEntity) session.getAttribute("user");
 
-        if (user == null) {
-            return null;
-        }
-
-        return planService.findById(user.getIdPlan())
-                .orElse(null);
+    if (user == null || user.getIdPlan() == null) {
+        return null;
     }
 
+    return planService.findById(user.getIdPlan())
+            .orElse(null);
+}
    
     @ModelAttribute("analisis")
     public List<AnalisisResultadoDTO> cargarAnalisis(HttpSession session) {
