@@ -5,5 +5,7 @@ public record DashboardAnalisisDTO(
         Double promedioFluidez,
         Double promedioPostura,
         Double puntajePromedio,
-        Double mejorPuntaje) {
+        Double mejorPuntaje,
+        Double muletillasPromedio,
+        Double promedioConfianza) {
 }

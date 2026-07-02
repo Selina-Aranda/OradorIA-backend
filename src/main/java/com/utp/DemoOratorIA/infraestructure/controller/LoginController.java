@@ -69,7 +69,7 @@ public class LoginController {
         actividadService.registrar(
                 user.getId(),
                 "Inicio de sesión",
-                "ACTIVO");
+                "ACTIVE");
 
         if (user.getIdRol() != null && user.getIdRol() == 1) {
             return "redirect:/admin-dashboard";

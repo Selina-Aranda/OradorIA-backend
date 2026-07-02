@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.utp.DemoOratorIA.infraestructure.DTO.DashboardAnalisisDTO;
+import com.utp.DemoOratorIA.infraestructure.DTO.ReporteMensualDTO;
 import com.utp.DemoOratorIA.infraestructure.entities.ResultadoIAEntity;
 import com.utp.DemoOratorIA.infraestructure.repositories.ResultadoQueryRepository;
 
@@ -12,6 +13,11 @@ import com.utp.DemoOratorIA.infraestructure.repositories.ResultadoQueryRepositor
 public class DashboardService {
 
     private final ResultadoQueryRepository repository;
+
+    private static final String[] MESES = {
+    "", "Ene", "Feb", "Mar", "Abr", "May", "Jun",
+    "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"
+    };
 
     public DashboardService(ResultadoQueryRepository repository) {
         this.repository = repository;
@@ -41,12 +47,43 @@ public class DashboardService {
 
         Double mejorPuntaje = puntajes[1] != null ? ((Number) puntajes[1]).doubleValue() : 0.0;
 
+        double muletillasPromedio = data.stream()
+                .mapToDouble(r -> r.getMuletillasDetectadas() != null ? r.getMuletillasDetectadas() : 0.0)
+                .average()
+                .orElse(0.0);
+
+        double promedioConfianza = data.stream()
+                .mapToDouble(r -> r.getConfianza() != null ? r.getConfianza() : 0.0)
+                .average()
+                .orElse(0.0);
+
         return new DashboardAnalisisDTO(
                 total,
                 promedioFluidez,
                 promedioPostura,
                 puntajePromedio,
-                mejorPuntaje
+                mejorPuntaje,
+                muletillasPromedio,
+                promedioConfianza
         );
+    }
+
+    public List<ReporteMensualDTO> obtenerReporteMensual(Integer idUsuario) {
+
+        return repository.obtenerReporteMensual(idUsuario)
+                .stream()
+                .map(r -> new ReporteMensualDTO(
+                        r.anio(),
+                        r.mes(),
+                        MESES[r.mes()],
+                        r.totalAnalisis(),
+                        r.puntajePromedio(),
+                        r.fluidezPromedio(),
+                        r.claridadPromedio(),
+                        r.confianzaPromedio(),
+                        r.muletillasPromedio(),
+                        r.duracionTotalMinutos()
+                ))
+                .toList();
     }
 }
