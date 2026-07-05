@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
@@ -8,383 +9,566 @@
   <!-- Tailwind CSS v3 + Font Awesome 6 + Google Fonts Inter -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
+    rel="stylesheet" />
 
   <style>
     * {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
     }
+
     body {
-      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      background: linear-gradient(135deg, #f0f4ff 0%, #e8edf5 100%);
     }
-    .card-glass {
-      background: rgba(255, 255, 255, 0.96);
-      backdrop-filter: blur(0px);
-      border: 1px solid rgba(203, 213, 225, 0.6);
-    }
-    .video-preview {
-      transition: all 0.2s ease;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-      transform: scale(1);
-    }
-    .pulse-ring {
-      animation: pulse-ring 1.8s infinite;
-    }
-    @keyframes pulse-ring {
-      0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.5); }
-      70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
-    }
+
     .btn-primary-gradient {
-      background: linear-gradient(105deg, #4f46e5 0%, #6366f1 100%);
+      background: linear-gradient(105deg, #4f46e5 0%, #7c3aed 100%);
+      box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.4);
     }
+
     .btn-primary-gradient:hover {
-      background: linear-gradient(105deg, #4338ca 0%, #4f46e5 100%);
+      background: linear-gradient(105deg, #4338ca 0%, #6d28d9 100%);
+      box-shadow: 0 6px 20px 0 rgba(79, 70, 229, 0.5);
+      transform: translateY(-1px);
     }
-    .status-badge {
-      transition: all 0.2s;
+
+    .btn-primary-gradient:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
     }
-    .fade-in {
-      animation: fadeIn 0.4s ease-out;
+
+    .sidebar-gradient {
+      background: linear-gradient(180deg, #ffffff 0%, #f8faff 100%);
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
+
+    .card-shadow {
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 8px 24px 0 rgba(79, 70, 229, 0.08);
     }
-    /* estilos para scroll sutil */
+
+    .card-shadow:hover {
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 12px 32px 0 rgba(79, 70, 229, 0.12);
+    }
+
+    .coach-gradient {
+      background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 50%, #faf5ff 100%);
+    }
+
+    .status-dot {
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.4;
+      }
+    }
+
     ::-webkit-scrollbar {
       width: 6px;
     }
+
     ::-webkit-scrollbar-track {
       background: #e2e8f0;
       border-radius: 10px;
     }
+
     ::-webkit-scrollbar-thumb {
       background: #94a3b8;
       border-radius: 10px;
     }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6366f1;
+    }
+
+    .nav-link-active {
+      background: linear-gradient(105deg, #eef2ff 0%, #ede9fe 100%);
+      color: #4f46e5;
+      border-right: 3px solid #4f46e5;
+    }
+
+    .nav-link {
+      transition: all 0.2s ease;
+    }
+
+    .nav-link:hover {
+      background: linear-gradient(105deg, #f8faff 0%, #f5f3ff 100%);
+      color: #4f46e5;
+    }
+
+    .metric-card {
+      transition: all 0.2s ease;
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
+    .metric-card:hover {
+      border-color: #818cf8;
+      box-shadow: 0 4px 12px 0 rgba(79, 70, 229, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline-primary {
+      border: 1.5px solid #4f46e5;
+      color: #4f46e5;
+      transition: all 0.2s ease;
+    }
+
+    .btn-outline-primary:hover {
+      background: #4f46e5;
+      color: white;
+      box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.3);
+    }
+
+    .badge-level {
+      background: linear-gradient(105deg, #eef2ff 0%, #ede9fe 100%);
+      border: 1px solid #c7d2fe;
+      color: #4f46e5;
+    }
+
+    .badge-duration {
+      background: linear-gradient(105deg, #f0fdf4 0%, #ecfdf5 100%);
+      border: 1px solid #86efac;
+      color: #059669;
+    }
+
+    .score-circle {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    }
+
+    .highlight-card {
+      background: linear-gradient(135deg, #f8faff 0%, #faf5ff 100%);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      transition: all 0.2s ease;
+    }
+
+    .highlight-card:hover {
+      border-color: #c7d2fe;
+      background: linear-gradient(135deg, #eef2ff 0%, #ede9fe 100%);
+    }
+
+    .observations-box {
+      background: linear-gradient(135deg, #f8faff 0%, #faf5ff 100%);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
   </style>
 </head>
+
 <body class="antialiased">
 
-  <div class="min-h-screen flex bg-slate-50">
+  <div class="min-h-screen flex bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30">
     <!-- Sidebar -->
-    <aside class="w-[280px] bg-white border-r border-slate-200/70 hidden md:flex flex-col">
+    <aside class="w-[280px] sidebar-gradient border-r border-slate-200/70 hidden md:flex flex-col flex-shrink-0">
       <div class="px-6 py-6">
         <div class="flex items-center gap-3">
-          <span class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-600">
-            <i class="fas fa-microphone-lines text-white"></i>
+          <span class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 shadow-lg shadow-blue-500/30">
+            <i class="fas fa-microphone-lines text-white text-lg"></i>
           </span>
-          <span class="text-xl font-extrabold tracking-tight text-blue-600">OradorIA</span>
+          <div>
+            <h1 class="text-xl font-extrabold tracking-tight text-slate-900">Orador<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">IA</span></h1>
+            <p class="text-[10px] uppercase tracking-[0.3em] text-slate-400 font-medium">Entrenamiento avanzado</p>
+          </div>
         </div>
       </div>
 
-      <nav class="px-4 space-y-2">
-        <a th:href="@{/main-user}" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
-          <i class="fas fa-house w-5"></i>
-          <span>Inicio</span>
+      <nav class="flex-1 px-3 space-y-1">
+        <a href="#" class="nav-link-active flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition">
+          <i class="fas fa-house-chimney w-5 text-blue-600"></i> Inicio
         </a>
-        <a th:href="@{/analysis-user}" class="flex items-center gap-3 rounded-xl px-4 py-3 bg-blue-50 text-blue-700 font-semibold" aria-current="page">
-          <i class="fas fa-magnifying-glass w-5 text-blue-600"></i>
-          <span>Nuevo Análisis</span>
+        <a href="#" class="nav-link flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 transition">
+          <i class="fas fa-chart-simple w-5"></i> Métricas
         </a>
-        <a th:href="@{/record-user}" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
-          <i class="fas fa-clock-rotate-left w-5"></i>
-          <span>Historial</span>
+        <a href="#" class="nav-link flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 transition">
+          <i class="fas fa-clock-rotate-left w-5"></i> Historial
         </a>
-        <a th:href="@{/reports-user}" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
-          <i class="fas fa-chart-column w-5"></i>
-          <span>Reportes</span>
-        </a>
-        <a th:href="@{/profile-user}" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
-          <i class="fas fa-user w-5"></i>
-          <span>Perfil</span>
-        </a>
-        <a th:href="@{/configuration-user}" class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
-          <i class="fas fa-gear w-5"></i>
-          <span>Configuración</span>
+        <a href="#" class="nav-link flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 transition">
+          <i class="fas fa-gear w-5"></i> Configuración
         </a>
       </nav>
 
-      <div class="mt-auto">
-        <div class="mx-6 my-6 border-t border-slate-200/70"></div>
-
-        <div class="px-6 pb-4">
-          <div class="flex items-center gap-3">
-            <div class="h-11 w-11 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" th:text="${#strings.substring(session.user.nombres,0,1) + ' ' + #strings.substring(session.user.apellidos,0,1)}"></div>
-            <div class="min-w-0">
-              <div class="font-semibold text-slate-900 truncate" th:text="${session.user.nombres}"></div>
-              <div class="text-sm text-slate-500">Plan Profesional</div>
-            </div>
+      <div class="border-t border-slate-200/70 p-6">
+        <div class="flex items-center gap-3">
+          <div class="h-9 w-9 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold shadow-lg shadow-indigo-500/30">
+            U
           </div>
-        </div>
-
-        <div class="px-6 pb-6">
-          <a th:href="@{/logout}" class="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 transition">
-            <i class="fas fa-right-from-bracket"></i>
-            <span>Cerrar sesión</span>
-          </a>
+          <div>
+            <p class="text-sm font-semibold text-slate-900">Usuario</p>
+            <p class="text-xs text-slate-500">Plan gratuito</p>
+          </div>
         </div>
       </div>
     </aside>
 
-    <div class="flex-1 min-w-0">
-      <!-- Header -->
-      <header class="bg-white border-b border-slate-200/70">
-        <div class="px-6 py-4 flex items-center gap-4">
-          <div class="flex items-center gap-3 min-w-0">
-            <div class="h-10 w-10 rounded-2xl bg-blue-600 flex items-center justify-center text-white md:hidden" aria-hidden="true">
-              <i class="fas fa-microphone-lines"></i>
-            </div>
-            <div class="min-w-0">
-              <div class="text-lg font-extrabold text-slate-900 truncate">Nuevo Análisis</div>
-              <div class="text-xs text-slate-500 truncate">Análisis en tiempo real</div>
-            </div>
-          </div>
-
-          <div class="flex-1 hidden lg:block">
-            <label class="relative block">
-              <span class="absolute inset-y-0 left-3 flex items-center text-slate-400">
-                <i class="fas fa-search"></i>
-              </span>
-              <input class="w-full max-w-3xl rounded-xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-200" placeholder="Buscar..." type="search" />
-            </label>
-          </div>
-
-          <button class="relative h-10 w-10 rounded-full hover:bg-slate-50 transition flex items-center justify-center text-slate-600" aria-label="Notificaciones">
-            <i class="fas fa-bell"></i>
-            <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500"></span>
-          </button>
-
-          <div class="h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" aria-label="Usuario" th:text="${#strings.substring(session.user.nombres,0,1) + ' ' + #strings.substring(session.user.apellidos,0,1)}"></div>
-        </div>
-      </header>
-
-      <!-- MAIN CONTENT - Análisis en Tiempo Real -->
-      <main class="px-5 py-6 md:px-8 md:py-8">
-      <div class="max-w-7xl mx-auto">
-        <!-- Encabezado -->
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-8">
+    <!-- Contenido principal -->
+    <main class="flex-1 min-w-0 p-4 md:p-6">
+      <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
           <div>
-            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">Análisis Avanzado</h1>
-            <p class="text-slate-500 mt-1 flex items-center gap-2"><i class="fas fa-robot text-indigo-400"></i> Entrenamiento en tiempo real · Voz, rostro y postura</p>
+            <h2 class="text-2xl font-extrabold text-slate-900">Sesión de entrenamiento</h2>
+            <p class="text-sm text-slate-500 mt-0.5">Análisis en tiempo real con <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 font-semibold">OradorIA Coach</span></p>
           </div>
-          <div class="flex items-center gap-3 text-sm bg-white/70 rounded-full px-4 py-2 border border-slate-200 shadow-sm">
-            <i class="fas fa-circle text-emerald-500 text-xs"></i>
-            <span class="font-medium text-slate-700">Sesión activa lista</span>
-          </div>
-        </div>
-
-        <!-- Grid principal: cámara + asistente + consejos -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
-          <!-- COLUMNA IZQUIERDA: PREVIEW CÁMARA Y CONTROLES -->
-          <div class="lg:col-span-2 space-y-6">
-            <!-- Tarjeta de video / cámara -->
-            <div class="bg-white rounded-3xl shadow-xl border border-slate-200/80 overflow-hidden transition-all">
-              <div class="relative bg-gradient-to-br from-slate-900 to-slate-800 aspect-video flex items-center justify-center">
-                <!-- Video elemento -->
-                <video id="videoPlayer" class="w-full h-full object-cover" autoplay playsinline muted style="display: none;"></video>
-                <!-- Placeholder cuando la cámara está desactivada -->
-                <div id="cameraPlaceholder" class="absolute inset-0 flex flex-col items-center justify-center text-white backdrop-blur-sm bg-black/50">
-                  <i class="fas fa-camera-slash text-5xl mb-4 text-indigo-300"></i>
-                  <p class="text-xl font-medium">Cámara desactivada</p>
-                  <p class="text-sm text-white/70 mt-1">Activa tu cámara para comenzar el análisis</p>
-                </div>
-                <!-- Indicador de estado de grabación / micrófono -->
-                <div id="camStatusBadge" class="absolute top-4 left-4 bg-black/60 backdrop-blur-md rounded-full px-3 py-1.5 text-xs text-white flex items-center gap-2 z-10">
-                  <i id="camLedIcon" class="fas fa-video-slash text-red-400"></i>
-                  <span id="camStatusText">Cámara: OFF</span>
-                </div>
-                <div id="micStatusBadge" class="absolute top-4 right-4 bg-black/60 backdrop-blur-md rounded-full px-3 py-1.5 text-xs text-white flex items-center gap-2 z-10">
-                  <i id="micLedIcon" class="fas fa-microphone-slash text-red-400"></i>
-                  <span id="micStatusText">Mic: OFF</span>
-                </div>
-              </div>
-
-              <!-- Controles de acción -->
-              <div class="p-6 bg-white/90 border-t border-slate-100">
-                <div class="flex flex-wrap gap-3 justify-between items-center">
-                  <div class="flex flex-wrap gap-3">
-                    <button id="btnCamara" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-50 text-indigo-700 font-semibold hover:bg-indigo-100 transition shadow-sm border border-indigo-200">
-                      <i class="fas fa-camera"></i> Activar Cámara
-                    </button>
-                    <button id="btnMicrofono" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200 transition">
-                      <i class="fas fa-microphone"></i> Activar Micrófono
-                    </button>
-                    <button id="btnAnalizar" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl btn-primary-gradient text-white font-bold shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                      <i class="fas fa-play"></i> Comenzar Análisis
-                    </button>
-                  </div>
-                  <!-- Simulación de grabación activa -->
-                  <div id="recordingIndicator" class="hidden items-center gap-2 bg-red-50 px-4 py-2 rounded-full border border-red-200">
-                    <div class="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></div>
-                    <span class="text-sm font-medium text-red-700">Analizando...</span>
-                  </div>
-                </div>
-                <p class="text-xs text-slate-400 mt-4 flex items-center gap-1"><i class="fas fa-info-circle"></i> Para el análisis completo, asegúrate de activar cámara y micrófono.</p>
-              </div>
-            </div>
-
-            <!-- Consejos rápidos (widget) -->
-            <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-indigo-100 p-5 shadow-sm">
-              <div class="flex items-start gap-3">
-                <div class="bg-indigo-100 p-2 rounded-xl text-indigo-600"><i class="fas fa-lightbulb text-xl"></i></div>
-                <div>
-                  <h3 class="font-bold text-slate-800">Consejos para el análisis</h3>
-                  <ul class="mt-2 space-y-1.5 text-sm text-slate-600 list-disc list-inside">
-                    <li>Posiciónate frente a la cámara con buena iluminación</li>
-                    <li>Mantén contacto visual con la cámara (simula audiencia)</li>
-                    <li>Habla claro y con ritmo pausado para mejor precisión</li>
-                    <li>Evita ruido de fondo y utiliza auriculares si es posible</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- COLUMNA DERECHA: ASISTENTE VIRTUAL + MÉTRICAS DINÁMICAS -->
-          <div class="space-y-6">
-            <!-- Tarjeta Coach IA -->
-            <div class="bg-gradient-to-br from-indigo-50 via-white to-slate-50 rounded-3xl border border-indigo-100 shadow-lg overflow-hidden">
-              <div class="bg-indigo-600 px-6 py-4 flex items-center gap-3">
-                <div class="h-12 w-12 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-white text-2xl">
-                  <i class="fas fa-robot"></i>
-                </div>
-                <div>
-                  <h2 class="text-white font-extrabold text-xl">OradorIA Coach</h2>
-                  <p class="text-indigo-100 text-xs">Tu entrenador virtual</p>
-                </div>
-              </div>
-              <div class="p-6">
-                <div id="coachMessage" class="bg-white rounded-2xl p-4 border border-slate-200 shadow-inner text-slate-700 text-sm leading-relaxed min-h-[110px] transition-all">
-                  <i class="fas fa-comment-dots text-indigo-400 mr-2"></i> ¡Bienvenido a tu sesión de entrenamiento! Estoy listo para analizar tu voz, postura y lenguaje corporal. Cuando estés preparado, activa los dispositivos y comienza a hablar.
-                </div>
-                
-                <!-- métricas simuladas en tiempo real (feedback) -->
-                <div class="mt-5 space-y-3">
-                  <div class="flex justify-between items-center border-b border-slate-100 pb-2">
-                    <span class="text-slate-500 text-sm"><i class="fas fa-waveform mr-1 text-indigo-400"></i> Volumen estimado</span>
-                    <span id="volumenValue" class="font-mono font-bold text-slate-700">--</span>
-                  </div>
-                  <div class="flex justify-between items-center border-b border-slate-100 pb-2">
-                    <span class="text-slate-500 text-sm"><i class="fas fa-chart-line mr-1 text-emerald-500"></i> Fluidez (IA)</span>
-                    <span id="fluidezValue" class="font-mono font-bold text-slate-700">--</span>
-                  </div>
-                  <div class="flex justify-between items-center border-b border-slate-100 pb-2">
-                    <span class="text-slate-500 text-sm"><i class="fas fa-user-check mr-1 text-purple-500"></i> Postura estimada</span>
-                    <span id="posturaValue" class="font-mono font-bold text-slate-700">--</span>
-                  </div>
-                  <div class="flex justify-between items-center">
-                    <span class="text-slate-500 text-sm"><i class="fas fa-clock mr-1 text-amber-500"></i> Tiempo de análisis</span>
-                    <span id="timerValue" class="font-mono font-bold text-indigo-600">00:00</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Siguiente paso / resumen -->
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center shadow-sm">
-              <i class="fas fa-chalkboard-user text-3xl text-indigo-300 mb-2"></i>
-              <p class="text-xs text-slate-500">Feedback en tiempo real basado en IA</p>
-              <p class="text-xs text-indigo-500 mt-1 font-medium">Postura · Voz · Velocidad · Muletillas</p>
-            </div>
+          <div class="flex items-center gap-3 bg-white/80 backdrop-blur-sm rounded-3xl border border-slate-200/80 px-4 py-2 shadow-sm">
+            <span class="flex items-center gap-2 text-sm font-medium text-slate-700">
+              <i class="fas fa-circle text-emerald-400 text-[10px] status-dot"></i>
+              <span id="camStatusText">Cámara: OFF</span>
+            </span>
+            <span class="w-px h-6 bg-slate-200"></span>
+            <span class="flex items-center gap-2 text-sm font-medium text-slate-700">
+              <i class="fas fa-circle text-emerald-400 text-[10px] status-dot"></i>
+              <span id="micStatusText">Mic: OFF</span>
+            </span>
           </div>
         </div>
 
-        <!-- Barra de estado o resultados (mensaje adicional) -->
-        <div class="mt-8 bg-indigo-50/60 rounded-2xl p-4 border border-indigo-200 flex flex-wrap items-center justify-between gap-3">
-          <div class="flex items-center gap-2 text-indigo-800 text-sm font-medium">
-            <i class="fas fa-circle-info text-indigo-500"></i>
-            <span>El análisis se detendrá automáticamente después de 30 segundos o puedes detenerlo manualmente.</span>
+        <!-- Grid principal -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+          <!-- Cámara y controles -->
+          <div class="lg:col-span-2 space-y-4">
+            <div class="bg-white/90 backdrop-blur-sm rounded-3xl border border-slate-200/80 card-shadow overflow-hidden">
+              <div class="relative aspect-video bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center">
+                <!-- Video -->
+                <video id="videoPlayer" class="w-full h-full object-cover" autoplay playsinline style="display: none;"></video>
+                <!-- Placeholder -->
+                <div id="cameraPlaceholder" class="flex flex-col items-center justify-center text-white p-8 text-center">
+                  <div class="h-20 w-20 rounded-full bg-slate-700/50 flex items-center justify-center mb-4 backdrop-blur-sm border border-slate-600/30">
+                    <i class="fas fa-video-slash text-3xl text-slate-400"></i>
+                  </div>
+                  <p class="text-sm font-medium text-slate-300">Cámara desactivada</p>
+                  <p class="text-xs text-slate-500 mt-1">Activa tu cámara para comenzar</p>
+                </div>
+
+                <!-- Indicador de grabación -->
+                <div id="recordingIndicator" class="absolute top-4 right-4 hidden">
+                  <div class="flex items-center gap-2 bg-black/80 backdrop-blur-md rounded-full px-4 py-2 border border-red-500/20">
+                    <span class="relative flex h-3 w-3">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                    </span>
+                    <span class="text-xs font-medium text-white">Analizando</span>
+                    <span id="timerValue" class="text-xs font-mono text-white bg-white/10 px-2 py-0.5 rounded">00:00</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Controles -->
+              <div class="p-4 border-t border-slate-200/70 bg-gradient-to-br from-slate-50/50 to-white/50">
+                <div class="flex flex-wrap items-center gap-3">
+                  <button id="btnCamara" class="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition shadow-sm hover:shadow-md hover:border-blue-300">
+                    <i class="fas fa-camera text-blue-600"></i> Activar Cámara
+                  </button>
+                  <button id="btnMicrofono" class="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition shadow-sm hover:shadow-md hover:border-blue-300">
+                    <i class="fas fa-microphone text-blue-600"></i> Activar Micrófono
+                  </button>
+                  <button id="btnAnalizar" class="flex items-center gap-2 px-6 py-2.5 rounded-2xl btn-primary-gradient text-white text-sm font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-play"></i> Iniciar Análisis
+                  </button>
+                  <button id="btnStopAnalysis" class="hidden flex items-center gap-2 px-6 py-2.5 rounded-2xl bg-gradient-to-r from-red-500 to-rose-500 text-white text-sm font-semibold hover:from-red-600 hover:to-rose-600 transition shadow-lg shadow-red-500/20">
+                    <i class="fas fa-stop"></i> Detener
+                  </button>
+                </div>
+
+                <!-- Métricas en tiempo real -->
+                <div class="mt-4 grid grid-cols-3 gap-3">
+                  <div class="metric-card bg-white rounded-2xl p-3">
+                    <p class="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-medium">Volumen</p>
+                    <p id="volumenValue" class="text-lg font-extrabold text-slate-900">--</p>
+                  </div>
+                  <div class="metric-card bg-white rounded-2xl p-3">
+                    <p class="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-medium">Fluidez</p>
+                    <p id="fluidezValue" class="text-lg font-extrabold text-slate-900">--</p>
+                  </div>
+                  <div class="metric-card bg-white rounded-2xl p-3">
+                    <p class="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-medium">Postura</p>
+                    <p id="posturaValue" class="text-lg font-extrabold text-slate-900">--</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <button id="btnStopAnalysis" class="hidden px-5 py-2 bg-white border border-red-300 text-red-600 rounded-xl text-sm font-semibold hover:bg-red-50 transition">Detener Análisis</button>
+
+          <!-- Coach -->
+          <div class="lg:col-span-1 space-y-4">
+            <div class="coach-gradient rounded-3xl border border-slate-200/80 card-shadow overflow-hidden">
+              <div class="px-6 py-5 border-b border-slate-200/70 bg-white/60 backdrop-blur-sm flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3 min-w-0">
+                  <div class="h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center text-indigo-600 shadow-sm">
+                    <i class="fas fa-robot text-lg"></i>
+                  </div>
+                  <div class="min-w-0">
+                    <p class="text-[11px] uppercase tracking-[0.28em] text-slate-400 font-semibold">OradorIA Coach</p>
+                    <h2 class="text-slate-900 font-extrabold text-xl truncate">Resultados del análisis</h2>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                  <span id="coachLevelBadge" class="badge-level inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold">--</span>
+                  <span id="coachDurationBadge" class="badge-duration inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold">00:00</span>
+                </div>
+              </div>
+
+              <div class="p-5 md:p-6 space-y-5">
+                <div id="coachMessage" class="rounded-3xl border border-slate-200/80 bg-white/90 backdrop-blur-sm p-4 shadow-sm text-slate-700 text-sm leading-relaxed min-h-[110px] transition-all">
+                  <i class="fas fa-comment-dots text-indigo-500 mr-2"></i> ¡Bienvenido a tu sesión de entrenamiento! Estoy listo para analizar tu voz, postura y lenguaje corporal. Cuando estés preparado, activa los dispositivos y comienza a hablar.
+                </div>
+
+                <div id="analysisResultsPanel" class="hidden space-y-5">
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="rounded-3xl border border-slate-200/80 bg-gradient-to-br from-slate-800 to-slate-900 p-5 text-white shadow-xl">
+                      <div class="flex items-start justify-between gap-3">
+                        <div>
+                          <p class="text-xs uppercase tracking-[0.28em] text-slate-400 font-medium">Puntuación general</p>
+                          <div id="coachScoreValue" class="mt-3 text-4xl font-extrabold leading-none">--</div>
+                        </div>
+                        <div class="h-14 w-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-indigo-200">
+                          <i class="fas fa-gauge-high text-2xl"></i>
+                        </div>
+                      </div>
+                      <div class="mt-4 h-2.5 rounded-full bg-white/10 overflow-hidden">
+                        <div id="coachScoreBar" class="h-full w-0 rounded-full bg-gradient-to-r from-emerald-400 via-lime-300 to-amber-300"></div>
+                      </div>
+                      <div class="mt-3 flex items-center justify-between text-xs text-slate-400">
+                        <span>0</span>
+                        <span>100</span>
+                      </div>
+                    </div>
+
+                    <div class="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm">
+                      <p class="text-xs uppercase tracking-[0.28em] text-slate-400 font-medium">Resumen</p>
+                      <div class="mt-3 grid grid-cols-2 gap-3">
+                        <div class="rounded-2xl bg-gradient-to-br from-slate-50 to-white border border-slate-200/80 p-4">
+                          <div class="text-xs text-slate-500 font-medium">Muletillas</div>
+                          <div id="coachMuletillasValue" class="mt-1 text-2xl font-extrabold text-slate-900">--</div>
+                        </div>
+                        <div class="rounded-2xl bg-gradient-to-br from-slate-50 to-white border border-slate-200/80 p-4">
+                          <div class="text-xs text-slate-500 font-medium">Pausas incómodas</div>
+                          <div id="coachPausasValue" class="mt-1 text-2xl font-extrabold text-slate-900">--</div>
+                        </div>
+                        <div class="rounded-2xl bg-gradient-to-br from-slate-50 to-white border border-slate-200/80 p-4 col-span-2">
+                          <div class="text-xs text-slate-500 font-medium">Duración del discurso</div>
+                          <div id="coachDurationValue" class="mt-1 text-2xl font-extrabold text-slate-900">--</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="coachMetricsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm">
+                      <div class="flex items-center justify-between gap-3 mb-4">
+                        <h4 class="text-sm font-bold text-slate-900">Observaciones</h4>
+                        <span class="text-xs uppercase tracking-[0.2em] text-slate-400 font-medium bg-gradient-to-r from-indigo-100 to-purple-100 px-3 py-1 rounded-full">IA</span>
+                      </div>
+                      <div id="coachObservationsBox" class="observations-box text-sm leading-relaxed text-slate-600 whitespace-pre-line max-h-48 overflow-y-auto rounded-2xl p-4">
+                        Aquí aparecerán las observaciones del análisis.
+                      </div>
+                    </div>
+
+                    <div class="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm">
+                      <div class="flex items-center justify-between gap-3 mb-4">
+                        <h4 class="text-sm font-bold text-slate-900">Indicadores destacados</h4>
+                        <span class="text-xs uppercase tracking-[0.2em] text-slate-400 font-medium bg-gradient-to-r from-emerald-100 to-teal-100 px-3 py-1 rounded-full">Estado</span>
+                      </div>
+                      <div id="coachHighlights" class="grid grid-cols-2 gap-3"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </main>
-    </div>
   </div>
 
   <script>
-    // ---------- Elementos DOM ----------
+    const API_BASE_URL = 'http://localhost:8001';
+
     const video = document.getElementById('videoPlayer');
     const placeholder = document.getElementById('cameraPlaceholder');
+    const camStatusText = document.getElementById('camStatusText');
+    const micStatusText = document.getElementById('micStatusText');
     const btnCamara = document.getElementById('btnCamara');
     const btnMicrofono = document.getElementById('btnMicrofono');
     const btnAnalizar = document.getElementById('btnAnalizar');
     const btnStopAnalysis = document.getElementById('btnStopAnalysis');
-    const camStatusText = document.getElementById('camStatusText');
-    const camLedIcon = document.getElementById('camLedIcon');
-    const micStatusText = document.getElementById('micStatusText');
-    const micLedIcon = document.getElementById('micLedIcon');
     const recordingIndicator = document.getElementById('recordingIndicator');
-    const coachMessageDiv = document.getElementById('coachMessage');
+    const coachMessage = document.getElementById('coachMessage');
+    const analysisResultsPanel = document.getElementById('analysisResultsPanel');
+    const coachLevelBadge = document.getElementById('coachLevelBadge');
+    const coachDurationBadge = document.getElementById('coachDurationBadge');
+    const coachScoreValue = document.getElementById('coachScoreValue');
+    const coachScoreBar = document.getElementById('coachScoreBar');
+    const coachMuletillasValue = document.getElementById('coachMuletillasValue');
+    const coachPausasValue = document.getElementById('coachPausasValue');
+    const coachDurationValue = document.getElementById('coachDurationValue');
+    const coachMetricsGrid = document.getElementById('coachMetricsGrid');
+    const coachObservationsBox = document.getElementById('coachObservationsBox');
+    const coachHighlights = document.getElementById('coachHighlights');
     const volumenSpan = document.getElementById('volumenValue');
     const fluidezSpan = document.getElementById('fluidezValue');
     const posturaSpan = document.getElementById('posturaValue');
     const timerSpan = document.getElementById('timerValue');
-    
-    // Estados
+
     let cameraStream = null;
-    let mediaRecorder = null;
-    let audioContext = null;
-    let sourceNode = null;
-    let analyserNode = null;
-    let animationId = null;
-    let isMicActive = false;
     let isCamActive = false;
+    let isMicActive = false;
     let isAnalyzing = false;
-    let analysisTimer = null;
-    let analysisStartTime = 0;
     let timerInterval = null;
+    let elapsedSeconds = 0;
 
-    // Variables para simular métricas inteligentes
-    let fakeMetricsInterval = null;
-
-    // Mensajes del coach
     const messages = {
-      welcome: "¡Bienvenido a tu sesión de entrenamiento! Estoy listo para analizar tu voz, postura y lenguaje corporal. Cuando estés preparado, comienza a hablar.",
-      cameraOn: "✅ Cámara activada. Buena posición: recuerda mantener contacto visual y enderezar la espalda.",
-      micOn: "🎤 Micrófono activado. Comenzaré a escuchar tu tono y fluidez verbal.",
-      analyzingStarted: "🔍 ¡Análisis iniciado! Estoy evaluando ritmo, claridad y lenguaje corporal. Habla naturalmente.",
-      volumeHigh: "📢 Volumen alto, trata de modular un poco más suave para mayor claridad.",
-      volumeLow: "🔊 Volumen bajo, proyecta tu voz con más energía.",
-      goodFluency: "✨ Fluidez excelente, evitas muletillas, ¡sigue así!",
-      neutralFluency: "📝 Buena fluidez, intenta reducir pausas incómodas.",
-      postureMention: "🧘‍♂️ Tu postura se ve bien, mantén hombros relajados.",
-      analysisStop: "⏹️ Análisis detenido. Revisa tus métricas en el panel. ¡Gran progreso!"
+      welcome: '¡Bienvenido a tu sesión de entrenamiento! Activa la cámara y el micrófono para comenzar.',
+      cameraOn: 'Cámara activada. Ya puedes preparar tu presentación.',
+      micOn: 'Micrófono activado. Estoy escuchando tu voz.',
+      analyzingStarted: '⏳ Iniciando análisis... (30 segundos)',
+      analysisStop: '⏹️ Análisis detenido.'
     };
 
-    function updateCoachMessage(msg, isError = false) {
-      coachMessageDiv.innerHTML = `<i class="fas fa-comment-dots text-indigo-400 mr-2"></i> ${msg}`;
+    function normalizeScore(value) {
+      const number = Number(value);
+      if (Number.isNaN(number)) return null;
+      return Math.max(0, Math.min(100, number));
     }
 
-    // Actualizar estado de botón analizar
-    function updateAnalyzeButtonState() {
-      if (isCamActive && isMicActive && !isAnalyzing) {
-        btnAnalizar.disabled = false;
-        btnAnalizar.classList.remove('opacity-50', 'cursor-not-allowed');
-      } else if (isAnalyzing) {
-        btnAnalizar.disabled = true;
-      } else {
-        btnAnalizar.disabled = true;
-        btnAnalizar.classList.add('opacity-50', 'cursor-not-allowed');
+    function formatValue(value, suffix = '') {
+      if (value === null || value === undefined || value === '') return '--';
+      return `${value}${suffix}`;
+    }
+
+    function formatDuration(seconds) {
+      const number = Number(seconds);
+      if (Number.isNaN(number) || number < 0) return '--';
+      const mins = Math.floor(number / 60);
+      const secs = number % 60;
+      return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function getAnalysisPayload(data) {
+      return data?.data || data || {};
+    }
+
+    function updateCoachMessage(text) {
+      coachMessage.innerHTML = `<i class="fas fa-comment-dots text-indigo-500 mr-2"></i> ${text}`;
+    }
+
+    function hideAnalysisPanel() {
+      analysisResultsPanel.classList.add('hidden');
+      coachMetricsGrid.innerHTML = '';
+      coachHighlights.innerHTML = '';
+      coachObservationsBox.textContent = 'Aquí aparecerán las observaciones del análisis.';
+      coachScoreValue.textContent = '--';
+      coachScoreBar.style.width = '0%';
+      coachLevelBadge.textContent = '--';
+      coachDurationBadge.textContent = '00:00';
+      coachMuletillasValue.textContent = '--';
+      coachPausasValue.textContent = '--';
+      coachDurationValue.textContent = '--';
+    }
+
+    function createProgressMetric(label, value, score) {
+      const safeScore = normalizeScore(score);
+      const width = safeScore === null ? 0 : safeScore;
+      return `
+        <div class="metric-card rounded-3xl border border-slate-200/80 bg-white/90 backdrop-blur-sm p-4 shadow-sm">
+          <div class="flex items-center justify-between gap-3">
+            <div>
+              <div class="text-sm font-bold text-slate-900">${label}</div>
+              <div class="text-xs text-slate-500 mt-1">Valor real del análisis</div>
+            </div>
+            <div class="text-sm font-extrabold text-slate-900">${value}</div>
+          </div>
+          <div class="mt-4 h-2.5 rounded-full bg-slate-100 overflow-hidden">
+            <div class="h-full rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 transition-all duration-500" style="width:${width}%"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderHighlights(items) {
+      coachHighlights.innerHTML = items.map((item) => `
+        <div class="highlight-card rounded-2xl p-4">
+          <div class="text-xs uppercase tracking-[0.22em] text-slate-400 font-medium">${item.label}</div>
+          <div class="mt-1 text-lg font-extrabold text-slate-900">${item.value}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderCoachMetrics(payload) {
+      const fluidez = payload.fluidez ?? payload.ppm;
+      const claridad = payload.claridad;
+      const volumen = payload.volumen;
+      const velocidad = payload.velocidad;
+      const postura = payload.postura;
+      const contactoVisual = payload.contacto_visual ?? payload.contactoVisual;
+      const confianza = payload.confianza;
+      const expresionFacial = payload.expresion_facial ?? payload.expresionFacial;
+
+      coachMetricsGrid.innerHTML = [
+        createProgressMetric('Fluidez', formatValue(fluidez, fluidez !== undefined ? '%' : ''), fluidez),
+        createProgressMetric('Claridad', formatValue(claridad, claridad !== undefined ? '%' : ''), claridad),
+        createProgressMetric('Volumen', formatValue(volumen, volumen !== undefined ? '%' : ''), volumen),
+        createProgressMetric('Velocidad', formatValue(velocidad, velocidad !== undefined ? '%' : ''), velocidad),
+        createProgressMetric('Postura', formatValue(postura, postura !== undefined ? '%' : ''), postura),
+        createProgressMetric('Contacto visual', formatValue(contactoVisual, contactoVisual !== undefined ? '%' : ''), contactoVisual),
+        createProgressMetric('Confianza', formatValue(confianza, confianza !== undefined ? '%' : ''), confianza),
+        createProgressMetric('Expresión facial', formatValue(expresionFacial, expresionFacial !== undefined ? '%' : ''), expresionFacial)
+      ].join('');
+    }
+
+    function showAnalysisPanel(payload, durationText) {
+      analysisResultsPanel.classList.remove('hidden');
+
+      const score = normalizeScore(payload.puntuacion_general ?? payload.puntuacion ?? payload.score);
+      const level = payload.nivel ?? payload.level ?? '--';
+      const muletillas = payload.muletillas_detectadas ?? payload.total_muletillas ?? payload.muletillas ?? '--';
+      const pausas = payload.pausas_incomodas ?? payload.pausas ?? '--';
+      const durationSeconds = payload.duracion_segundos ?? payload.duracionSegundos;
+      const duration = durationSeconds !== undefined ? formatDuration(durationSeconds) : durationText;
+      const observations = payload.observaciones ?? payload.analisis ?? payload.respuestaIA ?? 'Sin observaciones disponibles.';
+
+      coachLevelBadge.textContent = String(level).toUpperCase();
+      coachDurationBadge.textContent = duration;
+      coachScoreValue.textContent = score === null ? '--' : `${score}`;
+      coachScoreBar.style.width = score === null ? '0%' : `${score}%`;
+      coachMuletillasValue.textContent = formatValue(muletillas);
+      coachPausasValue.textContent = formatValue(pausas);
+      coachDurationValue.textContent = duration;
+      coachObservationsBox.textContent = observations;
+
+      renderCoachMetrics(payload);
+      renderHighlights([
+        { label: 'Muletillas detectadas', value: formatValue(muletillas) },
+        { label: 'Pausas incómodas', value: formatValue(pausas) },
+        { label: 'Duración', value: duration },
+        { label: 'Nivel', value: String(level).toUpperCase() }
+      ]);
+
+      if (payload.feedback) {
+        coachMessage.innerHTML = `<i class="fas fa-comment-dots text-indigo-500 mr-2"></i> ${payload.feedback}`;
       }
     }
 
-    // ----- CÁMARA -----
+    function updateAnalyzeButtonState() {
+      btnAnalizar.disabled = !(isCamActive && isMicActive && !isAnalyzing);
+    }
+
     async function toggleCamera() {
       if (isCamActive && cameraStream) {
-        // apagar cámara
-        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream.getTracks().forEach((track) => track.stop());
+        cameraStream = null;
+        video.srcObject = null;
         video.style.display = 'none';
         placeholder.style.display = 'flex';
-        cameraStream = null;
         isCamActive = false;
         camStatusText.innerText = 'Cámara: OFF';
-        camLedIcon.className = 'fas fa-video-slash text-red-400';
-        btnCamara.innerHTML = '<i class="fas fa-camera"></i> Activar Cámara';
-        updateCoachMessage("Cámara desactivada. Puedes volver a activarla cuando quieras.");
+        btnCamara.innerHTML = '<i class="fas fa-camera text-blue-600"></i> Activar Cámara';
+        updateCoachMessage('Cámara desactivada.');
+        hideAnalysisPanel();
       } else {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -394,189 +578,144 @@
           placeholder.style.display = 'none';
           isCamActive = true;
           camStatusText.innerText = 'Cámara: ON';
-          camLedIcon.className = 'fas fa-video text-green-400';
-          btnCamara.innerHTML = '<i class="fas fa-camera-slash"></i> Desactivar Cámara';
+          btnCamara.innerHTML = '<i class="fas fa-camera-slash text-red-500"></i> Desactivar Cámara';
           updateCoachMessage(messages.cameraOn);
         } catch (err) {
-          console.error("Error cámara:", err);
-          updateCoachMessage("No se pudo acceder a la cámara. Verifica permisos.", true);
-          alert("No se pudo acceder a la cámara. Permisos requeridos.");
+          console.error('Error cámara:', err);
+          updateCoachMessage('No se pudo acceder a la cámara.');
+          alert('No se pudo acceder a la cámara.');
         }
       }
       updateAnalyzeButtonState();
     }
 
-    // ----- MICRÓFONO + ANALIZADOR DE VOLUMEN (tiempo real visual)
     async function toggleMicrophone() {
-      if (isMicActive && audioContext) {
-        // apagar micrófono
-        if (sourceNode) sourceNode.disconnect();
-        if (analyserNode) analyserNode.disconnect();
-        if (audioContext) await audioContext.close();
-        if (animationId) cancelAnimationFrame(animationId);
-        audioContext = null;
+      if (isMicActive) {
         isMicActive = false;
         micStatusText.innerText = 'Mic: OFF';
-        micLedIcon.className = 'fas fa-microphone-slash text-red-400';
-        btnMicrofono.innerHTML = '<i class="fas fa-microphone"></i> Activar Micrófono';
+        btnMicrofono.innerHTML = '<i class="fas fa-microphone text-blue-600"></i> Activar Micrófono';
         volumenSpan.innerText = '--';
-        updateCoachMessage("Micrófono desactivado.");
+        updateCoachMessage('Micrófono desactivado.');
       } else {
         try {
-          const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          audioContext = new (window.AudioContext || window.webkitAudioContext)();
-          analyserNode = audioContext.createAnalyser();
-          analyserNode.fftSize = 256;
-          sourceNode = audioContext.createMediaStreamSource(micStream);
-          sourceNode.connect(analyserNode);
-          // no conectar destino para no generar eco
-          await audioContext.resume();
-          
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          stream.getTracks().forEach(track => track.stop());
           isMicActive = true;
           micStatusText.innerText = 'Mic: ON';
-          micLedIcon.className = 'fas fa-microphone text-green-400';
-          btnMicrofono.innerHTML = '<i class="fas fa-microphone-slash"></i> Desactivar Micrófono';
+          btnMicrofono.innerHTML = '<i class="fas fa-microphone-slash text-red-500"></i> Desactivar Micrófono';
           updateCoachMessage(messages.micOn);
-          
-          // Iniciar detección de volumen
-          const dataArray = new Uint8Array(analyserNode.frequencyBinCount);
-          function updateVolume() {
-            if (!isMicActive || !analyserNode) return;
-            analyserNode.getByteFrequencyData(dataArray);
-            let avg = 0;
-            for (let i = 0; i < dataArray.length; i++) avg += dataArray[i];
-            avg /= dataArray.length;
-            let percent = Math.min(100, Math.floor((avg / 255) * 100));
-            if (percent > 0) {
-              volumenSpan.innerText = `${percent}%`;
-              if (isAnalyzing) {
-                if (percent > 80) updateCoachMessage(messages.volumeHigh, false);
-                else if (percent < 20 && percent > 0) updateCoachMessage(messages.volumeLow, false);
-              }
-            } else {
-              if (isAnalyzing && percent === 0) volumenSpan.innerText = '0%';
-              else if (!isAnalyzing) volumenSpan.innerText = '--';
-            }
-            animationId = requestAnimationFrame(updateVolume);
-          }
-          if (animationId) cancelAnimationFrame(animationId);
-          animationId = requestAnimationFrame(updateVolume);
         } catch (err) {
-          console.error("Error micrófono", err);
-          updateCoachMessage("Error al acceder al micrófono. Permisos necesarios.", true);
-          alert("No se pudo acceder al micrófono.");
+          console.error('Error micrófono', err);
+          updateCoachMessage('Error al acceder al micrófono.');
+          alert('No se pudo acceder al micrófono.');
         }
       }
       updateAnalyzeButtonState();
     }
 
-    // Simulación de métricas fluidas de fluidez y postura mientras se analiza
-    function startFakeMetricsSimulation() {
-      if (fakeMetricsInterval) clearInterval(fakeMetricsInterval);
-      fakeMetricsInterval = setInterval(() => {
-        if (!isAnalyzing) return;
-        // Fluidez simulada entre 55 y 98%
-        const fluidez = Math.floor(Math.random() * (98 - 60 + 1) + 60);
-        fluidezSpan.innerText = `${fluidez}%`;
-        // Postura simulada dinámica
-        const postura = Math.floor(Math.random() * (95 - 65 + 1) + 65);
-        posturaSpan.innerText = `${postura}%`;
-        
-        // feedback coach según fluidez
-        if (fluidez > 85) updateCoachMessage("✨ " + messages.goodFluency);
-        else if (fluidez > 68) updateCoachMessage("📈 " + messages.neutralFluency);
-        else updateCoachMessage("🎯 Intenta reducir pausas y muletillas. ¡Practica la fluidez!");
-        
-        if (postura > 80) updateCoachMessage(messages.postureMention);
-      }, 4000);
-    }
-    
-    function stopFakeMetricsSimulation() {
-      if (fakeMetricsInterval) clearInterval(fakeMetricsInterval);
-      fakeMetricsInterval = null;
-    }
-
-    // Temporizador
-    function startTimer() {
-      if (timerInterval) clearInterval(timerInterval);
-      analysisStartTime = Date.now();
-      timerInterval = setInterval(() => {
-        if (!isAnalyzing) return;
-        const elapsedSeconds = Math.floor((Date.now() - analysisStartTime) / 1000);
-        const mins = Math.floor(elapsedSeconds / 60);
-        const secs = elapsedSeconds % 60;
-        timerSpan.innerText = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
-        if (elapsedSeconds >= 30 && isAnalyzing) {
-          stopAnalysis('⏱️ Análisis completado (30s). Excelente sesión.');
-        }
-      }, 1000);
-    }
-
-    function stopTimer() {
-      if (timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-      }
-    }
-
-    // COMENZAR ANÁLISIS!
-    function startAnalysis() {
+    async function startAnalysis() {
       if (!isCamActive || !isMicActive) {
-        alert("🔴 Debes activar cámara y micrófono antes de iniciar el análisis.");
+        alert('Debes activar cámara y micrófono antes de iniciar el análisis.');
         return;
       }
       if (isAnalyzing) return;
+
       isAnalyzing = true;
-      recordingIndicator.classList.remove('hidden');
       btnAnalizar.disabled = true;
-      btnAnalizar.classList.add('opacity-50');
       btnStopAnalysis.classList.remove('hidden');
+      recordingIndicator.classList.remove('hidden');
       updateCoachMessage(messages.analyzingStarted);
-      // Resetear métricas simuladas
-      fluidezSpan.innerText = '...';
-      posturaSpan.innerText = '...';
-      volumenSpan.innerText = (volumenSpan.innerText !== '--' ? volumenSpan.innerText : '0%');
-      startTimer();
-      startFakeMetricsSimulation();
-      
-      // Simular detección de postura básica cada cierto tiempo extra
-      if (analysisTimer) clearTimeout(analysisTimer);
-      // El análisis se corta a los 30s o manual
+      hideAnalysisPanel();
+
+      elapsedSeconds = 0;
+      timerSpan.textContent = '00:00';
+      timerInterval = setInterval(() => {
+        elapsedSeconds += 1;
+        timerSpan.textContent = formatDuration(elapsedSeconds);
+      }, 1000);
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/analisis/iniciar`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        if (data.success) {
+          const payload = getAnalysisPayload(data);
+          updateCoachMessage('✅ Análisis completado. Revisa el resultado en OradorIA Coach.');
+          
+          const analysisData = {
+            ...payload,
+            feedback: data.feedback || payload.analisis || data.resultadoProcesado,
+            puntuacion_general: payload.puntuacion_general ?? payload.puntuacion,
+            nivel: payload.nivel,
+            observaciones: payload.observaciones ?? payload.analisis ?? data.resultadoProcesado,
+            duracion_segundos: payload.duracion_segundos ?? elapsedSeconds,
+            muletillas_detectadas: payload.muletillas_detectadas ?? data.totalMuletillas ?? payload.total_muletillas,
+            pausas_incomodas: payload.pausas_incomodas ?? payload.pausas,
+            fluidez: payload.fluidez ?? payload.ppm,
+            claridad: payload.claridad,
+            volumen: payload.volumen,
+            velocidad: payload.velocidad,
+            postura: payload.postura,
+            contacto_visual: payload.contacto_visual ?? payload.contactoVisual,
+            confianza: payload.confianza,
+            expresion_facial: payload.expresion_facial ?? payload.expresionFacial
+          };
+
+          showAnalysisPanel(analysisData, formatDuration(elapsedSeconds));
+
+          fluidezSpan.textContent = formatValue(payload.fluidez ?? payload.ppm, '%');
+          posturaSpan.textContent = formatValue(payload.postura, '%');
+          volumenSpan.textContent = formatValue(payload.volumen, '%');
+        } else {
+          updateCoachMessage(`❌ Error: ${data.mensaje || 'Error desconocido'}`);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        updateCoachMessage(`❌ Error al conectar con el servidor: ${error.message}`);
+        alert('Error al conectar con el backend. ¿Está corriendo Spring Boot?');
+      } finally {
+        isAnalyzing = false;
+        recordingIndicator.classList.add('hidden');
+        btnStopAnalysis.classList.add('hidden');
+        clearInterval(timerInterval);
+        updateAnalyzeButtonState();
+      }
     }
 
-    function stopAnalysis(customMsg = null) {
+    function stopAnalysis() {
       if (!isAnalyzing) return;
       isAnalyzing = false;
-      if (recordingIndicator) recordingIndicator.classList.add('hidden');
+      clearInterval(timerInterval);
+      recordingIndicator.classList.add('hidden');
       btnStopAnalysis.classList.add('hidden');
-      btnAnalizar.disabled = false;
       updateAnalyzeButtonState();
-      stopTimer();
-      stopFakeMetricsSimulation();
-      if (customMsg) {
-        updateCoachMessage(customMsg);
-      } else {
-        updateCoachMessage(messages.analysisStop);
-      }
-      if (analysisTimer) clearTimeout(analysisTimer);
-      // No reiniciamos fluidez y postura completamente, se mantienen valores finales
+      updateCoachMessage('⏹️ Análisis detenido manualmente.');
     }
 
-    // Eventos
     btnCamara.addEventListener('click', toggleCamera);
     btnMicrofono.addEventListener('click', toggleMicrophone);
     btnAnalizar.addEventListener('click', startAnalysis);
-    btnStopAnalysis.addEventListener('click', () => stopAnalysis("⏹️ Análisis detenido por el usuario. Puedes empezar de nuevo."));
-    
-    // Inicial: Mensaje de bienvenida
-    updateCoachMessage(messages.welcome);
-    updateAnalyzeButtonState();
-    
-    // cleanup opcional (si se recarga la página, cerrar streams)
+    btnStopAnalysis.addEventListener('click', stopAnalysis);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateCoachMessage(messages.welcome);
+      hideAnalysisPanel();
+      updateAnalyzeButtonState();
+    });
+
     window.addEventListener('beforeunload', () => {
-      if (cameraStream) cameraStream.getTracks().forEach(t => t.stop());
-      if (audioContext) audioContext.close();
+      if (cameraStream) cameraStream.getTracks().forEach((track) => track.stop());
+      clearInterval(timerInterval);
     });
   </script>
 </body>
+
 </html>

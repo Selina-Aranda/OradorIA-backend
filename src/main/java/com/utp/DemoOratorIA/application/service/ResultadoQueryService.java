@@ -1,39 +1,31 @@
 package com.utp.DemoOratorIA.application.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.utp.DemoOratorIA.domain.model.aggregate.Analisis;
+import com.utp.DemoOratorIA.domain.model.repositories.IAnalisisRepository;
 import org.springframework.stereotype.Service;
 
-import com.utp.DemoOratorIA.domain.model.repositories.ResultadoQueryRepository;
-import com.utp.DemoOratorIA.infraestructure.DTO.AnalisisResultadoDTO;
-import com.utp.DemoOratorIA.infraestructure.entities.ResultadoIAEntity;
+import java.util.List;
 
 @Service
 public class ResultadoQueryService {
 
-    private final ResultadoQueryRepository repository;
+    private final IAnalisisRepository analisisRepository;
 
-    public ResultadoQueryService(ResultadoQueryRepository repository) {
-        this.repository = repository;
+    public ResultadoQueryService(IAnalisisRepository analisisRepository) {
+        this.analisisRepository = analisisRepository;
     }
 
-    public List<AnalisisResultadoDTO> listar(Integer idAnalisis) {
-
-        List<ResultadoIAEntity> data = repository.findByIdAnalisis(idAnalisis);
-
-        return data.stream()
-                .map(r -> new AnalisisResultadoDTO(
-                        r.getIdAnalisis(),
-                        "Analisis IA",
-                        "COMPLETADO",
-                        r.getFecha(),
-                        safe(r.getFluidez()),
-                        safe(r.getPostura())))
-                .collect(Collectors.toList());
+    public List<Analisis> listar(Integer usuarioId) {
+        // Aquí deberías filtrar por usuarioId
+        // Por ahora retorna todos
+        return analisisRepository.list();
     }
-
-    private Double safe(Double v) {
-        return v != null ? v : 0.0;
+    
+    public Analisis obtenerUltimoPorUsuario(Integer usuarioId) {
+        List<Analisis> lista = listar(usuarioId);
+        if (!lista.isEmpty()) {
+            return lista.get(0);
+        }
+        return null;
     }
 }
