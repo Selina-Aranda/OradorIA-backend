@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.utp.DemoOratorIA.domain.model.aggregate.Pago;
 import com.utp.DemoOratorIA.domain.model.aggregate.Suscripciones;
-import com.utp.DemoOratorIA.domain.model.enums.PaymentStatus;
 import com.utp.DemoOratorIA.domain.model.repositories.IPagoRepository;
 import com.utp.DemoOratorIA.domain.model.repositories.ISuscripcionesRepository;
 
@@ -19,7 +18,8 @@ public class PagoService {
     private final ISuscripcionesRepository suscripcionRepository;
     private final ActividadRecienteService actividadService;
 
-    public PagoService(IPagoRepository pagoRepository,  ISuscripcionesRepository suscripcionRepository, ActividadRecienteService actividadService) {
+    public PagoService(IPagoRepository pagoRepository, ISuscripcionesRepository suscripcionRepository,
+            ActividadRecienteService actividadService) {
         this.pagoRepository = pagoRepository;
         this.suscripcionRepository = suscripcionRepository;
         this.actividadService = actividadService;
@@ -36,8 +36,7 @@ public class PagoService {
         actividadService.registrar(
                 suscripcion.getIdUsuario(),
                 "PAGO",
-                "Pago realizado por S/ " + pago.getMonto()
-        );
+                "Pago realizado por S/ " + pago.getMonto());
 
         return nuevoPago;
     }
@@ -64,7 +63,6 @@ public class PagoService {
 
         return pagoRepository.obtenerIngresosMensuales(
                 hoy.getYear(),
-                hoy.getMonthValue()
-        );
+                hoy.getMonthValue());
     }
 }

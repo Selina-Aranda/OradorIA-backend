@@ -17,7 +17,7 @@ public class ResultadoQueryService {
         this.repository = repository;
     }
 
-     public List<AnalisisResultadoDTO> listar(Integer idUsuario) {
+    public List<AnalisisResultadoDTO> listar(Integer idUsuario) {
 
         List<Object[]> data = repository.listarAnalisisUsuario(idUsuario);
 
@@ -33,9 +33,5 @@ public class ResultadoQueryService {
 
                 ))
                 .toList();
-    }
-
-    private Double safe(Double v) {
-        return v != null ? v : 0.0;
     }
 }
