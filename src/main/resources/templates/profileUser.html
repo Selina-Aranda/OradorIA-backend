@@ -162,8 +162,11 @@
                       <span class="text-lg" th:text="${session.user.email}"></span>
                     </div>
                     <div class="flex items-center gap-3">
-                      <i class="far fa-calendar w-5 text-slate-500"></i>
-                      <span class="text-lg">Miembro desde Enero 2026</span>
+                        <i class="far fa-calendar w-5 text-slate-500"></i>
+                        <span class="text-lg">
+                            Miembro desde
+                            <span th:text="${#temporals.format(session.user.fechaRegistro, 'MMMM yyyy')}"></span>
+                        </span>
                     </div>
                   </div>
 
@@ -178,7 +181,7 @@
         </section>
 
         <!-- Métricas -->
-        <section class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <section class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <div class="bg-white rounded-2xl border border-slate-200 p-8 text-center">
             <div class="text-5xl font-extrabold text-blue-600" th:text="${totalAnalisis}"></div>
             <div class="mt-3 text-slate-500">Análisis totales</div>
@@ -190,13 +193,7 @@
             <div class="mt-3 text-slate-500">Mejor puntaje</div>
           </div>
           <div class="bg-white rounded-2xl border border-slate-200 p-8 text-center">
-            <div class="text-5xl font-extrabold text-slate-900">5 días</div>
-            <div class="mt-3 text-slate-500">Racha actual</div>
-          </div>
-          <div class="bg-white rounded-2xl border border-slate-200 p-8 text-center">
-            <div class="text-5xl font-extrabold text-purple-600"
-     th:text="${nivel}">
-</div>
+            <div class="text-5xl font-extrabold text-purple-600" th:text="${nivel}"></div>
             <div class="mt-3 text-slate-500">Nivel</div>
           </div>
         </section>
@@ -253,7 +250,7 @@
           <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
             <div>
               <div class="text-lg text-white/90">Nivel de Progreso</div>
-              <div class="mt-1 text-4xl font-extrabold">Nivel 7 - Avanzado</div>
+              <div class="mt-1 text-4xl font-extrabold" th:text="${nivel}">Avanzado</div>
             </div>
             <div class="md:text-right">
               <div class="text-lg text-white/90">Próximo nivel</div>

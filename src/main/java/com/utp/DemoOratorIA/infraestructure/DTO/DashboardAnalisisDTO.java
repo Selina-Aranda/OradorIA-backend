@@ -7,5 +7,6 @@ public record DashboardAnalisisDTO(
         Double puntajePromedio,
         Double mejorPuntaje,
         Double muletillasPromedio,
-        Double promedioConfianza) {
+        Double promedioConfianza,
+        String nivel) {
 }

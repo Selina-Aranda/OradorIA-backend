@@ -23,6 +23,10 @@ public class DashboardService {
         this.repository = repository;
     }
 
+    public String obtenerNivel(Integer idUsuario) {
+    return repository.obtenerNivel(idUsuario);
+    }
+
     public DashboardAnalisisDTO getEstadisticas(Integer idUsuario) {
 
         List<ResultadoIAEntity> data = repository.findByIdUsuario(idUsuario);
@@ -64,7 +68,8 @@ public class DashboardService {
                 puntajePromedio,
                 mejorPuntaje,
                 muletillasPromedio,
-                promedioConfianza
+                promedioConfianza,
+                obtenerNivel(idUsuario)
         );
     }
 

@@ -78,6 +78,7 @@ public Plan cargarPlan(HttpSession session) {
         model.addAttribute("mejorPuntaje", stats.mejorPuntaje());
         model.addAttribute("muletillasPromedio", stats.muletillasPromedio());
         model.addAttribute("promedioConfianza", stats.promedioConfianza());
+        model.addAttribute("nivel", stats.nivel());
 
         model.addAttribute(
         "reporteMensual",

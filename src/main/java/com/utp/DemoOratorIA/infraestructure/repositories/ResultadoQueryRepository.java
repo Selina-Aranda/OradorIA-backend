@@ -110,12 +110,15 @@ List<ReporteMensualDTO> obtenerReporteMensual(@Param("idUsuario") Integer idUsua
 List<Object[]> promediosGlobales();
 
 @Query(value = """
-    SELECT nivel, COUNT(*)
-    FROM resultados_ia
-    WHERE nivel IS NOT NULL
-    GROUP BY nivel
+    SELECT r.nivel
+    FROM resultados_ia r
+    INNER JOIN analisis a
+        ON a.id_analisis = r.id_analisis
+    WHERE a.id_usuario = :idUsuario
+    ORDER BY r.fecha_resultado DESC
+    LIMIT 1
     """, nativeQuery = true)
-List<Object[]> contarPorNivel();
+String obtenerNivel(Integer idUsuario);
 
 @Query(value = """
     SELECT palabra, SUM(cantidad) AS total
