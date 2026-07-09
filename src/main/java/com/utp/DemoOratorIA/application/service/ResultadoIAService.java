@@ -36,4 +36,16 @@ public class ResultadoIAService {
     public void delete(Integer id) {
         resultadoRepository.delete(id);
     }
+
+    public Optional<ResultadoIA> findByIdAnalisis(Integer idAnalisis) {
+        return resultadoRepository.findByIdAnalisis(idAnalisis);
+    }
+
+    public ResultadoIA obtenerUltimoResultado() {
+        return resultadoRepository.obtenerUltimoResultado();
+    }
+
+    public ResultadoIA obtenerMejorResultado() {
+        return resultadoRepository.obtenerMejorResultado();
+    }
 }

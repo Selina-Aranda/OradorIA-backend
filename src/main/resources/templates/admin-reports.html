@@ -2,6 +2,10 @@
 <!-- admin-reports.html -->
 <!-- ========================= -->
 
+<!-- ========================= -->
+<!-- admin-reports.html -->
+<!-- ========================= -->
+
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
@@ -19,6 +23,9 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 
     <style>
@@ -126,16 +133,6 @@
 
                 </a>
 
-                <!-- CONFIGURACION -->
-                <a th:href="@{/admin-settings}"
-                    class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-slate-600">
-
-                    <i class="fas fa-gear w-5"></i>
-
-                    <span>Configuración</span>
-
-                </a>
-
                 <!-- SALIR ADMIN -->
                 <div class="pt-4 mt-4 border-t border-slate-200">
 
@@ -219,47 +216,246 @@
 
       </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="px-6 pb-10 space-y-8">
 
+            <!-- ==================== REPORTE DE USUARIOS ==================== -->
             <div class="card p-6">
+                <div class="flex items-center justify-between mb-5 flex-wrap gap-3">
+                    <h2 class="font-bold text-xl flex items-center gap-2">
+                        <i class="fas fa-users text-blue-600"></i> Reporte de Usuarios
+                    </h2>
+                    <span class="text-xs text-slate-400 bg-slate-50 px-3 py-1.5 rounded-full">Datos en tiempo real</span>
+                </div>
 
-                <h2 class="font-bold text-xl mb-4">
-                    Reporte Usuarios
-                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-blue-50 rounded-2xl p-4">
+                        <p class="text-xs text-blue-600 mb-1">Total de usuarios</p>
+                        <p id="repUsuariosTotal" class="text-2xl font-extrabold text-blue-700">--</p>
+                    </div>
+                    <div class="bg-emerald-50 rounded-2xl p-4">
+                        <p class="text-xs text-emerald-600 mb-1">Usuarios activos</p>
+                        <p id="repUsuariosActivos" class="text-2xl font-extrabold text-emerald-700">--</p>
+                    </div>
+                    <div class="bg-purple-50 rounded-2xl p-4">
+                        <p class="text-xs text-purple-600 mb-1">Nuevos este mes</p>
+                        <p id="repUsuariosNuevos" class="text-2xl font-extrabold text-purple-700">--</p>
+                    </div>
+                </div>
 
-                <button class="bg-blue-600 text-white px-5 py-2 rounded-xl">
-                    Descargar PDF
-                </button>
-
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 h-64">
+                        <canvas id="chartUsuariosMes"></canvas>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-slate-600 mb-2">Usuarios por plan</p>
+                        <div id="listaUsuariosPorPlan" class="space-y-2 text-sm"></div>
+                    </div>
+                </div>
             </div>
 
+            <!-- ==================== REPORTE IA ==================== -->
             <div class="card p-6">
+                <div class="flex items-center justify-between mb-5 flex-wrap gap-3">
+                    <h2 class="font-bold text-xl flex items-center gap-2">
+                        <i class="fas fa-robot text-indigo-600"></i> Reporte IA
+                    </h2>
+                    <span class="text-xs text-slate-400 bg-slate-50 px-3 py-1.5 rounded-full">Uso y rendimiento del sistema</span>
+                </div>
 
-                <h2 class="font-bold text-xl mb-4">
-                    Reporte IA
-                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-indigo-50 rounded-2xl p-4">
+                        <p class="text-xs text-indigo-600 mb-1">Total análisis</p>
+                        <p id="repIaTotal" class="text-2xl font-extrabold text-indigo-700">--</p>
+                    </div>
+                    <div class="bg-amber-50 rounded-2xl p-4">
+                        <p class="text-xs text-amber-600 mb-1">Puntuación prom.</p>
+                        <p id="repIaPuntuacion" class="text-2xl font-extrabold text-amber-700">--</p>
+                    </div>
+                    <div class="bg-rose-50 rounded-2xl p-4">
+                        <p class="text-xs text-rose-600 mb-1">Muletillas prom.</p>
+                        <p id="repIaMuletillas" class="text-2xl font-extrabold text-rose-700">--</p>
+                    </div>
+                    <div class="bg-teal-50 rounded-2xl p-4">
+                        <p class="text-xs text-teal-600 mb-1">Fluidez prom.</p>
+                        <p id="repIaFluidez" class="text-2xl font-extrabold text-teal-700">--</p>
+                    </div>
+                </div>
 
-                <button class="bg-indigo-600 text-white px-5 py-2 rounded-xl">
-                    Descargar Excel
-                </button>
-
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 h-64">
+                        <canvas id="chartIaEvolucion"></canvas>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-sm font-semibold text-slate-600 mb-2">Por nivel</p>
+                            <div id="listaIaPorNivel" class="space-y-2 text-sm"></div>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-slate-600 mb-2">Muletillas más comunes</p>
+                            <div id="listaIaMuletillas" class="space-y-2 text-sm"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
+            <!-- ==================== REPORTE FINANCIERO ==================== -->
             <div class="card p-6">
+                <div class="flex items-center justify-between mb-5 flex-wrap gap-3">
+                    <h2 class="font-bold text-xl flex items-center gap-2">
+                        <i class="fas fa-sack-dollar text-emerald-600"></i> Reporte Financiero
+                    </h2>
+                    <span class="text-xs text-slate-400 bg-slate-50 px-3 py-1.5 rounded-full">Suscripciones y pagos</span>
+                </div>
 
-                <h2 class="font-bold text-xl mb-4">
-                    Reporte Financiero
-                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-emerald-50 rounded-2xl p-4">
+                        <p class="text-xs text-emerald-600 mb-1">Ingresos totales</p>
+                        <p id="repFinTotal" class="text-2xl font-extrabold text-emerald-700">--</p>
+                    </div>
+                    <div class="bg-blue-50 rounded-2xl p-4">
+                        <p class="text-xs text-blue-600 mb-1">Ingresos este mes</p>
+                        <p id="repFinMes" class="text-2xl font-extrabold text-blue-700">--</p>
+                    </div>
+                    <div class="bg-violet-50 rounded-2xl p-4">
+                        <p class="text-xs text-violet-600 mb-1">Suscripciones activas</p>
+                        <p id="repFinSuscripciones" class="text-2xl font-extrabold text-violet-700">--</p>
+                    </div>
+                </div>
 
-                <button class="bg-emerald-600 text-white px-5 py-2 rounded-xl">
-                    Generar Reporte
-                </button>
-
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 h-64">
+                        <canvas id="chartFinMes"></canvas>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-sm font-semibold text-slate-600 mb-2">Ingresos por plan</p>
+                            <div id="listaFinPorPlan" class="space-y-2 text-sm"></div>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-slate-600 mb-2">Por método de pago</p>
+                            <div id="listaFinPorMetodo" class="space-y-2 text-sm"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
 </div>
     </div>
+
+    <script>
+        function filaLista(etiqueta, valor) {
+            return `
+                <div class="flex justify-between items-center bg-slate-50 rounded-xl px-3 py-2">
+                    <span class="text-slate-600">${etiqueta}</span>
+                    <span class="font-bold text-slate-800">${valor}</span>
+                </div>
+            `;
+        }
+
+        function formatoSoles(valor) {
+            return 'S/ ' + Number(valor || 0).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        async function cargarReporteUsuarios() {
+            try {
+                const res = await fetch('/api/admin/reportes/usuarios');
+                if (!res.ok) { console.error('Reporte usuarios:', res.status); return; }
+                const data = await res.json();
+
+                document.getElementById('repUsuariosTotal').innerText = data.totalUsuarios ?? 0;
+                document.getElementById('repUsuariosActivos').innerText = data.usuariosActivos ?? 0;
+                document.getElementById('repUsuariosNuevos').innerText = data.usuariosNuevosEsteMes ?? 0;
+
+                const listaPlan = document.getElementById('listaUsuariosPorPlan');
+                listaPlan.innerHTML = (data.porPlan || []).map(p => filaLista(p.etiqueta, p.cantidad)).join('')
+                    || '<p class="text-slate-400 text-sm">Sin datos</p>';
+
+                const meses = data.registrosPorMes || [];
+                new Chart(document.getElementById('chartUsuariosMes'), {
+                    type: 'bar',
+                    data: {
+                        labels: meses.map(m => m.etiqueta),
+                        datasets: [{ label: 'Nuevos usuarios', data: meses.map(m => m.cantidad), backgroundColor: '#2563eb', borderRadius: 6 }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                });
+            } catch (e) {
+                console.error('Error cargando reporte de usuarios:', e);
+            }
+        }
+
+        async function cargarReporteIA() {
+            try {
+                const res = await fetch('/api/admin/reportes/ia');
+                if (!res.ok) { console.error('Reporte IA:', res.status); return; }
+                const data = await res.json();
+
+                document.getElementById('repIaTotal').innerText = data.totalAnalisis ?? 0;
+                document.getElementById('repIaPuntuacion').innerText = (data.promedioPuntuacion ?? 0).toFixed(1);
+                document.getElementById('repIaMuletillas').innerText = (data.promedioMuletillas ?? 0).toFixed(1);
+                document.getElementById('repIaFluidez').innerText = (data.promedioFluidez ?? 0).toFixed(1);
+
+                const listaNivel = document.getElementById('listaIaPorNivel');
+                listaNivel.innerHTML = (data.porNivel || []).map(p => filaLista(p.etiqueta, p.cantidad)).join('')
+                    || '<p class="text-slate-400 text-sm">Sin datos</p>';
+
+                const listaMuletillas = document.getElementById('listaIaMuletillas');
+                listaMuletillas.innerHTML = (data.topMuletillas || []).map(p => filaLista(p.etiqueta, p.cantidad)).join('')
+                    || '<p class="text-slate-400 text-sm">Sin datos</p>';
+
+                const meses = data.evolucionMensual || [];
+                new Chart(document.getElementById('chartIaEvolucion'), {
+                    type: 'line',
+                    data: {
+                        labels: meses.map(m => m.etiqueta),
+                        datasets: [{ label: 'Análisis realizados', data: meses.map(m => m.cantidad), borderColor: '#4f46e5', backgroundColor: 'rgba(79,70,229,0.08)', fill: true, tension: 0.25 }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                });
+            } catch (e) {
+                console.error('Error cargando reporte IA:', e);
+            }
+        }
+
+        async function cargarReporteFinanciero() {
+            try {
+                const res = await fetch('/api/admin/reportes/financiero');
+                if (!res.ok) { console.error('Reporte financiero:', res.status); return; }
+                const data = await res.json();
+
+                document.getElementById('repFinTotal').innerText = formatoSoles(data.ingresosTotales);
+                document.getElementById('repFinMes').innerText = formatoSoles(data.ingresosEsteMes);
+                document.getElementById('repFinSuscripciones').innerText = data.suscripcionesActivas ?? 0;
+
+                const listaPlan = document.getElementById('listaFinPorPlan');
+                listaPlan.innerHTML = (data.ingresosPorPlan || []).map(p => filaLista(p.etiqueta, formatoSoles(p.monto))).join('')
+                    || '<p class="text-slate-400 text-sm">Sin datos</p>';
+
+                const listaMetodo = document.getElementById('listaFinPorMetodo');
+                listaMetodo.innerHTML = (data.pagosPorMetodo || []).map(p => filaLista(p.etiqueta, p.cantidad)).join('')
+                    || '<p class="text-slate-400 text-sm">Sin datos</p>';
+
+                const meses = data.ingresosPorMes || [];
+                new Chart(document.getElementById('chartFinMes'), {
+                    type: 'bar',
+                    data: {
+                        labels: meses.map(m => m.etiqueta),
+                        datasets: [{ label: 'Ingresos (S/)', data: meses.map(m => m.monto), backgroundColor: '#059669', borderRadius: 6 }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                });
+            } catch (e) {
+                console.error('Error cargando reporte financiero:', e);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarReporteUsuarios();
+            cargarReporteIA();
+            cargarReporteFinanciero();
+        });
+    </script>
 </body>
 
 </html>

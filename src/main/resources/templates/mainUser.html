@@ -58,7 +58,55 @@
           <span>Configuración</span>
         </a>
       </nav>
+      <div class="mx-4 mt-6">
 
+        <div class="rounded-3xl bg-gradient-to-br from-indigo-600 via-blue-600 to-cyan-500 p-5 text-white shadow-xl">
+    
+            <div class="flex items-center gap-3">
+    
+                <div class="h-12 w-12 rounded-2xl bg-white/20 flex items-center justify-center">
+                    <i class="fas fa-rocket text-xl"></i>
+                </div>
+    
+                <div>
+                    <h3 class="font-bold text-lg">
+                        Actualiza tu experiencia
+                    </h3>
+    
+                    <p class="text-sm text-blue-100">
+                        Desbloquea herramientas avanzadas para mejorar tu oratoria.
+                    </p>
+                </div>
+    
+            </div>
+    
+            <div class="mt-5 space-y-2 text-sm">
+    
+                <div>
+                    <i class="fas fa-check-circle text-green-300 mr-2"></i>
+                    IA en tiempo real
+                </div>
+    
+                <div>
+                    <i class="fas fa-check-circle text-green-300 mr-2"></i>
+                    Prácticas ilimitadas
+                </div>
+    
+                <div>
+                    <i class="fas fa-check-circle text-green-300 mr-2"></i>
+                    Reportes inteligentes
+                </div>
+    
+            </div>
+    
+            <a th:href="@{/planes}"
+            class="mt-6 block rounded-xl bg-white py-3 text-center font-bold text-indigo-700 hover:bg-slate-100 transition">
+             Explorar planes
+         </a>
+    
+        </div>
+    
+    </div>
       <div class="mt-auto">
         <div class="mx-6 my-6 border-t border-slate-200/70"></div>
 
@@ -67,7 +115,7 @@
             <div class="h-11 w-11 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" th:text="${#strings.substring(session.user.nombres,0,1) + ' ' + #strings.substring(session.user.apellidos,0,1)}"></div>
             <div class="min-w-0">
               <div class="font-semibold text-slate-900 truncate" th:text="${session.user.nombres}"></div>
-              <div class="text-sm text-slate-500">Plan Profesional</div>
+              <div class="text-sm text-slate-500" th:text="${plan.nombre}"></div>
             </div>
           </div>
         </div>
@@ -132,12 +180,8 @@
                 <div class="h-12 w-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
                   <i class="fas fa-chart-column"></i>
                 </div>
-                <div class="text-sm font-semibold text-emerald-600 flex items-center gap-1">
-                  <i class="fas fa-arrow-up"></i>
-                  <span>+12%</span>
-                </div>
               </div>
-              <div class="mt-5 text-4xl font-extrabold">24</div>
+              <div class="mt-5 text-4xl font-extrabold" th:text="${totalAnalisis}"></div>
               <div class="mt-1 text-sm text-slate-500">Total de análisis</div>
             </article>
 
@@ -147,12 +191,8 @@
                 <div class="h-12 w-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
                   <i class="fas fa-bullseye"></i>
                 </div>
-                <div class="text-sm font-semibold text-emerald-600 flex items-center gap-1">
-                  <i class="fas fa-arrow-up"></i>
-                  <span>+5%</span>
-                </div>
               </div>
-              <div class="mt-5 text-4xl font-extrabold">87%</div>
+              <div class="mt-5 text-4xl font-extrabold"  th:text="${#numbers.formatDecimal(promedioFluidez,1,1)} + '%'"></div>
               <div class="mt-1 text-sm text-slate-500">Promedio de fluidez</div>
             </article>
 
@@ -162,12 +202,8 @@
                 <div class="h-12 w-12 rounded-2xl bg-slate-50 text-slate-700 flex items-center justify-center">
                   <i class="fas fa-comment"></i>
                 </div>
-                <div class="text-sm font-semibold text-red-600 flex items-center gap-1">
-                  <i class="fas fa-arrow-down"></i>
-                  <span>-23%</span>
-                </div>
               </div>
-              <div class="mt-5 text-4xl font-extrabold">8</div>
+              <div class="mt-5 text-4xl font-extrabold" th:text="${muletillasPromedio}"></div>
               <div class="mt-1 text-sm text-slate-500">Muletillas promedio</div>
             </article>
 
@@ -177,12 +213,8 @@
                 <div class="h-12 w-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center">
                   <i class="fas fa-chart-line"></i>
                 </div>
-                <div class="text-sm font-semibold text-emerald-600 flex items-center gap-1">
-                  <i class="fas fa-arrow-up"></i>
-                  <span>+8%</span>
-                </div>
               </div>
-              <div class="mt-5 text-4xl font-extrabold">82%</div>
+              <div class="mt-5 text-4xl font-extrabold" th:text="${#numbers.formatDecimal(promedioConfianza,1,1)} + '%'"></div>
               <div class="mt-1 text-sm text-slate-500">Nivel de confianza</div>
             </article>
           </section>
@@ -193,198 +225,157 @@
               <h2 class="text-xl font-bold">Progreso mensual</h2>
             </div>
             <div class="px-6 pb-6">
-              <div class="h-64 rounded-2xl bg-slate-50 border border-dashed border-slate-200"></div>
-            </div>
+            <div class="h-72"><canvas id="graficoMensual"></canvas></div>           
+          </div>
           </section>
 
           <!-- Análisis recientes + CTA -->
           <section class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
             <!-- Left: Análisis recientes -->
-            <div class="lg:col-span-8 bg-white rounded-3xl border border-slate-200/70 p-6">
+          <div class="lg:col-span-8 bg-white rounded-3xl border border-slate-200/70 p-6">
               <div class="flex items-center justify-between">
                 <h2 class="text-2xl font-extrabold tracking-tight">Análisis recientes</h2>
                 <a href="#" class="text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition">Ver todos</a>
               </div>
 
-              <div class="mt-6 space-y-5">
-                <!-- Item 1 -->
-                <div class="rounded-2xl border border-slate-200/70 p-5">
+          <div class="mt-6 space-y-5">
+
+              <div
+                  th:each="a : ${analisis}"
+                  class="rounded-2xl border border-slate-200 p-5">
+
                   <div class="flex items-center gap-4">
-                    <div class="h-14 w-14 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600">
-                      <i class="fas fa-pen"></i>
-                    </div>
 
-                    <div class="flex-1 min-w-0">
-                      <div class="font-bold text-lg truncate">Presentación de ventas Q1</div>
-                      <div class="mt-1 text-sm text-slate-500 flex items-center gap-2">
-                        <i class="far fa-clock"></i>
-                        <span>Hace 2 horas</span>
+                      <div class="h-14 w-14 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600">
+                          <i class="fas fa-microphone"></i>
                       </div>
-                    </div>
 
-                    <div class="hidden sm:flex items-center gap-10">
-                      <div class="text-right">
-                        <div class="text-sm text-slate-500">Duración</div>
-                        <div class="font-extrabold text-slate-900">5:23</div>
+                      <div class="flex-1">
+
+                          <div
+                              class="font-bold text-lg"
+                              th:text="${a.titulo}">
+                          </div>
+
+                          <div class="text-sm text-slate-500">
+
+                              <i class="far fa-calendar"></i>
+
+                              <span th:text="${#temporals.format(a.fecha,'dd/MM/yyyy HH:mm')}"></span>
+
+                          </div>
+
                       </div>
+
                       <div class="text-right">
-                        <div class="text-sm text-slate-500">Puntaje</div>
-                        <div class="text-3xl font-extrabold text-indigo-600">92</div>
+
+                          <div class="text-sm text-slate-500">
+                              Fluidez
+                          </div>
+
+                          <div class="font-bold"
+                              th:text="${a.fluidez} + '%'">
+                          </div>
+
                       </div>
-                    </div>
+
+                      <div class="text-right">
+
+                          <div class="text-sm text-slate-500">
+                              Postura
+                          </div>
+
+                          <div class="font-bold"
+                              th:text="${a.postura} + '%'">
+                          </div>
+
+                      </div>
+
                   </div>
 
-                  <!-- Mobile right metrics -->
-                  <div class="sm:hidden mt-4 grid grid-cols-2 gap-3">
-                    <div class="rounded-xl bg-slate-50 border border-slate-200/60 p-3">
-                      <div class="text-xs text-slate-500">Duración</div>
-                      <div class="font-extrabold">5:23</div>
-                    </div>
-                    <div class="rounded-xl bg-slate-50 border border-slate-200/60 p-3">
-                      <div class="text-xs text-slate-500">Puntaje</div>
-                      <div class="font-extrabold text-indigo-600">92</div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Item 2 -->
-                <div class="rounded-2xl border border-slate-200/70 p-5">
-                  <div class="flex items-center gap-4">
-                    <div class="h-14 w-14 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600">
-                      <i class="fas fa-pen"></i>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                      <div class="font-bold text-lg truncate">Pitch para inversores</div>
-                      <div class="mt-1 text-sm text-slate-500 flex items-center gap-2">
-                        <i class="far fa-clock"></i>
-                        <span>Hace 1 día</span>
-                      </div>
-                    </div>
-                    <div class="hidden sm:flex items-center gap-10">
-                      <div class="text-right">
-                        <div class="text-sm text-slate-500">Duración</div>
-                        <div class="font-extrabold text-slate-900">8:45</div>
-                      </div>
-                      <div class="text-right">
-                        <div class="text-sm text-slate-500">Puntaje</div>
-                        <div class="text-3xl font-extrabold text-indigo-600">88</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="sm:hidden mt-4 grid grid-cols-2 gap-3">
-                    <div class="rounded-xl bg-slate-50 border border-slate-200/60 p-3">
-                      <div class="text-xs text-slate-500">Duración</div>
-                      <div class="font-extrabold">8:45</div>
-                    </div>
-                    <div class="rounded-xl bg-slate-50 border border-slate-200/60 p-3">
-                      <div class="text-xs text-slate-500">Puntaje</div>
-                      <div class="font-extrabold text-indigo-600">88</div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Item 3 -->
-                <div class="rounded-2xl border border-slate-200/70 p-5">
-                  <div class="flex items-center gap-4">
-                    <div class="h-14 w-14 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600">
-                      <i class="fas fa-pen"></i>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                      <div class="font-bold text-lg truncate">Discurso motivacional</div>
-                      <div class="mt-1 text-sm text-slate-500 flex items-center gap-2">
-                        <i class="far fa-clock"></i>
-                        <span>Hace 2 días</span>
-                      </div>
-                    </div>
-                    <div class="hidden sm:flex items-center gap-10">
-                      <div class="text-right">
-                        <div class="text-sm text-slate-500">Duración</div>
-                        <div class="font-extrabold text-slate-900">3:12</div>
-                      </div>
-                      <div class="text-right">
-                        <div class="text-sm text-slate-500">Puntaje</div>
-                        <div class="text-3xl font-extrabold text-indigo-600">85</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="sm:hidden mt-4 grid grid-cols-2 gap-3">
-                    <div class="rounded-xl bg-slate-50 border border-slate-200/60 p-3">
-                      <div class="text-xs text-slate-500">Duración</div>
-                      <div class="font-extrabold">3:12</div>
-                    </div>
-                    <div class="rounded-xl bg-slate-50 border border-slate-200/60 p-3">
-                      <div class="text-xs text-slate-500">Puntaje</div>
-                      <div class="font-extrabold text-indigo-600">85</div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Item 4 -->
-                <div class="rounded-2xl border border-slate-200/70 p-5">
-                  <div class="flex items-center gap-4">
-                    <div class="h-14 w-14 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600">
-                      <i class="fas fa-pen"></i>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                      <div class="font-bold text-lg truncate">Reunión de equipo</div>
-                      <div class="mt-1 text-sm text-slate-500 flex items-center gap-2">
-                        <i class="far fa-clock"></i>
-                        <span>Hace 3 días</span>
-                      </div>
-                    </div>
-                    <div class="hidden sm:flex items-center gap-10">
-                      <div class="text-right">
-                        <div class="text-sm text-slate-500">Duración</div>
-                        <div class="font-extrabold text-slate-900">6:30</div>
-                      </div>
-                      <div class="text-right">
-                        <div class="text-sm text-slate-500">Puntaje</div>
-                        <div class="text-3xl font-extrabold text-indigo-600">79</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="sm:hidden mt-4 grid grid-cols-2 gap-3">
-                    <div class="rounded-xl bg-slate-50 border border-slate-200/60 p-3">
-                      <div class="text-xs text-slate-500">Duración</div>
-                      <div class="font-extrabold">6:30</div>
-                    </div>
-                    <div class="rounded-xl bg-slate-50 border border-slate-200/60 p-3">
-                      <div class="text-xs text-slate-500">Puntaje</div>
-                      <div class="font-extrabold text-indigo-600">79</div>
-                    </div>
-                  </div>
-                </div>
               </div>
-            </div>
+
+          </div>
+          </div>
 
             <!-- Right: CTA -->
             <div class="lg:col-span-4 bg-gradient-to-b from-blue-600 to-indigo-700 rounded-3xl p-8 text-white">
               <h2 class="text-2xl font-extrabold">Comienza ahora</h2>
               <p class="mt-3 text-white/90">Realiza un nuevo análisis de oratoria</p>
-
-              <button class="mt-10 w-full bg-white text-indigo-700 font-bold py-4 rounded-2xl hover:bg-white/95 transition">
-                Nuevo Análisis
-              </button>
-
-              <div class="mt-8 space-y-4">
-                <div class="bg-white/10 rounded-2xl px-5 py-4 flex items-center justify-between">
-                  <span class="text-white/90">Análisis este mes</span>
-                  <span class="text-xl font-extrabold">24</span>
-                </div>
-                <div class="bg-white/10 rounded-2xl px-5 py-4 flex items-center justify-between">
-                  <span class="text-white/90">Tiempo total</span>
-                  <span class="text-xl font-extrabold">2h 34m</span>
-                </div>
-                <div class="bg-white/10 rounded-2xl px-5 py-4 flex items-center justify-between">
-                  <span class="text-white/90">Mejora promedio</span>
-                  <span class="text-xl font-extrabold">+15%</span>
-                </div>
-              </div>
+              <a th:href="@{/analysis-user}"
+                class="mt-10 w-full bg-white text-indigo-700 font-bold py-4 rounded-2xl hover:bg-white/95 transition block text-center">
+                  Nuevo análisis
+              </a>
             </div>
           </section>
         </div>
       </main>
     </div>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script th:inline="javascript">
+
+  const reporte = /*[[${reporteMensual}]]*/ [];
+
+  const meses = reporte.map(r => r.etiquetaMes);
+
+  const puntajes = reporte.map(r => r.puntajePromedio);
+
+  </script>
+  <script>
+
+    new Chart(document.getElementById("graficoMensual"), {
+
+        type: 'line',
+
+        data: {
+
+            labels: meses,
+
+            datasets: [{
+
+                label: 'Puntaje promedio',
+
+                data: puntajes,
+
+                borderColor: '#2563eb',
+
+                backgroundColor: 'rgba(37,99,235,.15)',
+
+                fill: true,
+
+                tension: .4
+
+            }]
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+
+            scales: {
+
+                y: {
+
+                    beginAtZero: true,
+
+                    max: 100
+                }
+
+            }
+
+        }
+
+    });
+
+    </script>
 </body>
 </html>

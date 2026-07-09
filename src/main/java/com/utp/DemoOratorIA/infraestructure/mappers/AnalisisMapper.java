@@ -1,9 +1,9 @@
 package com.utp.DemoOratorIA.infraestructure.mappers;
 
+import org.springframework.stereotype.Component;
+
 import com.utp.DemoOratorIA.domain.model.aggregate.Analisis;
 import com.utp.DemoOratorIA.infraestructure.entities.AnalisisEntity;
-import com.utp.DemoOratorIA.infraestructure.DTO.AnalisisDTO;
-import org.springframework.stereotype.Component;
 
 @Component
 public class AnalisisMapper {

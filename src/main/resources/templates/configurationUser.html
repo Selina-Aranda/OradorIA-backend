@@ -7,6 +7,7 @@
 
   <!-- Tailwind CSS v3 + Font Awesome 6 + Google Fonts Inter -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
@@ -121,7 +122,7 @@
             <div class="h-11 w-11 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" th:text="${#strings.substring(session.user.nombres,0,1) + ' ' + #strings.substring(session.user.apellidos,0,1)}"></div>
             <div class="min-w-0">
               <div class="font-semibold text-slate-900 truncate" th:text="${session.user.nombres}"></div>
-              <div class="text-sm text-slate-500">Plan Profesional</div>
+              <div class="text-sm text-slate-500" th:text="${plan.nombre}"></div>
             </div>
           </div>
         </div>
@@ -219,49 +220,7 @@
             </div>
           </div>
 
-          <!-- SECCIÓN: NOTIFICACIONES -->
-          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden settings-card">
-            <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center gap-2">
-              <i class="fas fa-bell text-indigo-500 text-xl"></i>
-              <h2 class="font-bold text-slate-800 text-lg">Notificaciones</h2>
-            </div>
-            <div class="p-6 space-y-5">
-              <!-- Notificaciones por correo -->
-              <div class="flex items-center justify-between flex-wrap gap-3">
-                <div>
-                  <label class="font-medium text-slate-700 block">Notificaciones por correo</label>
-                  <p class="text-sm text-slate-500">Recibe actualizaciones, resúmenes semanales y consejos de oratoria por email</p>
-                </div>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="emailNotificationsToggle" checked>
-                  <span class="toggle-slider"></span>
-                </label>
-              </div>
-              <!-- Recordatorios de práctica -->
-              <div class="flex items-center justify-between flex-wrap gap-3 pt-2 border-t border-slate-100">
-                <div>
-                  <label class="font-medium text-slate-700 block">Recordatorios de práctica</label>
-                  <p class="text-sm text-slate-500">Recibe notificaciones para mantener tu racha de entrenamiento</p>
-                </div>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="reminderToggle" checked>
-                  <span class="toggle-slider"></span>
-                </label>
-              </div>
-              <!-- Alertas de logros -->
-              <div class="flex items-center justify-between flex-wrap gap-3 pt-2 border-t border-slate-100">
-                <div>
-                  <label class="font-medium text-slate-700 block">Alertas de logros</label>
-                  <p class="text-sm text-slate-500">Recibe felicitaciones cuando superes tus marcas personales</p>
-                </div>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="achievementsToggle" checked>
-                  <span class="toggle-slider"></span>
-                </label>
-              </div>
-            </div>
-          </div>
-
+        
           <!-- SECCIÓN: PREFERENCIAS DE ANÁLISIS -->
           <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden settings-card">
             <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center gap-2">
@@ -358,118 +317,154 @@
     </div>
   </div>
 
-  <script>
-    // Simulación de persistencia de preferencias usando localStorage
-    // Inicializar estados guardados o por defecto
-    function loadSettings() {
-      const emailNotify = localStorage.getItem('emailNotifications') !== 'false';
-      const reminderNotify = localStorage.getItem('reminderNotifications') !== 'false';
-      const achievementsNotify = localStorage.getItem('achievementsNotifications') !== 'false';
-      const fillerDetect = localStorage.getItem('fillerDetection') !== 'false';
-      const postureAnalysis = localStorage.getItem('postureAnalysis') !== 'false';
-      const autoSave = localStorage.getItem('autoSave') !== 'false';
-      const shareData = localStorage.getItem('shareAnonymousData') !== 'false';
-      
-      document.getElementById('emailNotificationsToggle').checked = emailNotify;
-      document.getElementById('reminderToggle').checked = reminderNotify;
-      document.getElementById('achievementsToggle').checked = achievementsNotify;
-      document.getElementById('fillerDetectionToggle').checked = fillerDetect;
-      document.getElementById('postureAnalysisToggle').checked = postureAnalysis;
-      document.getElementById('autoSaveToggle').checked = autoSave;
-      document.getElementById('shareDataToggle').checked = shareData;
-    }
-    
-    function saveAllSettings() {
-      localStorage.setItem('emailNotifications', document.getElementById('emailNotificationsToggle').checked);
-      localStorage.setItem('reminderNotifications', document.getElementById('reminderToggle').checked);
-      localStorage.setItem('achievementsNotifications', document.getElementById('achievementsToggle').checked);
-      localStorage.setItem('fillerDetection', document.getElementById('fillerDetectionToggle').checked);
-      localStorage.setItem('postureAnalysis', document.getElementById('postureAnalysisToggle').checked);
-      localStorage.setItem('autoSave', document.getElementById('autoSaveToggle').checked);
-      localStorage.setItem('shareAnonymousData', document.getElementById('shareDataToggle').checked);
-      
-      // Mostrar mensaje de éxito
-      const btn = document.getElementById('saveAllSettingsBtn');
-      const originalHtml = btn.innerHTML;
+<script>
+  function safeGet(id) {
+    return document.getElementById(id);
+  }
+
+  function loadSettings() {
+
+    const emailNotify = localStorage.getItem('emailNotifications') !== 'false';
+    const reminderNotify = localStorage.getItem('reminderNotifications') !== 'false';
+    const achievementsNotify = localStorage.getItem('achievementsNotifications') !== 'false';
+    const fillerDetect = localStorage.getItem('fillerDetection') !== 'false';
+    const postureAnalysis = localStorage.getItem('postureAnalysis') !== 'false';
+    const autoSave = localStorage.getItem('autoSave') !== 'false';
+    const shareData = localStorage.getItem('shareAnonymousData') !== 'false';
+
+    if (safeGet('emailNotificationsToggle'))
+      safeGet('emailNotificationsToggle').checked = emailNotify;
+
+    if (safeGet('reminderToggle'))
+      safeGet('reminderToggle').checked = reminderNotify;
+
+    if (safeGet('achievementsToggle'))
+      safeGet('achievementsToggle').checked = achievementsNotify;
+
+    if (safeGet('fillerDetectionToggle'))
+      safeGet('fillerDetectionToggle').checked = fillerDetect;
+
+    if (safeGet('postureAnalysisToggle'))
+      safeGet('postureAnalysisToggle').checked = postureAnalysis;
+
+    if (safeGet('autoSaveToggle'))
+      safeGet('autoSaveToggle').checked = autoSave;
+
+    if (safeGet('shareDataToggle'))
+      safeGet('shareDataToggle').checked = shareData;
+  }
+
+  function saveAllSettings() {
+
+    const emailT = safeGet('emailNotificationsToggle');
+    const reminderT = safeGet('reminderToggle');
+    const achievementsT = safeGet('achievementsToggle');
+    const fillerT = safeGet('fillerDetectionToggle');
+    const postureT = safeGet('postureAnalysisToggle');
+    const autoT = safeGet('autoSaveToggle');
+    const shareT = safeGet('shareDataToggle');
+
+    if (emailT) localStorage.setItem('emailNotifications', emailT.checked);
+    if (reminderT) localStorage.setItem('reminderNotifications', reminderT.checked);
+    if (achievementsT) localStorage.setItem('achievementsNotifications', achievementsT.checked);
+    if (fillerT) localStorage.setItem('fillerDetection', fillerT.checked);
+    if (postureT) localStorage.setItem('postureAnalysis', postureT.checked);
+    if (autoT) localStorage.setItem('autoSave', autoT.checked);
+    if (shareT) localStorage.setItem('shareAnonymousData', shareT.checked);
+
+    const btn = safeGet('saveAllSettingsBtn');
+    if (btn) {
+      const original = btn.innerHTML;
       btn.innerHTML = '<i class="fas fa-check-circle"></i> Guardado!';
-      setTimeout(() => {
-        btn.innerHTML = originalHtml;
-      }, 2000);
-      alert("✅ Configuración guardada correctamente.");
+      setTimeout(() => btn.innerHTML = original, 2000);
     }
-    
-    // Acciones de los botones interactivos
-    function initActions() {
-      document.getElementById('changeEmailBtn').addEventListener('click', () => {
-        const newEmail = prompt("Ingresa tu nuevo correo electrónico:", "juan.perez@email.com");
+
+    alert("✅ Configuración guardada correctamente.");
+  }
+
+  function initActions() {
+
+    const emailBtn = safeGet('changeEmailBtn');
+    if (emailBtn) {
+      emailBtn.addEventListener('click', () => {
+        const newEmail = prompt("Ingresa tu nuevo correo electrónico:");
         if (newEmail && newEmail.includes('@')) {
-          document.getElementById('userEmailDisplay').innerText = newEmail;
-          alert(`Correo actualizado a: ${newEmail}`);
+          const display = safeGet('userEmailDisplay');
+          if (display) display.innerText = newEmail;
+
           localStorage.setItem('userEmail', newEmail);
-        } else if (newEmail) alert("Correo inválido");
-      });
-      
-      document.getElementById('changePasswordBtn').addEventListener('click', () => {
-        const newPass = prompt("Cambiar contraseña (simulación):", "********");
-        if (newPass && newPass.length >= 4) {
-          alert("Contraseña actualizada correctamente (simulación protección).");
-        } else if (newPass) alert("La contraseña debe tener al menos 4 caracteres.");
-      });
-      
-      document.getElementById('upgradePlanBtn').addEventListener('click', () => {
-        alert("🧠 Próximamente: gestión de planes premium. Actualmente disfrutas del plan Profesional.");
-      });
-      
-      document.getElementById('exportDataBtn').addEventListener('click', () => {
-        const data = {
-          usuario: "Juan Pérez",
-          email: document.getElementById('userEmailDisplay').innerText,
-          estadisticas: { totalAnalisis: 24, mejorPuntaje: 92, racha: 5 },
-          configuraciones: {
-            emailNotifications: document.getElementById('emailNotificationsToggle').checked,
-            recordatorios: document.getElementById('reminderToggle').checked,
-            deteccionMuletillas: document.getElementById('fillerDetectionToggle').checked,
-            analisisPostura: document.getElementById('postureAnalysisToggle').checked
-          }
-        };
-        const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "oratoria_mis_datos.json";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        alert("Exportación completada. Se ha descargado tu archivo json.");
-      });
-      
-      document.getElementById('deleteAccountBtn').addEventListener('click', () => {
-        const confirmDelete = confirm("⚠️ ADVERTENCIA: Esta acción eliminará permanentemente tu cuenta y todos tus análisis. ¿Estás completamente seguro?");
-        if (confirmDelete) {
-          const secondConfirm = prompt("Escribe 'ELIMINAR' para confirmar la eliminación de tu cuenta");
-          if (secondConfirm === "ELIMINAR") {
-            alert("Tu cuenta ha sido eliminada. Serás redirigido al inicio.");
-            localStorage.clear();
-            window.location.href = "#"; // simulación
-          } else {
-            alert("Eliminación cancelada.");
-          }
+          alert("Correo actualizado");
         }
       });
-      
-      document.getElementById('saveAllSettingsBtn').addEventListener('click', saveAllSettings);
-      
-      // Restaurar email si estaba guardado previamente
-      const savedEmail = localStorage.getItem('userEmail');
-      if (savedEmail) document.getElementById('userEmailDisplay').innerText = savedEmail;
     }
-    
-    // Cargar email inicial desde almacenamiento simulado
-    document.addEventListener('DOMContentLoaded', () => {
-      loadSettings();
-      initActions();
-    });
-  </script>
+
+    const passBtn = safeGet('changePasswordBtn');
+    if (passBtn) {
+      passBtn.addEventListener('click', () => {
+        const newPass = prompt("Nueva contraseña:");
+        if (newPass && newPass.length >= 4) {
+          alert("Contraseña actualizada (simulación)");
+        }
+      });
+    }
+
+    const planBtn = safeGet('upgradePlanBtn');
+    if (planBtn) {
+      planBtn.addEventListener('click', () => {
+        window.location.href = "/planes";
+      });
+    }
+
+  const exportBtn = safeGet('exportDataBtn');
+
+if (exportBtn) {
+  exportBtn.addEventListener('click', async () => {
+
+    const idUsuario = 4;
+
+    try {
+      const response = await fetch(`/historial-sesiones/usuario/${idUsuario}`);
+      const data = await response.json();
+
+      if (!data || data.length === 0) {
+        alert("No hay historial para exportar");
+        return;
+      }
+
+      const ws = XLSX.utils.json_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Historial");
+
+      XLSX.writeFile(wb, "historial_sesiones.xlsx");
+
+    } catch (error) {
+      alert("Error al exportar");
+      console.error(error);
+    }
+
+  });
+}
+    const deleteBtn = safeGet('deleteAccountBtn');
+    if (deleteBtn) {
+      deleteBtn.addEventListener('click', () => {
+        const ok = confirm("¿Seguro que deseas eliminar tu cuenta?");
+        if (ok) {
+          localStorage.clear();
+          alert("Cuenta eliminada (simulación)");
+        }
+      });
+    }
+
+    const savedEmail = localStorage.getItem('userEmail');
+    if (savedEmail && safeGet('userEmailDisplay')) {
+      safeGet('userEmailDisplay').innerText = savedEmail;
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    loadSettings();
+    initActions();
+  });
+</script>
 </body>
 </html>

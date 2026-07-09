@@ -7,31 +7,32 @@ import com.utp.DemoOratorIA.infraestructure.entities.SuscripcionesEntity;
 
 @Component
 public class SuscripcionesMapper {
-    
-    public Suscripciones toDomain(SuscripcionesEntity suscripcionesEntity){
-        return new Suscripciones.Builder()
-            .idSuscripcion(suscripcionesEntity.getIdSuscripciones())
-            .idUsuario(suscripcionesEntity.getIdUsuario())
-            .idPlan(suscripcionesEntity.getIdPlan())
-            .fechaInicio(suscripcionesEntity.getFechaInicio())
-            .fechaFin(suscripcionesEntity.getFechaFin())
-            .estado(suscripcionesEntity.getEstado())
-            .renovacionAutomatica(suscripcionesEntity.getRenovacionAutomatica())
-            .build();
 
+    public SuscripcionesEntity toEntity(Suscripciones s) {
+        SuscripcionesEntity e = new SuscripcionesEntity();
+
+        e.setIdSuscripcion(s.getIdSuscripcion());
+        e.setIdUsuario(s.getIdUsuario());
+        e.setIdPlan(s.getIdPlan());
+        e.setFechaInicio(s.getFechaInicio());
+        e.setFechaFin(s.getFechaFin());
+        e.setEstado(s.getEstado());
+        e.setRenovacionAutomatica(s.getRenovacionAutomatica());
+
+        return e;
     }
 
-    public SuscripcionesEntity toEntity(Suscripciones suscripciones){
-       return SuscripcionesEntity.builder()
-            .idSuscripciones(suscripciones.getIdSuscripcion())
-            .idUsuario(suscripciones.getIdUsuario())
-            .idPlan(suscripciones.getIdPlan())
-            .fechaInicio(suscripciones.getFechaInicio())
-            .fechaFin(suscripciones.getFechaFin())
-            .estado(suscripciones.getEstado())
-            .renovacionAutomatica(suscripciones.getRenovacionAutomatica())
-            .build();
+    public Suscripciones toDomain(SuscripcionesEntity e) {
+        Suscripciones s = new Suscripciones();
 
+        s.setIdSuscripcion(e.getIdSuscripcion());
+        s.setIdUsuario(e.getIdUsuario());
+        s.setIdPlan(e.getIdPlan());
+        s.setFechaInicio(e.getFechaInicio());
+        s.setFechaFin(e.getFechaFin());
+        s.setEstado(e.getEstado());
+        s.setRenovacionAutomatica(e.getRenovacionAutomatica());
 
+        return s;
     }
 }

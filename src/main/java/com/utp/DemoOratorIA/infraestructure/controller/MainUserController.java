@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.utp.DemoOratorIA.application.service.UserService;
 
@@ -28,7 +29,7 @@ public class MainUserController {
         return "mainUser";
     }
 
-    @GetMapping("/profile-user")
+    @GetMapping("/main-profile-user")
     public String mostrarPerfilUsuario() {
         return "profileUser";
     }
@@ -53,19 +54,20 @@ public class MainUserController {
         return "admin-reports";
     }
 
-    @GetMapping("/admin-settings")
-    public String mostrarConfigAdmin() {
-        return "admin-settings";
-    }
-
-    @GetMapping("/admin-subscriptions")
-    public String mostrarSubs() {
-        return "admin-subscriptions";
-    }
-
     @GetMapping("/admin-users")
     public String mostrarUsuarios(Model model) {
         model.addAttribute("usuarios", userService.listar());
         return "admin-users";
+    }
+
+    @GetMapping("/planes")
+    public String mostrarPlanes() {
+        return "planes";
+    }
+
+    @GetMapping("/pago")
+    public String mostrarPago(@RequestParam String plan, Model model) {
+        model.addAttribute("plan", plan);
+        return "pago";
     }
 }
