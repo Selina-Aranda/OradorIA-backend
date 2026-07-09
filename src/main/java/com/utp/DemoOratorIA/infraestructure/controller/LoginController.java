@@ -69,7 +69,7 @@ public class LoginController {
         actividadService.registrar(
                 user.getId(),
                 "Inicio de sesión",
-                "ACTIVE");
+                "ACTIVO");
 
         if (user.getIdRol() != null && user.getIdRol() == 1) {
             return "redirect:/admin-dashboard";
@@ -97,7 +97,7 @@ public class LoginController {
 
         user.setIdRol(2);
         user.setIdPlan(1); // Plan Básico por defecto
-        user.setEstado(UserStatus.ACTIVE);
+        user.setEstado(UserStatus.ACTIVO);
         user.setFechaRegistro(LocalDateTime.now());
 
         User usuarioGuardado = userService.save(user);

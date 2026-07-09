@@ -120,6 +120,18 @@ List<Object[]> promediosGlobales();
     """, nativeQuery = true)
 String obtenerNivel(Integer idUsuario);
 
+
+
+//NUEVO QUERY
+@Query(value = """
+    SELECT r.nivel, COUNT(*) AS total
+    FROM resultados_ia r
+    GROUP BY r.nivel
+    ORDER BY total DESC
+    """, nativeQuery = true)
+List<Object[]> contarPorNivel();
+
+
 @Query(value = """
     SELECT palabra, SUM(cantidad) AS total
     FROM muletillas_detectadas

@@ -32,7 +32,7 @@ public class AnalisisSesionController {
 
     public record FinalizarAnalisisRequest(Integer duracionSegundos) {}
 
-    @PostMapping("/iniciar")
+    @PostMapping("/sesion/iniciar")
     public ResponseEntity<Analisis> iniciar(
             @RequestBody(required = false) IniciarAnalisisRequest request,
             HttpSession session) {

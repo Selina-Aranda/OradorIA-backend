@@ -56,7 +56,16 @@ public Plan cargarPlan(HttpSession session) {
             return Collections.emptyList();
         }
 
-        return resultadoQueryService.listar(usuario.getId());
+        return resultadoQueryService.listar(usuario.getId()).stream()
+        .map(a -> new AnalisisResultadoDTO(
+                a.getIdAnalisis(),
+                a.getTitulo(),
+                a.getEstado() != null ? a.getEstado().name() : null,
+                a.getFechaAnalisis(),
+                null, // fluidez: no disponible en Analisis
+                null  // postura: no disponible en Analisis
+        ))
+        .toList();
     }
 
    

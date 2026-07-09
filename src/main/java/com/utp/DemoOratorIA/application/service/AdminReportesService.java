@@ -106,7 +106,7 @@ public class AdminReportesService {
                 .map(f -> new ConteoDTO(String.valueOf(f[0]), ((Number) f[1]).longValue()))
                 .toList();
 
-        List<ConteoDTO> porNivel = resultadoQueryRepository.obtenerNivel(idUsuario).stream()
+        List<ConteoDTO> porNivel = resultadoQueryRepository.contarPorNivel().stream()
                 .map(f -> new ConteoDTO(String.valueOf(f[0]), ((Number) f[1]).longValue()))
                 .toList();
 

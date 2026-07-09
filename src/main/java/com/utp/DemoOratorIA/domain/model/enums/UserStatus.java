@@ -2,7 +2,7 @@
 package com.utp.DemoOratorIA.domain.model.enums;
 
 public enum UserStatus {
-    ACTIVE,
+    ACTIVO,
     INACTIVE,
     SUSPENDED
 }
