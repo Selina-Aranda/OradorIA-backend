@@ -1,37 +1,32 @@
 package com.utp.DemoOratorIA.application.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.utp.DemoOratorIA.infraestructure.DTO.AnalisisResultadoDTO;
-import com.utp.DemoOratorIA.infraestructure.repositories.ResultadoQueryRepository;
+import com.utp.DemoOratorIA.domain.model.aggregate.Analisis;
+import com.utp.DemoOratorIA.domain.model.repositories.IAnalisisRepository;
 
 @Service
 public class ResultadoQueryService {
 
-    private final ResultadoQueryRepository repository;
+    private final IAnalisisRepository analisisRepository;
 
-    public ResultadoQueryService(ResultadoQueryRepository repository) {
-        this.repository = repository;
+    public ResultadoQueryService(IAnalisisRepository analisisRepository) {
+        this.analisisRepository = analisisRepository;
     }
 
-    public List<AnalisisResultadoDTO> listar(Integer idUsuario) {
+    public List<Analisis> listar(Integer usuarioId) {
+        // Aquí deberías filtrar por usuarioId
+        // Por ahora retorna todos
+        return analisisRepository.list();
+    }
 
-        List<Object[]> data = repository.listarAnalisisUsuario(idUsuario);
-
-        return data.stream()
-                .map(r -> new AnalisisResultadoDTO(
-
-                        ((Number) r[0]).intValue(),
-                        (String) r[1],
-                        (String) r[2],
-                        (LocalDateTime) r[3],
-                        r[4] != null ? ((Number) r[4]).doubleValue() : 0.0,
-                        r[5] != null ? ((Number) r[5]).doubleValue() : 0.0
-
-                ))
-                .toList();
+    public Analisis obtenerUltimoPorUsuario(Integer usuarioId) {
+        List<Analisis> lista = listar(usuarioId);
+        if (!lista.isEmpty()) {
+            return lista.get(0);
+        }
+        return null;
     }
 }

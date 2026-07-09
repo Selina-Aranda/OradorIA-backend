@@ -1,11 +1,15 @@
 from fastapi import FastAPI
+from analisis_oratoria import main
+
 
 app = FastAPI()
 
-@app.get("/")
-def inicio():
-    return {"mensaje": "OradorIA API funcionando"}
 
-@app.get("/analizar")
+@app.post("/analizar")
+
 def analizar():
-    return ejecutar_analisis()
+    resultado = main()
+    return {
+        "success": True,
+        "data": resultado
+    }

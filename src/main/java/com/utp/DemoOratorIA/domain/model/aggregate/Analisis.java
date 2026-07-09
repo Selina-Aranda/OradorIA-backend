@@ -26,7 +26,6 @@ public class Analisis {
     public Integer getIdUsuario() {
         return idUsuario;
     }
-
     public String getTitulo() {
         return titulo;
     }

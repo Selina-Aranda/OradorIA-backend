@@ -7,7 +7,7 @@ import com.utp.DemoOratorIA.domain.model.enums.UserStatus;
 
 
 public class User {
-private Integer idUsuario;
+    private Integer idUsuario;
     private Integer idRol;
     private Integer idPlan;
     private String nombres;
