@@ -68,6 +68,7 @@ public class Analisis {
     public void setIdUsuario(Integer idUsuario) {
         this.idUsuario = idUsuario;
     }
+  
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }

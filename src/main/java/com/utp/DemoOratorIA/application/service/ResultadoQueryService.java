@@ -1,11 +1,10 @@
 package com.utp.DemoOratorIA.application.service;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import com.utp.DemoOratorIA.domain.model.aggregate.Analisis;
 import com.utp.DemoOratorIA.domain.model.repositories.IAnalisisRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ResultadoQueryService {
