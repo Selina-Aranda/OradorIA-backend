@@ -70,20 +70,16 @@ List<Object[]> obtenerPuntajesUsuario(@Param("idUsuario") Integer idUsuario);
 List<Object[]> obtenerEvolucionMensual(@Param("idUsuario") Integer idUsuario);
 
     @Query("""
-    SELECT new com.utp.DemoOratorIA.infraestructure.DTO.ReporteMensualDTO(
-
+    SELECT
         YEAR(r.fechaResultado),
         MONTH(r.fechaResultado),
-        '',
-        CAST(COUNT(r) AS integer),
+        COUNT(r),
         AVG(r.puntuacionGeneral),
         AVG(r.fluidez),
         AVG(r.claridad),
         AVG(r.confianza),
         AVG(r.muletillasDetectadas),
         SUM(a.duracionSegundos) / 60.0
-
-    )
     FROM AnalisisEntity a
     JOIN ResultadoIAEntity r
         ON a.idAnalisis = r.idAnalisis
@@ -95,7 +91,35 @@ List<Object[]> obtenerEvolucionMensual(@Param("idUsuario") Integer idUsuario);
         YEAR(r.fechaResultado),
         MONTH(r.fechaResultado)
     """)
-List<ReporteMensualDTO> obtenerReporteMensual(@Param("idUsuario") Integer idUsuario);
+    List<Object[]> obtenerReporteMensualDatos(@Param("idUsuario") Integer idUsuario);
+
+    default List<ReporteMensualDTO> obtenerReporteMensual(Integer idUsuario) {
+        List<Object[]> datos = obtenerReporteMensualDatos(idUsuario);
+        return datos.stream().map(fila -> {
+            Integer anio = fila[0] != null ? ((Number) fila[0]).intValue() : 0;
+            Integer mes = fila[1] != null ? ((Number) fila[1]).intValue() : 1;
+            Integer totalAnalisis = fila[2] != null ? ((Number) fila[2]).intValue() : 0;
+            Double puntaje = fila[3] != null ? ((Number) fila[3]).doubleValue() : 0.0;
+            Double fluidez = fila[4] != null ? ((Number) fila[4]).doubleValue() : 0.0;
+            Double claridad = fila[5] != null ? ((Number) fila[5]).doubleValue() : 0.0;
+            Double confianza = fila[6] != null ? ((Number) fila[6]).doubleValue() : 0.0;
+            Double muletillas = fila[7] != null ? ((Number) fila[7]).doubleValue() : 0.0;
+            Double duracion = fila[8] != null ? ((Number) fila[8]).doubleValue() : 0.0;
+
+            return new ReporteMensualDTO(
+                    anio,
+                    mes,
+                    "",
+                    totalAnalisis,
+                    puntaje,
+                    fluidez,
+                    claridad,
+                    confianza,
+                    muletillas,
+                    duracion
+            );
+        }).toList();
+    }
 
 @Query(value = """
     SELECT

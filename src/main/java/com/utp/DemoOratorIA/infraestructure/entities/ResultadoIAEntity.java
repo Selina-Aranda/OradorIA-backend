@@ -74,16 +74,18 @@ public class ResultadoIAEntity {
     private ResultsLevel nivel;
 
     @Lob
-    @Column(name = "observaciones")
+    @Column(name = "observaciones", columnDefinition = "LONGTEXT")
     private String observaciones;
 
     @Column(name = "fecha_resultado")
     private LocalDateTime fechaResultado;
 
-    @Column(name = "entrada_usuario")
+    @Lob
+    @Column(name = "entrada_usuario", columnDefinition = "LONGTEXT")
     private String entradaUsuario;
 
-    @Column(name = "respuesta_ia")
+    @Lob
+    @Column(name = "respuesta_ia", columnDefinition = "LONGTEXT")
     private String respuestaIA;
 
     @Column(name = "puntuacion")

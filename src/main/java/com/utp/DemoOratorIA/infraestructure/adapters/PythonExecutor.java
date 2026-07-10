@@ -31,24 +31,24 @@ public class PythonExecutor {
 
     public Map<String, Object> ejecutarAnalisis() throws Exception {
         Map<String, Object> payload = new HashMap<>();
-        payload.put("duracion_segundos", 30);
+        payload.put("duracion_segundos", 300);
 
         return ejecutarAnalisis(payload);
-        }
+    }
 
-        @SuppressWarnings("unchecked")
-        public Map<String, Object> ejecutarAnalisis(Map<String, Object> payload) throws Exception {
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> ejecutarAnalisis(Map<String, Object> payload) throws Exception {
         log.info("🎯 Llamando a FastAPI para análisis...");
 
-            asegurarFastApiActiva();
+        asegurarFastApiActiva();
 
         String body = objectMapper.writeValueAsString(payload);
         
         HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(API_URL))
+                .uri(URI.create(API_URL))
                 .timeout(REQUEST_TIMEOUT)
-            .header("Content-Type", "application/json")
-            .POST(HttpRequest.BodyPublishers.ofString(body))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(body))
                 .build();
         
         HttpResponse<String> response = httpClient.send(
@@ -69,6 +69,18 @@ public class PythonExecutor {
         }
         
         return (Map<String, Object>) result.get("data");
+    }
+
+    public void detenerAnalisis() throws Exception {
+        log.info("🛑 Deteniendo análisis en FastAPI...");
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://127.0.0.1:8000/detener"))
+                .timeout(REQUEST_TIMEOUT)
+                .POST(HttpRequest.BodyPublishers.noBody())
+                .build();
+        
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        log.info("📊 Respuesta detener FastAPI: {}", response.body());
     }
 
     private void asegurarFastApiActiva() throws Exception {

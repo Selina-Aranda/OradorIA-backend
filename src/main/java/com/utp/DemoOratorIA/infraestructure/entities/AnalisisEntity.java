@@ -24,7 +24,8 @@ public class AnalisisEntity {
     private Integer idUsuario;
     @Column(name = "titulo")
     private String titulo;
-    @Column(name = "descripcion")
+    @Lob
+    @Column(name = "descripcion", columnDefinition = "TEXT")
     private String descripcion;
     @Column(name = "fecha_analisis")
     private LocalDateTime fechaAnalisis;
@@ -36,7 +37,7 @@ public class AnalisisEntity {
     private String audioUrl;
 
     @Lob
-    @Column(name = "texto_transcrito")
+    @Column(name = "texto_transcrito", columnDefinition = "LONGTEXT")
     private String textoTranscrito;
 
     @Enumerated(EnumType.STRING)

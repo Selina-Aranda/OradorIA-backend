@@ -63,13 +63,32 @@ def detener_grabacion():
     return True
 
 def grabar_audio(duracion):
-    print("🎤 Grabando audio...")
+    global _stop
+    print("🎤 Grabando audio dinámicamente...")
     fs = 44100
-    audio = sd.rec(int(duracion * fs), samplerate=fs, channels=1, dtype='float32')
-    sd.wait()
-    audio_int16 = np.int16(audio * 32767)
-    write("audio.wav", fs, audio_int16)
-    print("✅ Audio guardado")
+    q = []
+    
+    def callback(indata, frames, time_info, status):
+        q.append(indata.copy())
+        
+    try:
+        with sd.InputStream(samplerate=fs, channels=1, callback=callback):
+            inicio = time.time()
+            while not _stop:
+                time.sleep(0.1)
+                if time.time() - inicio > duracion:
+                    _stop = True
+                    break
+    except Exception as e:
+        print(f"❌ Error en grabación de audio: {e}")
+        
+    if q:
+        audio = np.concatenate(q, axis=0)
+        audio_int16 = np.int16(audio * 32767)
+        write("audio.wav", fs, audio_int16)
+        print("✅ Audio guardado")
+    else:
+        print("⚠️ No se grabó ningún audio")
 
 def analizar_video(duracion):
     global _stop, _miradas_eventos
@@ -111,6 +130,12 @@ def analizar_video(duracion):
     return miradas
 
 def esta_grabando():
+    global _grabacion_activa, _hilo_audio, _hilo_video
+    if _grabacion_activa:
+        audio_vivo = _hilo_audio and _hilo_audio.is_alive()
+        video_vivo = _hilo_video and _hilo_video.is_alive()
+        if not audio_vivo and not video_vivo:
+            _grabacion_activa = False
     return _grabacion_activa
 
 def obtener_miradas():

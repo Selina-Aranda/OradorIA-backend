@@ -35,12 +35,12 @@ public class LoginController {
     @Autowired
     private ActividadRecienteService actividadService;
 
-    @GetMapping({ "/Login", "/login" })
+    @GetMapping({"/Login", "/login"})
     public String mostrarLogin() {
         return "login";
     }
 
-    @PostMapping({ "/Login", "/login" })
+    @PostMapping({"/Login", "/login"})
     public String login(@RequestParam String email,
             @RequestParam(required = false) String password,
             HttpSession session,
@@ -85,7 +85,6 @@ public class LoginController {
     }
 
     // registro
-
     @GetMapping("/registro")
     public String registro(Model model) {
         model.addAttribute("user", new User());
@@ -97,7 +96,7 @@ public class LoginController {
 
         user.setIdRol(2);
         user.setIdPlan(1); // Plan Básico por defecto
-        user.setEstado(UserStatus.ACTIVO);
+        user.setEstado(UserStatus.ACTIVE);
         user.setFechaRegistro(LocalDateTime.now());
 
         User usuarioGuardado = userService.save(user);

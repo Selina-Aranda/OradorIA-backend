@@ -120,10 +120,7 @@
             </label>
           </div>
 
-          <button class="relative h-10 w-10 rounded-full hover:bg-slate-50 transition flex items-center justify-center text-slate-600" aria-label="Notificaciones">
-            <i class="fas fa-bell"></i>
-            <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500"></span>
-          </button>
+
 
           <div class="h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold" aria-label="Usuario" th:text="${#strings.substring(session.user.nombres,0,1) + ' ' + #strings.substring(session.user.apellidos,0,1)}"></div>
         </div>

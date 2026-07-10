@@ -29,7 +29,7 @@ public class MainUserController {
         return "mainUser";
     }
 
-    @GetMapping("/main-profile-user")
+    @GetMapping({"/profile-user", "/main-profile-user"})
     public String mostrarPerfilUsuario() {
         return "profileUser";
     }

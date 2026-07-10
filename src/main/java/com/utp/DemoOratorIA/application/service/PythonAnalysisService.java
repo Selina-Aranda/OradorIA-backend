@@ -37,7 +37,11 @@ public class PythonAnalysisService {
     }
 
     public Map<String, Object> ejecutarYGuardarConResultado() {
-        log.info("🚀 Ejecutando análisis completo con Python");
+        return ejecutarYGuardarConResultado(1);
+    }
+
+    public Map<String, Object> ejecutarYGuardarConResultado(Integer idUsuario) {
+        log.info("🚀 Ejecutando análisis completo con Python para usuario: {}", idUsuario);
 
         try {
             Map<String, Object> resultadoPython = pythonExecutor.ejecutarAnalisis();
@@ -63,10 +67,16 @@ public class PythonAnalysisService {
             metadatos.put("pausas", pausas);
             metadatos.put("muletillas", muletillas);
 
+            // Guardamos el análisis
+            String descripcionAnalisis = analisis != null ? analisis : (String) resultadoPython.get("recomendaciones");
+            if (descripcionAnalisis == null) {
+                descripcionAnalisis = "Análisis de oratoria completado con éxito.";
+            }
+
             Analisis analisisObj = new Analisis.Builder()
-                    .idUsuario(1)  // TODO: Obtener de sesión
+                    .idUsuario(idUsuario)
                     .titulo("Análisis de Oratoria - " + LocalDateTime.now())
-                    .descripcion(truncarDescripcion(analisis))
+                    .descripcion(truncarDescripcion(descripcionAnalisis))
                     .fechaAnalisis(LocalDateTime.now())
                     .duracionSegundos(30)
                     .textoTranscrito(texto)
@@ -76,9 +86,26 @@ public class PythonAnalysisService {
             Analisis guardado = analisisService.save(analisisObj);
             log.info("✅ Análisis guardado con ID: {}", guardado.getIdAnalisis());
 
+            // Construir y guardar el resultado IA
             ResultadoIA resultadoIA = construirResultadoIA(guardado.getIdAnalisis(), resultadoPython);
             ResultadoIA resultadoGuardado = resultadoIAService.save(resultadoIA);
             log.info("✅ Resultado IA guardado con ID: {}", resultadoGuardado.getIdResultado());
+
+            // Actualizar resultadoPython con los datos escalados y procesados para el frontend
+            resultadoPython.put("fluidez", resultadoIA.getFluidez());
+            resultadoPython.put("claridad", resultadoIA.getClaridad());
+            resultadoPython.put("volumen", resultadoIA.getVolumen());
+            resultadoPython.put("velocidad", resultadoIA.getVelocidad());
+            resultadoPython.put("postura", resultadoIA.getPostura());
+            resultadoPython.put("contacto_visual", resultadoIA.getContactoVisual());
+            resultadoPython.put("confianza", resultadoIA.getConfianza());
+            resultadoPython.put("expresion_facial", resultadoIA.getExpresionFacial());
+            resultadoPython.put("puntuacion_general", resultadoIA.getPuntuacionGeneral());
+            resultadoPython.put("nivel", resultadoIA.getNivel().name());
+            resultadoPython.put("observaciones", resultadoIA.getObservaciones());
+            resultadoPython.put("analisis", resultadoIA.getObservaciones());
+            resultadoPython.put("pausas_incomodas", resultadoIA.getPausasIncomodas());
+            resultadoPython.put("muletillas_detectadas", resultadoIA.getMuletillasDetectadas());
 
             Map<String, Object> resultado = new HashMap<>();
             resultado.put("analisis", guardado);
@@ -95,15 +122,15 @@ public class PythonAnalysisService {
                 mensajeError = e.getClass().getSimpleName();
             }
 
-            Analisis analisis = new Analisis.Builder()
-                    .idUsuario(1)
+            Analisis analisisObj = new Analisis.Builder()
+                    .idUsuario(idUsuario)
                     .titulo("Análisis Fallido")
                     .descripcion(truncarDescripcion("Error: " + mensajeError))
                     .fechaAnalisis(LocalDateTime.now())
                     .estado(AnalysisStatus.ERROR)
                     .build();
 
-            Analisis guardado = analisisService.save(analisis);
+            Analisis guardado = analisisService.save(analisisObj);
 
             Map<String, Object> resultadoPython = new HashMap<>();
             resultadoPython.put("success", false);
@@ -118,37 +145,113 @@ public class PythonAnalysisService {
         }
     }
 
+    private Double escalarA100(Object valor) {
+        if (valor == null) {
+            return null;
+        }
+        try {
+            double val = Double.parseDouble(valor.toString());
+            // Si el valor viene de 0 a 10 (ej. desde Ollama), lo escalamos a porcentaje (0 a 100)
+            if (val <= 10.0) {
+                return val * 10.0;
+            }
+            return val;
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
     private ResultadoIA construirResultadoIA(Integer idAnalisis, Map<String, Object> resultadoPython) {
         Map<String, Object> pausas = resultadoPython.get("pausas") instanceof Map
                 ? (Map<String, Object>) resultadoPython.get("pausas")
                 : new HashMap<>();
 
-        Integer cantidadPausas = extraerEntero(pausas.get("cantidad_pausas_largas"));
-        Integer totalMuletillas = extraerEntero(resultadoPython.get("total_muletillas"));
-        Integer miradas = extraerEntero(resultadoPython.get("miradas"));
-        Integer ppm = extraerEntero(resultadoPython.get("ppm"));
-        String analisis = resultadoPython.get("analisis") != null ? resultadoPython.get("analisis").toString() : null;
+        Integer cantidadPausas = extraerEntero(resultadoPython.get("pausas_incomodas"));
+        if (cantidadPausas == null) {
+            cantidadPausas = extraerEntero(pausas.get("cantidad_pausas_largas"));
+        }
+        Integer totalMuletillas = extraerEntero(resultadoPython.get("muletillas_detectadas"));
+        if (totalMuletillas == null) {
+            totalMuletillas = extraerEntero(resultadoPython.get("total_muletillas"));
+        }
+        Integer miradas = extraerEntero(resultadoPython.get("miradas_desviadas"));
+        if (miradas == null) {
+            miradas = extraerEntero(resultadoPython.get("miradas"));
+        }
+        Integer ppm = extraerEntero(resultadoPython.get("velocidad_ppm"));
+        if (ppm == null) {
+            ppm = extraerEntero(resultadoPython.get("ppm"));
+        }
+
+        Double fluidez = escalarA100(resultadoPython.get("fluidez"));
+        Double claridad = escalarA100(resultadoPython.get("claridad"));
+        Double volumen = escalarA100(resultadoPython.get("volumen"));
+        Double velocidad = escalarA100(resultadoPython.get("velocidad"));
+        Double postura = escalarA100(resultadoPython.get("postura"));
+        Double contactoVisual = escalarA100(resultadoPython.get("contacto_visual"));
+        if (contactoVisual == null) {
+            contactoVisual = escalarA100(resultadoPython.get("contactoVisual"));
+        }
+        Double confianza = escalarA100(resultadoPython.get("confianza"));
+        Double expresionFacial = escalarA100(resultadoPython.get("expresion_facial"));
+        if (expresionFacial == null) {
+            expresionFacial = escalarA100(resultadoPython.get("expresionFacial"));
+        }
+        Double puntuacionGeneral = escalarA100(resultadoPython.get("puntuacion_general"));
+
+        // Determinar el nivel según la puntuación general
+        ResultsLevel nivel = ResultsLevel.BASICO;
+        if (puntuacionGeneral != null) {
+            if (puntuacionGeneral >= 80.0) {
+                nivel = ResultsLevel.AVANZADO;
+            } else if (puntuacionGeneral >= 50.0) {
+                nivel = ResultsLevel.INTERMEDIO;
+            }
+        }
+
+        // Construir observaciones combinando errores_detectados y recomendaciones
+        String observaciones = null;
+        Object obsObj = resultadoPython.get("observaciones");
+        if (obsObj != null) {
+            observaciones = obsObj.toString();
+        } else {
+            StringBuilder combined = new StringBuilder();
+            Object errores = resultadoPython.get("errores_detectados");
+            Object recs = resultadoPython.get("recomendaciones");
+            if (errores != null && !errores.toString().isBlank()) {
+                combined.append("Errores detectados:\n").append(errores.toString()).append("\n\n");
+            }
+            if (recs != null && !recs.toString().isBlank()) {
+                combined.append("Recomendaciones:\n").append(recs.toString());
+            }
+            if (combined.length() > 0) {
+                observaciones = combined.toString().trim();
+            } else {
+                observaciones = resultadoPython.get("analisis") != null ? resultadoPython.get("analisis").toString() : "Sin observaciones.";
+            }
+        }
+
         String texto = resultadoPython.get("texto") != null ? resultadoPython.get("texto").toString() : null;
 
         return new ResultadoIA.Builder()
                 .idAnalisis(idAnalisis)
-                .fluidez(ppm != null ? ppm.doubleValue() : null)
-                .claridad(null)
-                .volumen(null)
-                .velocidad(ppm != null ? ppm.doubleValue() : null)
-                .postura(miradas != null ? miradas.doubleValue() : null)
-                .contactoVisual(null)
-                .confianza(null)
-                .expresionFacial(null)
+                .fluidez(fluidez)
+                .claridad(claridad)
+                .volumen(volumen)
+                .velocidad(velocidad)
+                .postura(postura)
+                .contactoVisual(contactoVisual)
+                .confianza(confianza)
+                .expresionFacial(expresionFacial)
                 .muletillasDetectadas(totalMuletillas)
                 .pausasIncomodas(cantidadPausas)
-                .puntuacionGeneral(null)
-                .nivel(ResultsLevel.BASICO)
-                .observaciones(analisis)
+                .puntuacionGeneral(puntuacionGeneral)
+                .nivel(nivel)
+                .observaciones(observaciones)
                 .fechaResultado(LocalDateTime.now())
                 .entradaUsuario(texto)
-                .respuestaIA(analisis)
-                .puntuacion(null)
+                .respuestaIA(observaciones)
+                .puntuacion(puntuacionGeneral)
                 .fecha(LocalDateTime.now())
                 .build();
     }
@@ -178,5 +281,9 @@ public class PythonAnalysisService {
         }
 
         return normalizado.substring(0, MAX_DESCRIPCION_LENGTH - 3).trim() + "...";
+    }
+
+    public void detenerAnalisis() throws Exception {
+        pythonExecutor.detenerAnalisis();
     }
 }

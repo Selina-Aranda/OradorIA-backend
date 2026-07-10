@@ -62,11 +62,13 @@ public class AnalisisController {
 
     @PostMapping("/api/analisis/iniciar")
     @ResponseBody
-    public Map<String, Object> iniciarAnalisis() {
+    public Map<String, Object> iniciarAnalisis(jakarta.servlet.http.HttpSession session) {
         Map<String, Object> response = new HashMap<>();
         
         try {
-            Map<String, Object> resultado = pythonAnalysisService.ejecutarYGuardarConResultado();
+            com.utp.DemoOratorIA.infraestructure.entities.UserEntity user = (com.utp.DemoOratorIA.infraestructure.entities.UserEntity) session.getAttribute("user");
+            Integer idUsuario = (user != null) ? user.getId() : 1;
+            Map<String, Object> resultado = pythonAnalysisService.ejecutarYGuardarConResultado(idUsuario);
             Analisis analisisGuardado = (Analisis) resultado.get("analisis");
             Map<String, Object> resultadoPython = (Map<String, Object>) resultado.get("resultadoPython");
             Map<String, Object> metadatos = (Map<String, Object>) resultado.get("metadatos");
@@ -93,6 +95,22 @@ public class AnalisisController {
             response.put("mensaje", "Error en el análisis: " + e.getMessage());
         }
         
+        return response;
+    }
+
+    @PostMapping("/api/analisis/detener")
+    @ResponseBody
+    public Map<String, Object> detenerAnalisis() {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            pythonAnalysisService.detenerAnalisis();
+            response.put("success", true);
+            response.put("mensaje", "Grabación detenida exitosamente");
+        } catch (Exception e) {
+            log.error("❌ Error al detener análisis: {}", e.getMessage(), e);
+            response.put("success", false);
+            response.put("mensaje", "Error al detener: " + e.getMessage());
+        }
         return response;
     }
 

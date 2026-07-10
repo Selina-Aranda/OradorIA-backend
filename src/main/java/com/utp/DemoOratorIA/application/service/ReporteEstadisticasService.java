@@ -68,10 +68,12 @@ public class ReporteEstadisticasService {
     }
 
     private ReporteMensualDTO mapearFila(Object[] fila) {
-
-        Integer anio = ((Number) fila[0]).intValue();
-        Integer mes = ((Number) fila[1]).intValue();
-        Integer totalAnalisis = ((Number) fila[2]).intValue();
+        Integer anio = (fila[0] != null) ? ((Number) fila[0]).intValue() : 2026;
+        Integer mes = (fila[1] != null) ? ((Number) fila[1]).intValue() : 1;
+        if (mes < 1 || mes > 12) {
+            mes = 1;
+        }
+        Integer totalAnalisis = (fila[2] != null) ? ((Number) fila[2]).intValue() : 0;
         Double puntaje = fila[3] != null ? ((Number) fila[3]).doubleValue() : 0.0;
         Double fluidez = fila[4] != null ? ((Number) fila[4]).doubleValue() : 0.0;
         Double claridad = fila[5] != null ? ((Number) fila[5]).doubleValue() : 0.0;
