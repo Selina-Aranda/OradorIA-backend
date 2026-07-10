@@ -51,6 +51,13 @@ public class AnalisisRepositoryAdapter implements IAnalisisRepository {
     }
 
     @Override
+    public List<Analisis> findByUsuario(Integer idUsuario) {
+        return jpa.findByIdUsuario(idUsuario).stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void delete(Integer id) {
         jpa.deleteById(id);
     }

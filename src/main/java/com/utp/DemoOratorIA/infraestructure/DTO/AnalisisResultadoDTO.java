@@ -8,5 +8,6 @@ public record AnalisisResultadoDTO(
         String estado,
         LocalDateTime fecha,
         Double fluidez,
-        Double postura) {
+        Double postura,
+        Double score) {
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.utp.DemoOratorIA.application.service.DashboardService;
 import com.utp.DemoOratorIA.application.service.PlanService;
+import com.utp.DemoOratorIA.application.service.ResultadoIAService;
 import com.utp.DemoOratorIA.application.service.ResultadoQueryService;
 import com.utp.DemoOratorIA.domain.model.aggregate.Plan;
 import com.utp.DemoOratorIA.infraestructure.DTO.AnalisisResultadoDTO;
@@ -23,29 +24,32 @@ public class GlobalModelAttributes {
     private final PlanService planService;
     private final ResultadoQueryService resultadoQueryService;
     private final DashboardService dashboardService;
+    private final ResultadoIAService resultadoIAService;
 
-  public GlobalModelAttributes(
+    public GlobalModelAttributes(
             PlanService planService,
             ResultadoQueryService resultadoQueryService,
-            DashboardService dashboardService) {
+            DashboardService dashboardService,
+            ResultadoIAService resultadoIAService) {
 
         this.planService = planService;
         this.resultadoQueryService = resultadoQueryService;
         this.dashboardService = dashboardService;
+        this.resultadoIAService = resultadoIAService;
     }
 
     @ModelAttribute("plan")
-public Plan cargarPlan(HttpSession session) {
+    public Plan cargarPlan(HttpSession session) {
 
-    UserEntity user = (UserEntity) session.getAttribute("user");
+        UserEntity user = (UserEntity) session.getAttribute("user");
 
-    if (user == null || user.getIdPlan() == null) {
-        return null;
+        if (user == null || user.getIdPlan() == null) {
+            return null;
+        }
+
+        return planService.findById(user.getIdPlan())
+                .orElse(null);
     }
-
-    return planService.findById(user.getIdPlan())
-            .orElse(null);
-}
    
     @ModelAttribute("analisis")
     public List<AnalisisResultadoDTO> cargarAnalisis(HttpSession session) {
@@ -57,14 +61,20 @@ public Plan cargarPlan(HttpSession session) {
         }
 
         return resultadoQueryService.listar(usuario.getId()).stream()
-        .map(a -> new AnalisisResultadoDTO(
-                a.getIdAnalisis(),
-                a.getTitulo(),
-                a.getEstado() != null ? a.getEstado().name() : null,
-                a.getFechaAnalisis(),
-                null, // fluidez: no disponible en Analisis
-                null  // postura: no disponible en Analisis
-        ))
+        .map(a -> {
+            Double score = resultadoIAService.findByIdAnalisis(a.getIdAnalisis())
+                    .map(r -> r.getPuntuacionGeneral())
+                    .orElse(null);
+            return new AnalisisResultadoDTO(
+                    a.getIdAnalisis(),
+                    a.getTitulo(),
+                    a.getEstado() != null ? a.getEstado().name() : null,
+                    a.getFechaAnalisis(),
+                    null, // fluidez
+                    null, // postura
+                    score
+            );
+        })
         .toList();
     }
 

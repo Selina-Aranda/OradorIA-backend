@@ -16,9 +16,7 @@ public class ResultadoQueryService {
     }
 
     public List<Analisis> listar(Integer usuarioId) {
-        // Aquí deberías filtrar por usuarioId
-        // Por ahora retorna todos
-        return analisisRepository.list();
+        return analisisRepository.findByUsuario(usuarioId);
     }
     
     public Analisis obtenerUltimoPorUsuario(Integer usuarioId) {

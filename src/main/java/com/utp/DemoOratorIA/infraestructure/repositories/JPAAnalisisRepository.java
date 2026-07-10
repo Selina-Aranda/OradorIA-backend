@@ -25,4 +25,6 @@ public interface JPAAnalisisRepository extends JpaRepository<AnalisisEntity, Int
 
     @Query(value = "SELECT COUNT(*) FROM analisis", nativeQuery = true)
     Long contarTotal();
+
+    List<AnalisisEntity> findByIdUsuario(Integer idUsuario);
 }
